@@ -1,18 +1,18 @@
-import Client, { Local } from "@/lib/client";
+// import Client, { Local } from "@/lib/client";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 export default function HomeTemplate() {
   const { theme } = useTheme();
 
-  const client = new Client(Local);
+  // const client = new Client(Local);
 
-  useEffect(() => {
-    (async () => {
-      const res = await client.admin.getHelloWorld();
-      console.log(res);
-    })();
-  });
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await client.admin.getHelloWorld();
+  //     console.log(res);
+  //   })();
+  // });
 
   return (
     <div

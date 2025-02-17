@@ -1,3 +1,4 @@
+import { Button } from "~/components/ui/button";
 import type { Route } from "./+types/home";
 import { useTheme } from "next-themes";
 
@@ -29,6 +30,7 @@ export default function Home() {
         >
           Shop Now
         </a>
+        <Button>YOYO</Button>
       </div>
     </div>
   );

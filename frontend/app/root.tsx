@@ -9,10 +9,23 @@ import {
 
 import type { Route } from "./+types/root";
 
-import { HeroUIProvider } from "@heroui/react";
 import { ThemeProvider } from "next-themes";
 
 import "./app.css";
+
+import { rootAuthLoader } from "@clerk/react-router/ssr.server";
+
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignInButton,
+} from "@clerk/react-router";
+
+export async function loader(args: Route.LoaderArgs) {
+  return rootAuthLoader(args);
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -45,11 +58,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+export default function App({ loaderData }: Route.ComponentProps) {
   return (
-    <HeroUIProvider>
-      <Outlet />
-    </HeroUIProvider>
+    <ClerkProvider
+      loaderData={loaderData}
+      signUpFallbackRedirectUrl="/"
+      signInFallbackRedirectUrl="/"
+    >
+      <header className="flex items-center justify-center py-8 px-4">
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </header>
+      <main>
+        <Outlet />
+      </main>
+    </ClerkProvider>
   );
 }
 

@@ -1,6 +1,5 @@
 import type { Pokemon } from "~/types/pokemon";
 import type { Route } from "./+types/posters";
-import { Image } from "@heroui/react";
 import { useTheme } from "next-themes";
 import { PokemonCard } from "~/components/PokemonCard";
 

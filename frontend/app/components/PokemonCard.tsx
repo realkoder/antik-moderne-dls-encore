@@ -1,12 +1,5 @@
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Divider,
-  Image,
-} from "@heroui/react";
 import type { Pokemon } from "~/types/pokemon";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -14,34 +7,31 @@ interface PokemonCardProps {
 
 export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   return (
-    // <Card className="max-w-[400px]">
-    //   <CardHeader className="flex gap-3">
-    //     <Image
-    //       alt="heroui logo"
-    //       height={40}
-    //       radius="sm"
-    //       src={pokemon.sprites.front_default}
-    //       width={40}
-    //     />
-    //     <div className="flex flex-col">
-    //       <p className="text-md">{pokemon.name}</p>
-    //       <p className="text-small text-default-500">heroui.com</p>
-    //     </div>
-    //   </CardHeader>
-    //   <Divider />
-    //   <CardBody>
-    //     {pokemon.abilities &&
-    //       pokemon.abilities.map((ability) => <p>{ability.ability.name}</p>)}
-    //   </CardBody>
-    //   <Divider />
-    //   <CardFooter>
-    //     <p>FOOTERR FOR POKEMON CARD!</p>
-    //   </CardFooter>
-    // </Card>
-    <Card>
-      <CardBody>
-        <p>Make beautiful websites regardless of your design experience.</p>
-      </CardBody>
+    <Card className="w-[380px]">
+      <CardHeader>
+        <CardTitle>Pokemon {pokemon.name}</CardTitle>
+      </CardHeader>
+      <CardContent className="grid gap-4">
+        <div className=" flex items-center space-x-4 rounded-md border p-4">
+          <div className="flex-1 space-y-1">
+            <p className="text-sm font-medium leading-none">
+              Push Notifications
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Send notifications to device.
+            </p>
+            <img
+              src={pokemon.sprites.front_default}
+              height={60}
+              width={60}
+              alt="Pokemon"
+            />
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <p>{pokemon.abilities[0].ability.name || "No ability"}</p>
+      </CardFooter>
     </Card>
   );
 };

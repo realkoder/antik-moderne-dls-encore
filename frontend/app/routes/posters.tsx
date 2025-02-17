@@ -1,8 +1,8 @@
 import type { Pokemon } from "~/types/pokemon";
 import type { Route } from "./+types/posters";
 import { Image } from "@heroui/react";
-
-
+import { useTheme } from "next-themes";
+import { PokemonCard } from "~/components/PokemonCard";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function loader({ params }: Route.LoaderArgs) {
   try {
-    const pokeApiRes = await fetch("https://pokeapi.co/api/v2/pokemon/2");
+    const pokeApiRes = await fetch("https://pokeapi.co/api/v2/pokemon/3");
     if (pokeApiRes.ok) {
       const pokemon: Pokemon = await pokeApiRes.json();
       return { pokemon };
@@ -26,7 +26,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function Posters({ loaderData }: Route.ComponentProps) {
-  
+  const { theme } = useTheme();
   const pokemon = loaderData?.pokemon;
 
   if (!pokemon) {
@@ -34,9 +34,12 @@ export default function Posters({ loaderData }: Route.ComponentProps) {
   }
 
   return (
-    <div className="flex justify-center">
-      <h2>{`${pokemon.name}`}</h2>
-      <Image src={pokemon.sprites.front_default}/>
+    <div
+      className={`h-screen w-screen flex justify-center ${
+        theme && theme === "dark" ? "bg-gray-700" : "bg-amber-50"
+      }`}
+    >
+      <PokemonCard pokemon={pokemon} />
     </div>
   );
 }

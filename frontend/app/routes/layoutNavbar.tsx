@@ -7,10 +7,12 @@ export default function layoutNavbar() {
     <div>
       <nav className="bg-gray-800 py-4">
         <div className="container mx-auto text-white flex justify-between items-center">
-          <NavLink to="/" className=" font-bold text-xl">
-            <Image src="/logo.png" width={50} alt="ANTIK MODERNE" />
-          </NavLink>
-          <ThemeChanger />
+          <div className="flex space-x-4">
+            <NavLink to="/" className=" font-bold text-xl">
+              <Image src="/logo.png" width={50} alt="ANTIK MODERNE" />
+            </NavLink>
+            <ThemeChanger />
+          </div>
           <div className="flex space-x-4">
             <NavLink to="/posters" className=" ">
               Posters
@@ -24,7 +26,9 @@ export default function layoutNavbar() {
           </div>
         </div>
       </nav>
-      <Outlet />
+      <div>
+        <Outlet />
+      </div>
     </div>
   );
 }

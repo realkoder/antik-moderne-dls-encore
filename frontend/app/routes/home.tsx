@@ -1,5 +1,5 @@
-import { useTheme } from "next-themes";
 import type { Route } from "./+types/home";
+import { useTheme } from "next-themes";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,8 +13,8 @@ export default function Home() {
 
   return (
     <div
-      className={`border-2 border-solid ${
-        theme === "dark" ? "bg-gray-700" : ""
+      className={`h-screen w-screen ${
+        theme && theme === "dark" ? "bg-gray-700" : ""
       }`}
     >
       <h1 className="text-4xl font-bold mb-4">Welcome to Antik Moderne</h1>

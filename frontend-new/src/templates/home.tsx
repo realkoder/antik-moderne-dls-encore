@@ -32,8 +32,6 @@ export default function HomeTemplate() {
         >
           Shop Now
         </a>
-
-        <h2 className="font-bold">Our Story</h2>
       </div>
     </div>
   );

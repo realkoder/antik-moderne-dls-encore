@@ -6,36 +6,24 @@ function Layout() {
   return (
     <div>
       <div className="bg-gray-600 text-white flex justify-between items-center">
-        <div className="flex">
+        <div className="flex space-x-4">
           <Link to="/">
-            <Image
-              mr={4}
-              p={2}
+            <img className="m-2"
               src="/logo.png"
-              height={50}
+              width={60}
+              height={60}
               alt="ANTIK MODERNE"
             />
           </Link>
           <ThemeChanger />
         </div>
-        <div className="flex m-12">
-          <div className="m-12">
-            <Link to="/posters">Posters</Link>
-          </div>
+        <div className="flex space-x-4 mr-8">
+          <Link to="/posters">Posters</Link>
+          <Link to="/genres">Genres</Link>
 
-          <div className="p-12">
-            <Link to="/genres">Genres</Link>
-          </div>
+          <Link to="/about">About</Link>
 
-          <div className="m-4">
-            <Link className="m-4" to="/about">
-              About
-            </Link>
-          </div>
-
-          <Link className="m-4" to="/login">
-            Login
-          </Link>
+          <Link to="/login">Login</Link>
         </div>
       </div>
       <main>

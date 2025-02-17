@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import type { Pokemon } from "../types/pokemon";
 import { useTheme } from "next-themes";
 import { PokemonCard } from "@/components/PokemonCard";
-import { Button } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
 
 export default function PostersTemplate() {
   const { theme } = useTheme();
@@ -41,7 +41,7 @@ export default function PostersTemplate() {
         theme && theme === "dark" ? "bg-gray-700" : ""
       }`}
     >
-      <Button m={4} onClick={() => changePokemon()}>Get a pokemon</Button>
+      <Button onClick={() => changePokemon()}>Get a pokemon</Button>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {pokemons.map((pokemon) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} />

@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router";
-import { Provider } from "@/components/ui/provider";
 import { ClerkProvider } from "@clerk/clerk-react";
 import Home from "./templates/home.tsx";
 import { AboutTemplate } from "./templates/about.tsx";
@@ -10,6 +9,7 @@ import PostersTemplate from "./templates/posters.tsx";
 import Layout from "./templates/Layout.tsx";
 import { GenresTemplate } from "./templates/genres.tsx";
 import App from "./App.tsx";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -20,7 +20,7 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <Provider>
+      <NextThemesProvider>
         <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -32,7 +32,7 @@ createRoot(document.getElementById("root")!).render(
             </Route>
           </Routes>
         </ClerkProvider>
-      </Provider>
+      </NextThemesProvider>
     </BrowserRouter>
   </StrictMode>
 );

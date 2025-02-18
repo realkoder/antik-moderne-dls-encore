@@ -3,8 +3,7 @@ import type { Route } from "./+types/posters";
 import { PokemonCard } from "~/components/PokemonCard";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import { SpinnerRoundOutlined } from 'spinners-react/lib/esm/SpinnerRoundOutlined';
-
+import { SpinnerRoundOutlined } from "spinners-react/lib/esm/SpinnerRoundOutlined";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -59,13 +58,27 @@ export default function Posters() {
   };
 
   return (
-    <div className="p-4">
-      <SpinnerRoundOutlined enabled={isLoading} size={50} thickness={100} speed={100} color="#36ad47" />
-      <Button hidden={isLoading} className="m-2" onClick={() => changePokemon()}>Get a pokemon</Button>
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {pokemons.map((pokemon) => (
-          <PokemonCard key={pokemon.id} pokemon={pokemon} />
-        ))}
+    <div>
+      <div className="p-4">
+        <SpinnerRoundOutlined
+          enabled={isLoading}
+          size={50}
+          thickness={100}
+          speed={100}
+          color="#36ad47"
+        />
+        <Button
+          hidden={isLoading}
+          className="m-2"
+          onClick={() => changePokemon()}
+        >
+          Get a pokemon
+        </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {pokemons.map((pokemon) => (
+            <PokemonCard key={pokemon.id} pokemon={pokemon} />
+          ))}
+        </div>
       </div>
     </div>
   );

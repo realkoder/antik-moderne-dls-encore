@@ -26,9 +26,10 @@ import {
 } from "@clerk/react-router";
 
 export async function loader(args: Route.LoaderArgs) {
-  // const secretKey = process.env.VITE_CLERK_SECRET_KEY;
-  // return rootAuthLoader(args, { secretKey });
-  return rootAuthLoader(args);
+  const secretKey = process.env.VITE_CLERK_SECRET_KEY;
+  console.log("LOOK", process.env)
+  return rootAuthLoader(args, { secretKey });
+  // return rootAuthLoader(args);
 }
 
 export const links: Route.LinksFunction = () => [

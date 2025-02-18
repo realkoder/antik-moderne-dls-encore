@@ -27,7 +27,6 @@ import {
 
 export async function loader(args: Route.LoaderArgs) {
   const secretKey = process.env.VITE_CLERK_SECRET_KEY;
-  console.log("LOOK", process.env)
   return rootAuthLoader(args, { secretKey });
   // return rootAuthLoader(args);
 }

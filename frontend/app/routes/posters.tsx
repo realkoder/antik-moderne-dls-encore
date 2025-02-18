@@ -1,8 +1,10 @@
 import type { Pokemon } from "~/types/pokemon";
 import type { Route } from "./+types/posters";
 import { PokemonCard } from "~/components/PokemonCard";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
+import { SpinnerRoundOutlined } from 'spinners-react/lib/esm/SpinnerRoundOutlined';
+
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -28,11 +30,11 @@ export function meta({}: Route.MetaArgs) {
 // export default function Posters({ loaderData }: Route.ComponentProps) {
 export default function Posters() {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const isLoading = useRef(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPokemon = async (pokemonId: number) => {
-    if (isLoading.current) return;
-    isLoading.current = true;
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const pokeApiRes = await fetch(
         "https://pokeapi.co/api/v2/pokemon/" + pokemonId
@@ -47,7 +49,7 @@ export default function Posters() {
     } catch (error) {
       console.log("FETCH NOT OK", error);
     } finally {
-      isLoading.current = false;
+      setIsLoading(false);
     }
   };
 
@@ -58,7 +60,8 @@ export default function Posters() {
 
   return (
     <div className="p-4">
-      <Button className="m-2" onClick={() => changePokemon()}>Get a pokemon</Button>
+      <SpinnerRoundOutlined enabled={isLoading} size={50} thickness={100} speed={100} color="#36ad47" />
+      <Button hidden={isLoading} className="m-2" onClick={() => changePokemon()}>Get a pokemon</Button>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {pokemons.map((pokemon) => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} />

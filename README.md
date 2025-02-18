@@ -21,3 +21,5 @@
 #### Links
 
 Stackoverflow about issues with migrating to Tailwindcss v4 -> https://stackoverflow.com/questions/79380514/problem-installing-tailwindcss-with-vite-after-npx-tailwindcss-init-p-comman/79380522#79380522
+
+React spinners components -> https://github.com/adexin/spinners-react

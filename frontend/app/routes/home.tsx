@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Home() {
   return (
-    <div className="border-2 border-solid">
+    <div className="flex-row justify-center text-center">
       <h1 className="text-4xl font-bold mb-4">Welcome to Antik Moderne</h1>
       <p className="text-lg mb-6">
         Discover a curated collection of timeless posters that blend the

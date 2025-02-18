@@ -9,9 +9,23 @@ import {
 
 import type { Route } from "./+types/root";
 
-import { HeroUIProvider } from '@heroui/react';
+import { ThemeProvider } from "next-themes";
 
 import "./app.css";
+// import dotenv from "dotenv";
+// dotenv.config();
+
+import { rootAuthLoader } from "@clerk/react-router/ssr.server";
+
+import {
+  ClerkProvider,
+} from "@clerk/react-router";
+
+export async function loader(args: Route.LoaderArgs) {
+  // const secretKey = process.env.VITE_CLERK_SECRET_KEY;
+  // return rootAuthLoader(args, { secretKey });
+  return rootAuthLoader(args);
+}
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -28,7 +42,7 @@ export const links: Route.LinksFunction = () => [
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,11 +58,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
+export default function App({ loaderData }: Route.ComponentProps) {
   return (
-    <HeroUIProvider>
-      <Outlet />
-    </HeroUIProvider>
+    <ClerkProvider
+      loaderData={loaderData}
+      signUpFallbackRedirectUrl="/"
+      signInFallbackRedirectUrl="/"
+    >
+      <main>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Outlet />
+        </ThemeProvider>
+      </main>
+    </ClerkProvider>
   );
 }
 

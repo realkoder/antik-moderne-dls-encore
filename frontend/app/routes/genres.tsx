@@ -9,7 +9,7 @@ export function meta({}: Route.MetaArgs) {
 
 export default function Genres() {
   return (
-    <div className="border-2 border-solid">
+    <div>
       <h1 className="text-4xl font-bold mb-4">Browse Posters by Genre</h1>
     </div>
   );

@@ -98,7 +98,9 @@ Our e-commerce platform is a comprehensive online marketplace designed to facili
 
 ## System Architecture design
 
-TODO ========= ADD A COMPONENT DIAGRAM =========
+TODO ================== ADD A COMPONENT DIAGRAM        ==================
+TODO ================== ADD SOMETHING ABOUT CLERK AUTH ==================
+
 The whole project is organzied as a _mono-repo_ with two directories: `backend` & `frontend`. The backend system consists of following micro-services: `admin-service` `auth-service` `email-service` `product-service`.
 
 For the backend **[Encore](https://encore.dev)** is used as a backend framework and frontend is builded with [React Router v7](https://reactrouter.com/home).

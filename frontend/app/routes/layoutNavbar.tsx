@@ -1,3 +1,9 @@
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/react-router";
 import { useTheme } from "next-themes";
 import { NavLink, Outlet } from "react-router";
 import { ThemeChanger } from "~/components/ThemeChanger";
@@ -31,9 +37,15 @@ export default function layoutNavbar() {
             <NavLink to="/about" className="">
               About
             </NavLink>
-            <NavLink to="/signin" className="">
-              Sign in
-            </NavLink>
+
+            <SignedOut>
+              <NavLink to="/sign-in" className="">
+                Sign in
+              </NavLink>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
         </div>
       </nav>

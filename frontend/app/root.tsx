@@ -19,10 +19,6 @@ import { rootAuthLoader } from "@clerk/react-router/ssr.server";
 
 import {
   ClerkProvider,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  SignInButton,
 } from "@clerk/react-router";
 
 export async function loader(args: Route.LoaderArgs) {
@@ -69,14 +65,6 @@ export default function App({ loaderData }: Route.ComponentProps) {
       signUpFallbackRedirectUrl="/"
       signInFallbackRedirectUrl="/"
     >
-      <header className="flex items-center justify-center py-8 px-4">
-        <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header>
       <main>
         <ThemeProvider
           attribute="class"

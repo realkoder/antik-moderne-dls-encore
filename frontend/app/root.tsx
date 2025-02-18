@@ -12,6 +12,8 @@ import type { Route } from "./+types/root";
 import { ThemeProvider } from "next-themes";
 
 import "./app.css";
+// import dotenv from "dotenv";
+// dotenv.config();
 
 import { rootAuthLoader } from "@clerk/react-router/ssr.server";
 
@@ -24,6 +26,8 @@ import {
 } from "@clerk/react-router";
 
 export async function loader(args: Route.LoaderArgs) {
+  // const secretKey = process.env.VITE_CLERK_SECRET_KEY;
+  // return rootAuthLoader(args, { secretKey });
   return rootAuthLoader(args);
 }
 
@@ -50,7 +54,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -74,7 +78,14 @@ export default function App({ loaderData }: Route.ComponentProps) {
         </SignedIn>
       </header>
       <main>
-        <Outlet />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Outlet />
+        </ThemeProvider>
       </main>
     </ClerkProvider>
   );

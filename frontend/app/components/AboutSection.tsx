@@ -4,11 +4,7 @@ export const AboutSection = () => {
   const { theme } = useTheme();
 
   return (
-    <div
-      className={`h-screen w-screen ${
-        theme && theme === "dark" ? "bg-gray-700" : "bg-gray-50"
-      }`}
-    >
+    <div>
       <section
         className={`py-20 ${
           theme && theme === "dark" ? "bg-gray-700" : "bg-gray-300"

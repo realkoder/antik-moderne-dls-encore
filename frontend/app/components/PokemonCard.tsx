@@ -13,7 +13,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className=" flex items-center space-x-4 rounded-md border p-4">
-          <div className="flex-1 space-y-1">
+          <div className="space-y-1">
             <p className="text-sm font-medium leading-none">
               Push Notifications
             </p>
@@ -22,8 +22,8 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
             </p>
             <img
               src={pokemon.sprites.front_default}
-              height={60}
-              width={60}
+              height={100}
+              width={100}
               alt="Pokemon"
             />
           </div>

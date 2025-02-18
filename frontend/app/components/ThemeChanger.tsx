@@ -6,20 +6,16 @@ export const ThemeChanger = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex items-center space-x-2">
-      {theme === "dark" && <FaSun className="text-yellow-500" />}
+    <div className="flex-row items-center space-x-2">
+      <div className="flex space-y-1 space-x-2">
+        <FaSun className="text-yellow-500" />
+        <FaMoon className="text-gray-500" />
+      </div>
       <Switch
         onCheckedChange={() =>
           setTheme((cur) => (cur === "light" ? "dark" : "light"))
         }
-      >
-        <span
-          className={`${
-            theme === "dark" ? "translate-x-6" : "translate-x-1"
-          } inline-block w-4 h-4 transform bg-white rounded-full`}
-        />
-      </Switch>
-      {theme === "light" && <FaMoon className="text-gray-500" />}
+      />
     </div>
   );
 };

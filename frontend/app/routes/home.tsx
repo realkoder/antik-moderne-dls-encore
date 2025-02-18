@@ -1,6 +1,4 @@
-import { Button } from "~/components/ui/button";
 import type { Route } from "./+types/home";
-import { useTheme } from "next-themes";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -10,14 +8,8 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const { theme } = useTheme();
-
   return (
-    <div
-      className={`h-screen w-screen ${
-        theme && theme === "dark" ? "bg-gray-700" : ""
-      }`}
-    >
+    <div className="flex-row justify-center text-center">
       <h1 className="text-4xl font-bold mb-4">Welcome to Antik Moderne</h1>
       <p className="text-lg mb-6">
         Discover a curated collection of timeless posters that blend the
@@ -30,7 +22,6 @@ export default function Home() {
         >
           Shop Now
         </a>
-        <Button>YOYO</Button>
       </div>
     </div>
   );

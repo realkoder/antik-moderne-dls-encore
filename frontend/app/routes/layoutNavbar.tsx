@@ -1,11 +1,16 @@
-
+import { useTheme } from "next-themes";
 import { NavLink, Outlet } from "react-router";
 import { ThemeChanger } from "~/components/ThemeChanger";
 
 export default function layoutNavbar() {
+  const { theme } = useTheme();
   return (
     <div>
-      <nav className="bg-gray-800 py-4">
+      <nav
+        className={`py-4 ${
+          theme && theme === "dark" ? "bg-neutral-950" : "bg-slate-400"
+        }`}
+      >
         <div className="container mx-auto text-white flex justify-between items-center">
           <div className="flex space-x-4">
             <NavLink to="/" className=" font-bold text-xl">
@@ -14,6 +19,9 @@ export default function layoutNavbar() {
             <ThemeChanger />
           </div>
           <div className="flex space-x-4">
+            <NavLink to="/" className=" ">
+              Home
+            </NavLink>
             <NavLink to="/posters" className=" ">
               Posters
             </NavLink>
@@ -23,10 +31,17 @@ export default function layoutNavbar() {
             <NavLink to="/about" className="">
               About
             </NavLink>
+            <NavLink to="/signin" className="">
+              Sign in
+            </NavLink>
           </div>
         </div>
       </nav>
-      <div>
+      <div
+        className={`h-screen w-screen ${
+          theme && theme === "dark" ? "bg-gray-800" : ""
+        }`}
+      >
         <Outlet />
       </div>
     </div>

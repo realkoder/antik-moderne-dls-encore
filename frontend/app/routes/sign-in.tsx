@@ -1,5 +1,6 @@
 import { SignIn, SignInButton, SignUp } from "@clerk/react-router";
 import type { Route } from "./+types/genres";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,10 +12,20 @@ export function meta({}: Route.MetaArgs) {
 export default function SignInPage() {
   return (
     <div className="flex flex-col items-center text-center">
-      <h1 className="text-4xl font-bold mb-4">Sign in or up</h1>
-      <SignUp />
-      <SignIn />
-      <SignInButton />
+      <h1 className="my-4 text-4xl font-bold mb-4">Sign in or up</h1>
+
+      <Tabs defaultValue="signin" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="signin">Sign in</TabsTrigger>
+          <TabsTrigger value="signup">Create account</TabsTrigger>
+        </TabsList>
+        <TabsContent value="signin">
+          <SignIn />
+        </TabsContent>
+        <TabsContent value="signup">
+          <SignUp />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

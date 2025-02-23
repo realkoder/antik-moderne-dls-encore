@@ -22,10 +22,9 @@ interface AuthData {
   emailAddress: string | null;
 }
 
-const myAuthHandler = authHandler(async (params: AuthParams): Promise<
-  AuthData
-> => {
+const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> => {
   const token = params.authorization.replace("Bearer ", "");
+  console.log("HEY EXECTUED", token)
 
   if (!token) {
     throw APIError.unauthenticated("no token provided");

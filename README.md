@@ -174,3 +174,16 @@ npm run dev
 [React spinners components](https://github.com/adexin/spinners-react)
 
 ![yzane-md-to-pdf-vsc-extension](images/yzane-md-to-pdf.png "yzane-md-to-pdf")
+
+
+
+### NOTES
+For the authentication following is used: **clerk**, **svix** & **ngrok**.
+Clerk is handling the signin with either google / apple or manual signup. _Svix_ is what _Clerk_ uses for their webhooks.
+
+[Guide for configuring webhooks](https://clerk.com/docs/webhooks/sync-data)
+
+Using _ngrok_ for exposing local running encore services where /users/webhook is relevant to make webhook listening for incomming requests when user: **creates**, **updates** or **deletes**.
+
+[ngrok to expose local running endpoints used for clerk/svix webhook when new users or users updates or deletes](https://dashboard.ngrok.com/get-started/setup/macos)
+execute this to expose: ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000

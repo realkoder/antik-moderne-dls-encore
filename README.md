@@ -149,6 +149,9 @@ Since we use **Encore** as backend framework, encore have a super efficient and 
 # Given you're placed in root
 cd backend
 
+# If first time whole project have to have needed dependencies installed
+npm install
+
 # given you have configured encore -> https://encore.dev/docs/ts/install
 encore run
 ```
@@ -165,9 +168,19 @@ npm install
 npm run dev
 ```
 
+If you gonna experiement with [Clerk usage of Webhooks](https://clerk.com/docs/webhooks/overview?_gl=1*j9cbt9*_gcl_au*MTQwNDI0MjU0Mi4xNzM5ODA1MTE5*_ga*OTAyMzMwOTQ3LjE3Mzk4MDUxMTk.*_ga_1WMF5X234K*MTc0MDMyNjM4OS4xMC4xLjE3NDAzMjc4ODUuMC4wLjA.):
+
+```bash
+# Ensure you have instaled ngrok
+ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
+```
+
+
 <br>
 
 ## Bonus links and miscellaneous
+
+[Clerk React SDK + Encore App Example](https://github.com/encoredev/examples/blob/main/ts/clerk/admin/admin.ts)
 
 [Stackoverflow about issues with migrating to Tailwindcss v4](https://stackoverflow.com/questions/79380514/problem-installing-tailwindcss-with-vite-after-npx-tailwindcss-init-p-comman/79380522#79380522)
 
@@ -186,4 +199,4 @@ Clerk is handling the signin with either google / apple or manual signup. _Svix_
 Using _ngrok_ for exposing local running encore services where /users/webhook is relevant to make webhook listening for incomming requests when user: **creates**, **updates** or **deletes**.
 
 [ngrok to expose local running endpoints used for clerk/svix webhook when new users or users updates or deletes](https://dashboard.ngrok.com/get-started/setup/macos)
-execute this to expose: ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
+execute this to expose: `ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000`

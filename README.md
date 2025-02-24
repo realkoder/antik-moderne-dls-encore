@@ -98,7 +98,10 @@ Our e-commerce platform is a comprehensive online marketplace designed to facili
 
 ## System Architecture design
 
-![Component Diagram](/images/component-diagram.png "Component Diagram")
+**Component Diagram**
+
+![Component Diagram](images/component-diagram.png "Component Diagram")
+
 TODO ================== ADD SOMETHING ABOUT CLERK AUTH ==================
 
 The whole project is organzied as a _mono-repo_ with two directories: `backend` & `frontend`. The backend system consists of following micro-services: `admin-service` `auth-service` `email-service` `product-service`.
@@ -109,7 +112,7 @@ For the backend **[Encore](https://encore.dev)** is used as a backend framework 
 
 <br>
 
-**Encore** provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [NSQ](https://nsq.io/overview/design.html) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
+**Encore** provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [GCP](https://cloud.google.com/pubsub) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
 
 #### Key Features of Encore's Pub/Sub System:
 

@@ -10,7 +10,6 @@ const WebhookSigningSecretKey = secret("WebhookSigningSecretKey");
 export const webhookHandler = api.raw(
     { expose: true, path: "/users/webhook" },
     async (req, resp) => {
-        console.log("WTF WE ARE ACTUALLY CALLED!!!");
         const signingSecret = WebhookSigningSecretKey();
 
         if (!signingSecret) {
@@ -61,14 +60,12 @@ export const webhookHandler = api.raw(
 
         const eventType = event.type;
         if (eventType === "user.created") {
-            console.log("HEY WE HERE NOW!");
             try {
-
+                const email = event.data.email_addresses[0].email_address;
                 await UserService.create(event.data);
-                
-                await UserAddedTopic.publish({ name: event.data.first_name ?? "Unknown", email: event.data.email_addresses[0].email_address ?? "alexanderbtcc@gmail.com" });
-                
-                console.log("WOOW THE USER SHOULD BE CREATED BY NOW");
+                if (email) {
+                    await UserAddedTopic.publish({ name: event.data.first_name ?? "MissingName", email });
+                }
             } catch (e) {
                 console.error("Error with creating user by webhook", e);
             }
@@ -85,7 +82,6 @@ export const webhookHandler = api.raw(
             }
         }
 
-        console.log("WE STIL HERE");
         resp.writeHead(200, { 'Content-Type': 'application/json' });
         resp.end(JSON.stringify({ message: 'Webhook received' }));
     });

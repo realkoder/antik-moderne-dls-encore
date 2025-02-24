@@ -1,8 +1,8 @@
-import { users, email_addresses } from "../../../db/schema";
+import { users, email_addresses, privilege_roles } from "../../../db/schema";
 import { db } from "../../../db/database";
 import { count, sql, eq, asc } from 'drizzle-orm';
 import { UserJSON } from "@clerk/backend";
-import { EmailAddress, UserResponse } from "../../../types/user.interface";
+import { Role, UserResponse } from "../../../types/user.interface";
 import { Response } from "../../../types/api.interface";
 
 const UserService = {
@@ -35,6 +35,9 @@ const UserService = {
         emailAddresses.forEach(async emailAddress => {
             await db.insert(email_addresses).values(emailAddress);
         });
+
+        const userPrivilegeRole = { user_id: event.id, role: Role.USER };
+        await db.insert(privilege_roles).values(userPrivilegeRole);
 
         return {
             status: "OK"
@@ -133,7 +136,9 @@ const UserService = {
 
     delete: async (userId: string): Promise<Response> => {
         await db.delete(email_addresses).where(eq(email_addresses.user_id, userId)).returning();
+        await db.delete(privilege_roles).where(eq(privilege_roles.user_id, userId)).returning();
         const user = await db.delete(users).where(eq(users.id, userId)).returning();
+
         if (!user) {
             return {
                 success: false,
@@ -144,6 +149,11 @@ const UserService = {
             success: true,
             result: "User deleted successfully",
         };
+    },
+
+    getUserRoleById: async (userId: string): Promise<Role> => {
+        const [privilegeRole] = await db.select().from(privilege_roles).where(eq(privilege_roles.user_id, userId));
+        return privilegeRole.role as Role;
     },
 };
 

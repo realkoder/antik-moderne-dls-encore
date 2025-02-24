@@ -15,6 +15,13 @@
       "when": 1740325221846,
       "tag": "0001_bizarre_peter_quill",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740433987328,
+      "tag": "0002_luxuriant_brother_voodoo",
+      "breakpoints": true
     }
   ]
 }

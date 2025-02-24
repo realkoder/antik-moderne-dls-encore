@@ -2,8 +2,20 @@ import { api, APIError } from "encore.dev/api";
 
 import UserService from "../services/user.service";
 import { Response } from "../../../types/api.interface";
-import { UserResponse } from "../../../types/user.interface";
+import { Role, UserResponse } from "../../../types/user.interface";
 
+
+interface UserRoleParams {
+    userId: string;
+}
+
+export const getUserRole = api<UserRoleParams, { role: Role }>(
+    {},
+    async ({ userId }): Promise<{ role: Role }> => {
+        const role = await UserService.getUserRoleById(userId);
+        return { role };
+    }
+);
 
 export const count = api(
     { expose: true, method: "GET", path: "/count/users" },

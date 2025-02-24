@@ -12,9 +12,9 @@ export const users = p.pgTable("users", {
     username: p.varchar({ length: 200 }).notNull(),
     image_url: p.text(),
     primary_email_address_id: p.text(),
-    created_at: p.bigint({mode: "number"}).notNull(),
-    last_sign_in_at: p.bigint({mode: "number"}),
-    updated_at: p.bigint({mode: "number"}),
+    created_at: p.bigint({ mode: "number" }).notNull(),
+    last_sign_in_at: p.bigint({ mode: "number" }),
+    updated_at: p.bigint({ mode: "number" }),
 });
 
 export const email_addresses = p.pgTable("email_addresses", {
@@ -26,5 +26,19 @@ export const email_addresses = p.pgTable("email_addresses", {
         columns: [table.user_id],
         foreignColumns: [users.id],
         name: "fk_user_id"
+    })
+]);
+
+export const RoleEnum = p.pgEnum("role", ["USER", "ADMIN"]);
+
+export const privilege_roles = p.pgTable("privilege_roles", {
+    id: p.serial().primaryKey(),
+    user_id: p.text().notNull(),
+    role: RoleEnum(),
+}, (table) => [
+    p.foreignKey({
+        columns: [table.user_id],
+        foreignColumns: [users.id],
+        name: "fk_privilege_role_user_id"
     })
 ]);

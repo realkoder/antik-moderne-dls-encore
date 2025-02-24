@@ -36,11 +36,16 @@ export interface Paginated {
     pageSize: number;
     totalPages: number;
     current: number;
-  }
+}
 
 export interface UserResponse {
     success: boolean;
     message?: string;
     result?: UserDto;
     pagination?: Paginated;
-  }
+}
+
+export enum Role {
+    USER = "USER",
+    ADMIN = "ADMIN",
+}

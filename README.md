@@ -98,7 +98,7 @@ Our e-commerce platform is a comprehensive online marketplace designed to facili
 
 ## System Architecture design
 
-TODO ================== ADD A COMPONENT DIAGRAM        ==================
+TODO ================== ADD A COMPONENT DIAGRAM ==================
 TODO ================== ADD SOMETHING ABOUT CLERK AUTH ==================
 
 The whole project is organzied as a _mono-repo_ with two directories: `backend` & `frontend`. The backend system consists of following micro-services: `admin-service` `auth-service` `email-service` `product-service`.
@@ -145,6 +145,7 @@ By integrating these technologies, our frontend architecture is designed to be f
 ### Dev environment
 
 Since we use **Encore** as backend framework, encore have a super efficient and elegant dev-experience to boot up whole backend system (dev-exp for frontend is described below):
+
 ```bash
 # Given you're placed in root
 cd backend
@@ -157,6 +158,7 @@ encore run
 ```
 
 Frontend application for dev-exp:
+
 ```bash
 # Given you're placed in root
 
@@ -175,10 +177,13 @@ If you gonna experiement with [Clerk usage of Webhooks](https://clerk.com/docs/w
 ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
 ```
 
-
 <br>
 
 ## Bonus links and miscellaneous
+
+_PostgreSQL_ is used as databasse - where _[Drizzle](https://orm.drizzle.team)_ is used as _ORM_.
+
+[Encore example with PostgreSQL and Drizzle as ORM](https://github.com/encoredev/examples/blob/main/ts/drizzle/README.md)
 
 [Clerk React SDK + Encore App Example](https://github.com/encoredev/examples/blob/main/ts/clerk/admin/admin.ts)
 
@@ -188,9 +193,8 @@ ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
 
 ![yzane-md-to-pdf-vsc-extension](images/yzane-md-to-pdf.png "yzane-md-to-pdf")
 
-
-
 ### NOTES
+
 For the authentication following is used: **clerk**, **svix** & **ngrok**.
 Clerk is handling the signin with either google / apple or manual signup. _Svix_ is what _Clerk_ uses for their webhooks.
 

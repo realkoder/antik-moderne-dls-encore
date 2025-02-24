@@ -10,10 +10,19 @@ const resend = new Resend(resendApiKey());
 const sendEmail = async ({ name, email }: UserRequest) => {
   console.log("WOW CALLED", name, email);
   const msg = {
-    from: 'onboarding@resend.dev',
+    from: 'welcome@realkoder.com',
     to: email,
     subject: 'Welcome to Antik Moderne',
-    html: `<p>We wish you welcome for Antik Moderne, thank you for signing up <strong>${name}</strong>!</p>`
+    html: `
+      <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; color: #333;">
+        <h2>Welcome to Antik Moderne, ${name}!</h2>
+        <p>We're thrilled to have you join our community of art and poster enthusiasts. At Antik Moderne, we believe in the power of art to transform spaces and inspire lives.</p>
+        <p>As a welcome gift, here's a <strong>10% discount</strong> on your first purchase! Just use the code <strong>WELCOME10</strong> at checkout.</p>
+        <p>If you have any questions or need assistance, feel free to contact us at <a href="mailto:support@realkoder.com" style="color: #1a82e2;">support@realkoder.com</a>.</p>
+        <p>Thank you for choosing Antik Moderne. Let's make your space beautiful together!</p>
+        <p>Warm regards,<br>The Antik Moderne Team</p>
+      </div>
+    `
   };
 
   try {

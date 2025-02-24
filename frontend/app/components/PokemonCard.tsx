@@ -43,18 +43,19 @@ const gameVersionsLink: { [key: string]: string } = {
     "https://assets1.ignimgs.com/2019/05/17/pokemon-silver---button-1558057647925.jpg",
   crystal:
     "https://www.nintendo.com/eu/media/images/10_share_images/games_15/game_boy_color_5/H2x1_GBC_PokemonCrystal_enGB_image1600w.jpg",
+  red: "https://i.ytimg.com/vi/pvH5hWc7Mes/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDn5ncbOpIfgiffChsWepk63SbuFw",
+  blue: "https://www.nintendo.com/eu/media/images/10_share_images/games_15/game_boy_4/H2x1_GB_PokemonBlue_enGB_image1600w.jpg",
+  yellow: "https://assets1.ignimgs.com/2019/05/17/pokemon-yellow---button-1558057648010.jpg",
 };
 
 export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
-  
   return (
     <Card className="w-full text-center">
       <CardHeader className="text-center flex-col justify-center items-center">
         <CardTitle>Pokemon {pokemon.name}</CardTitle>
         <img
           src={pokemon.sprites.front_default}
-          height={100}
-          width={100}
+          className="w-35 h-35 hover:scale-150 transition-transform duration-150 rounded shadow-lg border-2 border-gray-200"
           alt="Pokemon"
         />
       </CardHeader>
@@ -65,7 +66,11 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
               <p className="text-sm font-bold leading-none">
                 Included in following versions
               </p>
-            ) : <p className="text-sm font-bold leading-none">Not included in any versions</p>}
+            ) : (
+              <p className="text-sm font-bold leading-none">
+                Not included in any versions
+              </p>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-2">
               {pokemon.game_indices.map((gameIndice) => {
                 const versionName = gameIndice.version.name as string;
@@ -74,8 +79,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
                   return (
                     <img
                       key={versionImageUrl}
-                      className="w-12 h-12 hover:scale-300 transition-transform duration-150"
-                      
+                      className="w-12 h-12 hover:scale-300 transition-transform duration-150 rounded shadow-lg border-2 border-gray-200"
                       src={versionImageUrl}
                       alt={versionName}
                     />

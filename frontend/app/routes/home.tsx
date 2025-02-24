@@ -1,4 +1,8 @@
 import type { Route } from "./+types/home";
+import Client, { Local } from "~/lib/client";
+import getRequestClient from "~/lib/getRequestClient";
+import { useAuth } from "@clerk/react-router";
+import { Button } from "~/components/ui/button";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -7,7 +11,18 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+
 export default function Home() {
+
+  const {getToken} = useAuth();
+
+  const handleFetc = async () => {
+    const token = await getToken();
+    new Client(Local).admin.getHelloWorld().then(res => console.log("LOOK, helloworldRES", res))
+    if (!token) return
+    getRequestClient(token).admin.getDashboardData().then(res => console.log("LOOK, AUTH CALL DASHBOARDDATE", res));
+  }
+
   return (
     <div className="flex-row justify-center text-center">
       <h1 className="text-4xl font-bold mb-4">Welcome to Antik Moderne</h1>
@@ -23,6 +38,7 @@ export default function Home() {
           Shop Now
         </a>
       </div>
+      <Button onClick={() => handleFetc()}>NOWW</Button>
     </div>
   );
 }

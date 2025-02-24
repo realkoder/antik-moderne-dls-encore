@@ -98,7 +98,9 @@ Our e-commerce platform is a comprehensive online marketplace designed to facili
 
 ## System Architecture design
 
-TODO ========= ADD A COMPONENT DIAGRAM =========
+TODO ================== ADD A COMPONENT DIAGRAM ==================
+TODO ================== ADD SOMETHING ABOUT CLERK AUTH ==================
+
 The whole project is organzied as a _mono-repo_ with two directories: `backend` & `frontend`. The backend system consists of following micro-services: `admin-service` `auth-service` `email-service` `product-service`.
 
 For the backend **[Encore](https://encore.dev)** is used as a backend framework and frontend is builded with [React Router v7](https://reactrouter.com/home).
@@ -143,15 +145,20 @@ By integrating these technologies, our frontend architecture is designed to be f
 ### Dev environment
 
 Since we use **Encore** as backend framework, encore have a super efficient and elegant dev-experience to boot up whole backend system (dev-exp for frontend is described below):
+
 ```bash
 # Given you're placed in root
 cd backend
+
+# If first time whole project have to have needed dependencies installed
+npm install
 
 # given you have configured encore -> https://encore.dev/docs/ts/install
 encore run
 ```
 
 Frontend application for dev-exp:
+
 ```bash
 # Given you're placed in root
 
@@ -163,12 +170,37 @@ npm install
 npm run dev
 ```
 
+If you gonna experiement with [Clerk usage of Webhooks](https://clerk.com/docs/webhooks/overview?_gl=1*j9cbt9*_gcl_au*MTQwNDI0MjU0Mi4xNzM5ODA1MTE5*_ga*OTAyMzMwOTQ3LjE3Mzk4MDUxMTk.*_ga_1WMF5X234K*MTc0MDMyNjM4OS4xMC4xLjE3NDAzMjc4ODUuMC4wLjA.):
+
+```bash
+# Ensure you have instaled ngrok
+ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
+```
+
 <br>
 
 ## Bonus links and miscellaneous
+
+_PostgreSQL_ is used as databasse - where _[Drizzle](https://orm.drizzle.team)_ is used as _ORM_.
+
+[Encore example with PostgreSQL and Drizzle as ORM](https://github.com/encoredev/examples/blob/main/ts/drizzle/README.md)
+
+[Clerk React SDK + Encore App Example](https://github.com/encoredev/examples/blob/main/ts/clerk/admin/admin.ts)
 
 [Stackoverflow about issues with migrating to Tailwindcss v4](https://stackoverflow.com/questions/79380514/problem-installing-tailwindcss-with-vite-after-npx-tailwindcss-init-p-comman/79380522#79380522)
 
 [React spinners components](https://github.com/adexin/spinners-react)
 
 ![yzane-md-to-pdf-vsc-extension](images/yzane-md-to-pdf.png "yzane-md-to-pdf")
+
+### NOTES
+
+For the authentication following is used: **clerk**, **svix** & **ngrok**.
+Clerk is handling the signin with either google / apple or manual signup. _Svix_ is what _Clerk_ uses for their webhooks.
+
+[Guide for configuring webhooks](https://clerk.com/docs/webhooks/sync-data)
+
+Using _ngrok_ for exposing local running encore services where /users/webhook is relevant to make webhook listening for incomming requests when user: **creates**, **updates** or **deletes**.
+
+[ngrok to expose local running endpoints used for clerk/svix webhook when new users or users updates or deletes](https://dashboard.ngrok.com/get-started/setup/macos)
+execute this to expose: `ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000`

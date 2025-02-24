@@ -1,41 +1,52 @@
-import { APIError, Gateway, Header, api } from "encore.dev/api";
+import { createClerkClient, verifyToken } from "@clerk/backend";
+import { APIError, Gateway, Header } from "encore.dev/api";
 import { authHandler } from "encore.dev/auth";
+import { secret } from "encore.dev/config";
 
-interface LoginParams {
-  email: string;
-  password: string;
-}
+import log from "encore.dev/log";
+import { AUTHORIZED_PARTIES } from "./config";
 
-export const login = api(
-  { expose: true, auth: false, method: "GET", path: "/login" },
-  async (params: LoginParams): Promise<{ token: string }> => {
-    // ... get the userID from database or third party service like Auth0 or Clerk ...
-    // ... create and sign a token ...
+const clerkSecretKey = secret("ClerkSecretKey");
 
-    return { token: "dummy-token" };
-  }
-);
+const clerkClient = createClerkClient({
+  secretKey: clerkSecretKey(),
+});
 
 interface AuthParams {
   authorization: Header<"Authorization">;
 }
 
-// The function passed to authHandler will be called for all incoming API call that requires authentication.
-// Remove if your app does not require authentication.
-export const myAuthHandler = authHandler(
-  async (params: AuthParams): Promise<{ userID: string }> => {
-    // ... verify and decode token to get the userID ...
-    // ... get user info from database or third party service like Auth0 or Clerk ...
+interface AuthData {
+  userID: string;
+  imageUrl: string;
+  emailAddress: string | null;
+}
 
-    if (!params.authorization) {
-      throw APIError.unauthenticated("no token provided");
-    }
-    if (params.authorization !== "dummy-token") {
-      throw APIError.unauthenticated("invalid token");
-    }
+const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> => {
+  const token = params.authorization.replace("Bearer ", "");
+  console.log("HEY EXECTUED", token)
 
-    return { userID: "dummy-user-id" };
+  if (!token) {
+    throw APIError.unauthenticated("no token provided");
   }
-);
 
-export const gateway = new Gateway({ authHandler: myAuthHandler });
+  try {
+    const result = await verifyToken(token, {
+      authorizedParties: AUTHORIZED_PARTIES,
+      secretKey: clerkSecretKey(),
+    });
+
+    const user = await clerkClient.users.getUser(result.sub);
+
+    return {
+      userID: user.id,
+      imageUrl: user.imageUrl,
+      emailAddress: user.emailAddresses[0].emailAddress || null,
+    };
+  } catch (e) {
+    log.error(e);
+    throw APIError.unauthenticated("invalid token", e as Error);
+  }
+});
+
+export const mygw = new Gateway({ authHandler: myAuthHandler });

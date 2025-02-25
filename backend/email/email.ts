@@ -8,7 +8,6 @@ const resendApiKey = secret("ResendApiKey");
 const resend = new Resend(resendApiKey());
 
 const sendEmail = async ({ name, email }: UserRequest) => {
-  console.log("WOW CALLED", name, email);
   const msg = {
     from: 'welcome@realkoder.com',
     to: email,

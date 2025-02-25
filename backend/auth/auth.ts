@@ -31,13 +31,13 @@ const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> 
   if (!token) {
     throw APIError.unauthenticated("no token provided");
   }
-  
+
   try {
     const result = await verifyToken(token, {
       authorizedParties: AUTHORIZED_PARTIES,
       secretKey: clerkSecretKey(),
     });
-    
+
     const user = await clerkClient.users.getUser(result.sub);
     const { role } = await usersService.getUserRole({ userId: user.id });
 

@@ -68,7 +68,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
       <main>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >

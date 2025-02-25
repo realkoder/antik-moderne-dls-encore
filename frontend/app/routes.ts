@@ -7,5 +7,5 @@ export default [
         route("genres", "routes/genres.tsx"),
         route("posters", "routes/posters.tsx"),
         route("sign-in/*", "routes/sign-in.tsx"),
-    ])
+    ]),
 ] satisfies RouteConfig;

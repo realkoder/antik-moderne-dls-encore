@@ -22,21 +22,21 @@ export default function layoutNavbar() {
             <ThemeChanger />
           </div>
           <div className="flex space-x-4">
-            <NavLink to="/" className={`p-2 ${pathname === "/" ? `rounded-full border-2 ${theme === "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`}>
+            <NavLink to="/" className={`p-2 ${pathname === "/" ? `rounded-full border-2 ${theme && theme === "dark" ? "border-neutral-50" : "border-neutral-950" }` : ""}`}>
               Home
             </NavLink>
-            <NavLink to="/posters" className={`p-2 ${pathname === "/posters" ? `rounded-full border-2 ${theme === "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`}>
+            <NavLink to="/posters" className={`p-2 ${pathname === "/posters" ? `rounded-full border-2 ${theme && theme === "dar" ? "border-neutral-50" : "border-neutral-950"}` : ""}`}>
               Posters
             </NavLink>
-            <NavLink to="/genres" className={`p-2 ${pathname === "/genres" ? `rounded-full border-2 ${theme === "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`}>
+            <NavLink to="/genres" className={`p-2 ${pathname === "/genres" ? `rounded-full border-2 ${theme && theme === "dar" ? "border-neutral-50" : "border-neutral-950"}` : ""}`}>
               Genres
             </NavLink>
-            <NavLink to="/about" className={`p-2 ${pathname === "/about" ? `rounded-full border-2 ${theme === "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`}>
+            <NavLink to="/about" className={`p-2 ${pathname === "/about" ? `rounded-full border-2 ${theme && theme === "dar" ?  "border-neutral-50" : "border-neutral-950"}` : ""}`}>
               About
             </NavLink>
 
             <SignedOut>
-              <NavLink to="/sign-in" className={`p-2 ${pathname === "/sign-in" ? `rounded-full border-2 ${theme === "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`}>
+              <NavLink to="/sign-in" className={`p-2 ${pathname === "/sign-in" ? `rounded-full border-2 ${theme && theme === "dar" ? "border-neutral-50" : "border-neutral-950"}` : ""}`}>
                 Sign in
               </NavLink>
             </SignedOut>

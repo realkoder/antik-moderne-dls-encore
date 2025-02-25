@@ -36,7 +36,7 @@ const UserService = {
             await db.insert(email_addresses).values(emailAddress);
         });
 
-        const userPrivilegeRole = { user_id: event.id, role: Role.USER };
+        const userPrivilegeRole = { user_id: user.id, role: Role.USER };
         await db.insert(privilege_roles).values(userPrivilegeRole);
 
         return {

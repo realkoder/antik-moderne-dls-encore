@@ -1,4 +1,4 @@
-import { SignIn, SignInButton, SignUp } from "@clerk/react-router";
+import { SignIn, SignUp } from "@clerk/react-router";
 import type { Route } from "./+types/genres";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 

@@ -10,7 +10,7 @@ interface UserRoleParams {
 }
 
 export const getUserRole = api<UserRoleParams, { role: Role }>(
-    {},
+    { expose: false},
     async ({ userId }): Promise<{ role: Role }> => {
         const role = await UserService.getUserRoleById(userId);
         return { role };

@@ -28,20 +28,20 @@ interface AuthData {
 const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> => {
   const token = params.authorization.replace("Bearer ", "");
 
-  console.log("WOW");
   if (!token) {
     throw APIError.unauthenticated("no token provided");
   }
-
+  
   try {
     const result = await verifyToken(token, {
       authorizedParties: AUTHORIZED_PARTIES,
       secretKey: clerkSecretKey(),
     });
-
+    
     const user = await clerkClient.users.getUser(result.sub);
     const { role } = await usersService.getUserRole({ userId: user.id });
 
+    if (!role) throw APIError.unauthenticated("Missing role");
 
     return {
       userID: user.id,
@@ -51,7 +51,7 @@ const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> 
     };
   } catch (e) {
     log.error(e);
-    throw APIError.unauthenticated("invalid token", e as Error);
+    throw APIError.unauthenticated("invalid token or missing role", e as Error);
   }
 });
 

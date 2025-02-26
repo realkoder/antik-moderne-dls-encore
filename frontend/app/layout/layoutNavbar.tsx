@@ -2,12 +2,14 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/react-router";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
+
 import { ThemeChanger } from "~/components/ThemeChanger";
+import useUserRole from "~/hooks/useUserRole";
 
 export default function layoutNavbar() {
   const { theme, setTheme } = useTheme();
-
   const { pathname } = useLocation();
+  const { userRole } = useUserRole();
 
   useEffect(() => {
     setTheme("light");
@@ -17,7 +19,7 @@ export default function layoutNavbar() {
     `${pathname === linkPath ? `border-black border-b ${theme == undefined || theme == "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`;
 
   return (
-    <div className={`h-screen flex flex-col ${theme == undefined || theme == "light" ? "white" : "bg-zinc-700"}`}>
+    <div className={`h-screen text-center flex flex-col`}>
       <nav className={"group"}>
         <div className={`p-4 px-8 flex justify-between items-center`}>
           <div className="flex space-x-4">
@@ -46,6 +48,12 @@ export default function layoutNavbar() {
               </NavLink>
             </SignedOut>
             <SignedIn>
+              {userRole === "ADMIN" && (
+                <NavLink to="/admin" className={navLinkClassName("/admin")}>
+                  Admin
+                </NavLink>
+              )}
+
               <UserButton />
             </SignedIn>
           </div>

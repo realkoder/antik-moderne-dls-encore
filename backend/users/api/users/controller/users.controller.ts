@@ -3,14 +3,26 @@ import { api, APIError } from "encore.dev/api";
 import UserService from "../services/user.service";
 import { Response } from "../../../types/api.interface";
 import { Role, UserResponse } from "../../../types/user.interface";
+import { getAuthData } from "~encore/auth";
 
 
 interface UserRoleParams {
     userId: string;
 }
 
-export const getUserRole = api<UserRoleParams, { role: Role }>(
-    { expose: false},
+export const getUserRoleForClient = api<{}, { role: Role }>(
+    {auth: true, expose: true, method: "GET", path: "/role"},
+    async (): Promise<{ role: Role }> => {
+        const userId = getAuthData().userID;
+        if (!userId) throw APIError.unauthenticated("Authdata is missing for the user!");
+        const role = await UserService.getUserRoleById(userId);
+        return { role };
+    }
+);
+
+
+export const getUserRoleForAuth = api<UserRoleParams, { role: Role }>(
+    {},
     async ({ userId }): Promise<{ role: Role }> => {
         const role = await UserService.getUserRoleById(userId);
         return { role };

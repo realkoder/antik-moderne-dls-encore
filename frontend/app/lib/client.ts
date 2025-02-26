@@ -31,7 +31,7 @@ export function PreviewEnv(pr: number | string): BaseURL {
  */
 export default class Client {
     public readonly admin: admin.ServiceClient
-    public readonly auth: auth.ServiceClient
+    public readonly users: users.ServiceClient
 
 
     /**
@@ -43,7 +43,7 @@ export default class Client {
     constructor(target: BaseURL, options?: ClientOptions) {
         const base = new BaseClient(target, options ?? {})
         this.admin = new admin.ServiceClient(base)
-        this.auth = new auth.ServiceClient(base)
+        this.users = new users.ServiceClient(base)
     }
 }
 
@@ -104,11 +104,9 @@ export namespace auth {
     export interface AuthParams {
         authorization: string
     }
+}
 
-    export interface LoginParams {
-        email: string
-        password: string
-    }
+export namespace users {
 
     export class ServiceClient {
         private baseClient: BaseClient
@@ -117,21 +115,80 @@ export namespace auth {
             this.baseClient = baseClient
         }
 
-        public async login(params: LoginParams): Promise<{
-    token: string
-}> {
-            // Convert our params into the objects we need for the request
-            const query = makeRecord<string, string | string[]>({
-                email:    params.email,
-                password: params.password,
-            })
-
+        public async count(): Promise<types.Response> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/login`, undefined, {query})
+            const resp = await this.baseClient.callTypedAPI("GET", `/count/users`)
+            return await resp.json() as types.Response
+        }
+
+        public async getUserRoleForClient(): Promise<{
+    role: types.Role
+}> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/role`)
             return await resp.json() as {
-    token: string
+    role: types.Role
 }
         }
+
+        public async readByEmail(email: string): Promise<types.UserResponse> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/users/email/${encodeURIComponent(email)}`)
+            return await resp.json() as types.UserResponse
+        }
+
+        public async readOne(id: string): Promise<types.UserResponse> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/users/${encodeURIComponent(id)}`)
+            return await resp.json() as types.UserResponse
+        }
+
+        public async webhookHandler(method: "POST", body?: BodyInit, options?: CallParameters): Promise<globalThis.Response> {
+            return this.baseClient.callAPI(method, `/users/webhook`, body, options)
+        }
+    }
+}
+
+export namespace types {
+    export interface EmailAddress {
+        "email_address": string
+        id: string
+    }
+
+    export interface Paginated {
+        count: number
+        pageSize: number
+        totalPages: number
+        current: number
+    }
+
+    export interface Response {
+        success: boolean
+        message?: string
+        result?: string | number
+    }
+
+    export type Role = "USER" | "ADMIN"
+
+    export interface UserDto {
+        "created_at": number
+        "external_id": string
+        "first_name": string
+        id: string
+        "last_name": string
+        "last_sign_in_at": number | null
+        "primary_email_address_id": string | null
+        "image_url": string | null
+        "updated_at": number | null
+        username: string
+        "email_addresses": EmailAddress[]
+    }
+
+    export interface UserResponse {
+        success: boolean
+        message?: string
+        result?: UserDto
+        pagination?: Paginated
     }
 }
 

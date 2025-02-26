@@ -1,6 +1,5 @@
 import type { Route } from "./+types/home";
 import Client, { Local } from "~/lib/client";
-import getRequestClient from "~/lib/getRequestClient";
 import { useAuth } from "@clerk/react-router";
 import { Button } from "~/components/ui/button";
 
@@ -15,9 +14,9 @@ export default function Home() {
     const token = await getToken();
     new Client(Local).admin.getHelloWorld().then((res) => console.log("LOOK, helloworldRES", res));
     if (!token) return;
-    getRequestClient(token)
-      .admin.getDashboardData()
-      .then((res) => console.log("LOOK, AUTH CALL DASHBOARDDATE", res));
+    // getRequestClient(token)
+    //   .admin.getDashboardData()
+    //   .then((res) => console.log("LOOK, AUTH CALL DASHBOARDDATE", res));
   };
 
   return (

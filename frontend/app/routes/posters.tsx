@@ -59,7 +59,7 @@ export default function Posters() {
 
   return (
     <div>
-      <div className="p-4">
+      <div className="p-4 text-left">
         <SpinnerRoundOutlined
           enabled={isLoading}
           size={50}

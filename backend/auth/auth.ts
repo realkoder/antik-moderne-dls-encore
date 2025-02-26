@@ -39,7 +39,7 @@ const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> 
     });
 
     const user = await clerkClient.users.getUser(result.sub);
-    const { role } = await usersService.getUserRole({ userId: user.id });
+    const { role } = await usersService.getUserRoleForAuth({ userId: user.id });
 
     if (!role) throw APIError.unauthenticated("Missing role");
 

@@ -17,8 +17,8 @@ export default function layoutNavbar() {
     `${pathname === linkPath ? `border-black border-b ${theme == undefined || theme == "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`;
 
   return (
-    <div className="h-screen flex flex-col">
-      <nav className={`group ${theme == undefined || theme == "light" ? "white" : "bg-neutral-950"}`}>
+    <div className={`h-screen flex flex-col ${theme == undefined || theme == "light" ? "white" : "bg-zinc-700"}`}>
+      <nav className={"group"}>
         <div className={`p-4 px-8 flex justify-between items-center`}>
           <div className="flex space-x-4">
             <NavLink to="/">
@@ -50,9 +50,9 @@ export default function layoutNavbar() {
             </SignedIn>
           </div>
         </div>
-        <hr className="opacity-0 group-hover:opacity-100 border-black transition-opacity duration-150" />
+        <hr className={`opacity-0 group-hover:opacity-100 ${theme == undefined || theme === "light" ? "border-black" : "border-white"} transition-opacity duration-150`} />
       </nav>
-      <div className={`flex-1 ${theme == undefined || theme == "light" ? "" : "bg-gray-800"}`}>
+      <div className={"flex-1"}>
         <Outlet />
       </div>
     </div>

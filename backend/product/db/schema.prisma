@@ -1,0 +1,48 @@
+// For any changes make a migration by running: npx prisma migrate dev
+// Migration naming convention: <incremenatl_number>_<changes_made>.<up/down>
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  //                REMEMEBER TO CHANGE TO THE EXACT db-<dbname>...
+  output        = "../../node_modules/@prisma-db-products/client" // Since we have multiple DB and multiple schema.prisma we have to this
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://backend-2tui:shadow-cuosrlr38u1lquc8stog@127.0.0.1:9500/products?sslmode=disable"
+}
+
+model Poster {
+  id             Int           @id @default(autoincrement())
+  name           String
+  artistFullName String
+  posterImageUrl String
+  formatPrices   FormatPrice[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@map("posters")
+}
+
+enum Format {
+  A4
+  Size_30X30_cm
+  Size_30X40_cm
+  Size_50x50
+  Size_50x70_cm
+  Size_70x70_cm
+  Size_70x100_cm
+  Size_100x100_cm
+  Size_100x140_cm
+}
+
+model FormatPrice {
+  id       Int    @id @default(autoincrement())
+  format   Format
+  price    Int
+  posterId Int
+  poster   Poster @relation(fields: [posterId], references: [id])
+
+  @@map("format_prices")
+}

@@ -2,7 +2,7 @@ import { APIError } from "encore.dev/api";
 import { secret } from "encore.dev/config";
 import { Subscription } from "encore.dev/pubsub";
 import { Resend } from 'resend';
-import { UserAddedTopic, UserRequest } from "../users/api/users/messaging/userAddedTopic";
+import { UserAddedTopic, UserRequest } from "../user/api/user/messaging/userAddedTopic";
 
 const resendApiKey = secret("ResendApiKey");
 const resend = new Resend(resendApiKey());

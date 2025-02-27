@@ -1,12 +1,12 @@
-import { prisma } from "../../../db/database";
+import { prismaUsers } from "../../../db/database"
 
-import { EmailAddress, UserJSON } from "@clerk/backend";
+import { UserJSON } from "@clerk/backend";
 import { Role, UserResponse } from "../../../types/user.interface";
-import { Response } from "../../../types/api.interface";
+import { Response } from "../../../../shared/types/api.interface";
 
 const UserService = {
     count: async (): Promise<number> => {
-        return await prisma.user.count();
+        return await prismaUsers.user.count();
     },
 
     create: async (event: UserJSON): Promise<{ status: string }> => {
@@ -24,8 +24,8 @@ const UserService = {
         };
 
         try {
-            const user = await prisma.$transaction(async (prisma) => {
-                const user = await prisma.user.create({ data: userNormalized });
+            const user = await prismaUsers.$transaction(async (prisma) => {
+                const user = await prismaUsers.user.create({ data: userNormalized });
 
                 const emailAddressesPromises = event.email_addresses.map(emailAddress =>
                     prisma.emailAddresses.create({
@@ -72,7 +72,7 @@ const UserService = {
                 last_sign_in_at: event.last_sign_in_at ? new Date(event.last_sign_in_at) : null,
                 updated_at: new Date(event.updated_at),
             };
-            const updateUser = await prisma.user.update({
+            const updateUser = await prismaUsers.user.update({
                 where: { id: id },
                 data: userNormalized,
             });
@@ -93,7 +93,7 @@ const UserService = {
     },
 
     findByEmail: async (email: string): Promise<UserResponse> => {
-        const user = await prisma.user.findFirst({
+        const user = await prismaUsers.user.findFirst({
             where: {
                 primary_email_address_id: email
             },
@@ -117,7 +117,7 @@ const UserService = {
     },
 
     findOne: async (userId: string): Promise<UserResponse> => {
-        const user = await prisma.user.findFirst({
+        const user = await prismaUsers.user.findFirst({
             where: { id: userId }
         });
 
@@ -140,14 +140,14 @@ const UserService = {
 
     delete: async (userId: string): Promise<Response> => {
         try {
-            await prisma.$transaction([
-                prisma.emailAddresses.deleteMany({
+            await prismaUsers.$transaction([
+                prismaUsers.emailAddresses.deleteMany({
                     where: { user_id: userId },
                 }),
-                prisma.privilegeRole.deleteMany({
+                prismaUsers.privilegeRole.deleteMany({
                     where: { user_id: userId },
                 }),
-                prisma.user.delete({
+                prismaUsers.user.delete({
                     where: { id: userId },
                 }),
             ]);
@@ -165,7 +165,7 @@ const UserService = {
     },
 
     getUserRoleById: async (userId: string): Promise<Role> => {
-        const privilegeRole = await prisma.privilegeRole.findFirst({ where: { user_id: userId } });
+        const privilegeRole = await prismaUsers.privilegeRole.findFirst({ where: { user_id: userId } });
         return privilegeRole?.role as Role;
     },
 };

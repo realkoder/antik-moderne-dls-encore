@@ -5,8 +5,8 @@ import { secret } from "encore.dev/config";
 
 import log from "encore.dev/log";
 import { AUTHORIZED_PARTIES } from "./config";
-import { Role } from "../users/types/user.interface";
-import { users as usersService } from "~encore/clients";
+import { Role } from "../user/types/user.interface";
+import { user as usersService } from "~encore/clients";
 
 const clerkSecretKey = secret("ClerkSecretKey");
 

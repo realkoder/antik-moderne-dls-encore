@@ -6,7 +6,12 @@
   "license": "MPL-2.0",
   "type": "module",
   "scripts": {
-    "postinstall": "npx prisma generate --schema=users/db/schema.prisma"
+    "generate:users": "npx prisma generate --schema=user/db/schema.prisma",
+    "generate:products": "npx prisma generate --schema=product/db/schema.prisma",
+    "postinstall": "npm run generate:users && npm run generate:products"
+  },
+  "prisma": {
+    "seed": "npx ts-node backend/product/db/seed.ts"
   },
   "devDependencies": {
     "@types/node": "^20",

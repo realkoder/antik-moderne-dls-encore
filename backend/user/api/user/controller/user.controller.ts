@@ -1,7 +1,7 @@
 import { api, APIError } from "encore.dev/api";
 
 import UserService from "../services/user.service";
-import { Response } from "../../../types/api.interface";
+import { Response } from "../../../../shared/types/api.interface";
 import { Role, UserResponse } from "../../../types/user.interface";
 import { getAuthData } from "~encore/auth";
 

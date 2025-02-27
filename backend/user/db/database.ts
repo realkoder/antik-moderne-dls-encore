@@ -1,5 +1,5 @@
 import { SQLDatabase } from "encore.dev/storage/sqldb";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma-db-users/client";
 
 const DB = new SQLDatabase("users", {
   migrations: {
@@ -8,7 +8,7 @@ const DB = new SQLDatabase("users", {
   },
 });
 
-const prisma = new PrismaClient({
+const prismaUsers = new PrismaClient({
   datasources: {
     db: {
       url: DB.connectionString,
@@ -16,4 +16,4 @@ const prisma = new PrismaClient({
   },
 });
 
-export { prisma };
+export { prismaUsers };

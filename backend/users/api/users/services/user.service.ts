@@ -1,6 +1,6 @@
 import { prisma } from "../../../db/database";
 
-import { UserJSON } from "@clerk/backend";
+import { EmailAddress, UserJSON } from "@clerk/backend";
 import { Role, UserResponse } from "../../../types/user.interface";
 import { Response } from "../../../types/api.interface";
 
@@ -23,24 +23,39 @@ const UserService = {
             updated_at: new Date(event.updated_at),
         };
 
-        const user = await prisma.user.create({ data: userNormalized });
+        try {
+            const user = await prisma.$transaction(async (prisma) => {
+                const user = await prisma.user.create({ data: userNormalized });
 
-        const emailAddresses = event.email_addresses.map(emailAddress => ({
-            id: emailAddress.id,
-            user_id: user.id,
-            email_address: emailAddress.email_address,
-        }));
+                const emailAddressesPromises = event.email_addresses.map(emailAddress =>
+                    prisma.emailAddresses.create({
+                        data: {
+                            id: emailAddress.id,
+                            user_id: user.id,
+                            email_address: emailAddress.email_address,
+                        }
+                    })
+                );
 
-        emailAddresses.forEach(async emailAddress => {
-            await prisma.emailAddresses.create({ data: emailAddress });
-        });
+                const userPrivilegeRolePromise = prisma.privilegeRole.create({
+                    data: { user_id: user.id, role: Role.USER }
+                });
 
-        const userPrivilegeRole = { user_id: user.id, role: Role.USER };
-        await prisma.privilegeRole.create({ data: userPrivilegeRole });
+                await Promise.all([...emailAddressesPromises, userPrivilegeRolePromise]);
 
-        return {
-            status: "OK"
-        };
+                return user;
+            });
+
+            return {
+                status: "OK",
+            };
+        } catch (error) {
+            console.error("Transactional usercreation failed: ", error);
+
+            return {
+                status: "failed"
+            };
+        }
     },
 
     update: async (id: string, event: UserJSON): Promise<UserResponse> => {
@@ -77,28 +92,6 @@ const UserService = {
         }
     },
 
-    // find: async (page?: number, limit?: number): Promise<UserResponse> => {
-    //     let pagination: any = undefined;
-    //     let result: any[] = [];
-    //     if (page && limit) {
-    //         const offset = getOffset(page, limit);
-    //         result = await db.select()
-    //             .from(users)
-    //             .orderBy(asc(users.id)) // order by is mandatory
-    //             .limit(limit) // the number of rows to return
-    //             .offset(offset)
-    //         const total = await db.$count(users)
-    //         pagination = paginatedData({ size: limit, page, count: total });
-    //     } else {
-    //         result = await db.select().from(users);
-    //     }
-    //     return {
-    //         success: true,
-    //         result,
-    //         pagination,
-    //     };
-    // },
-
     findByEmail: async (email: string): Promise<UserResponse> => {
         const user = await prisma.user.findFirst({
             where: {
@@ -118,7 +111,7 @@ const UserService = {
             message: `USER IS FOUND`,
             result: {
                 ...user,
-                email_addresses: [] // Assuming you will handle email addresses separately
+                email_addresses: [] // Fix this later if needed
             },
         };
     },
@@ -164,7 +157,6 @@ const UserService = {
                 result: "User deleted successfully",
             };
         } catch (error) {
-            // Error handling for not found user or database errors
             return {
                 success: false,
                 message: "User not found or delete operation failed",

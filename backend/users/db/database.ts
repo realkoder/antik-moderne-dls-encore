@@ -1,13 +1,19 @@
 import { SQLDatabase } from "encore.dev/storage/sqldb";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { PrismaClient } from "@prisma/client";
 
 const DB = new SQLDatabase("users", {
   migrations: {
     path: "migrations",
-    source: "drizzle",
+    source: "prisma",
   },
 });
 
-const db = drizzle(DB.connectionString);
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: DB.connectionString,
+    },
+  },
+});
 
-export { db };
+export { prisma };

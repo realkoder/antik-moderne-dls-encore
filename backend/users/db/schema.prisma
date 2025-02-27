@@ -1,0 +1,52 @@
+// For any changes make a migration by running: npx prisma migrate dev
+// Migration naming convention: <incremenatl_number>_<changes_made>.<up/down>
+
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://backend-2tui:shadow-cuosrlr38u1lquc8stog@127.0.0.1:9500/users?sslmode=disable"
+}
+
+model User {
+    id                       String           @id
+    external_id              String
+    first_name               String           @db.VarChar(200)
+    last_name                String           @db.VarChar(200)
+    username                 String           @db.VarChar(200)
+    image_url                String?
+    primary_email_address_id String?
+    created_at               DateTime?
+    last_sign_in_at          DateTime?
+    updated_at               DateTime?
+    email_addresses          EmailAddresses[]
+    privilege_roles          PrivilegeRole[]
+
+    @@map("users")
+}
+
+model EmailAddresses {
+    id            String @id
+    user_id       String
+    email_address String
+    user          User   @relation(fields: [user_id], references: [id])
+
+    @@map("email_addresses")
+}
+
+enum Role {
+    USER
+    ADMIN
+}
+
+model PrivilegeRole {
+    id      Int    @id @default(autoincrement())
+    user_id String
+    role    Role
+    user    User   @relation(fields: [user_id], references: [id])
+
+    @@map("privilege_roles")
+}

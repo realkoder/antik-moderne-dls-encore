@@ -125,6 +125,27 @@ By leveraging Encore's pub/sub system, `antik-moderne` ensures efficient and rel
 
 TODO ===== Something about the frameworks Rust-based runtime, nodejs, typescript etc.
 
+<br>
+
+
+### Database and use of Typescript ORM Prisma
+There exists a lot of different Typescript ORM's but we chosen to work with Prisma since it's proudction ready state and it's support of migrations but up and down.
+
+Commands to configure _Prisma_
+```bash
+# Install prisma
+npm install prisma --save-dev
+
+# To get the shadow db connection url to Encore.ts shadow database, run:
+encore db conn-uri <database name> --shadow
+
+# To initialize Prisma, run the following command from within your service folder:
+npx prisma init --url <shadow db connection url>
+```
+
+[Encores Prisma docs](https://encore.dev/docs/ts/develop/orms/prisma)
+[Encores Prisma github example](https://github.com/encoredev/examples/tree/main/ts/prisma)
+
 ---
 
 <br>

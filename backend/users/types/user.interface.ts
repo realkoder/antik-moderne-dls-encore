@@ -1,28 +1,28 @@
 export interface UserDto {
-    "created_at": number;
+    "created_at": Date | null;
     "external_id": string;
     "first_name": string;
     "id": string;
     "last_name": string;
-    "last_sign_in_at": number | null;
+    "last_sign_in_at": Date | null;
     "primary_email_address_id": string | null;
     "image_url": string | null;
-    "updated_at": number | null;
+    "updated_at": Date | null;
     "username": string;
     "email_addresses": EmailAddress[]
 }
 
 
 export interface User {
-    "created_at": number;
+    "created_at": Date | null;
     "external_id": string;
     "first_name": string;
     "id": string;
     "last_name": string;
-    "last_sign_in_at": number;
-    "primary_email_address_id": string;
+    "last_sign_in_at": Date | null;
+    "primary_email_address_id": string | null;
     "image_url": string;
-    "updated_at": number;
+    "updated_at": Date | null;
     "username": string;
 }
 

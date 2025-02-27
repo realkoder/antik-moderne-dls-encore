@@ -1,13 +1,12 @@
-import { users, email_addresses, privilege_roles } from "../../../db/schema";
-import { db } from "../../../db/database";
-import { count, sql, eq, asc } from 'drizzle-orm';
+import { prisma } from "../../../db/database";
+
 import { UserJSON } from "@clerk/backend";
 import { Role, UserResponse } from "../../../types/user.interface";
 import { Response } from "../../../types/api.interface";
 
 const UserService = {
     count: async (): Promise<number> => {
-        return db.$count(users);
+        return await prisma.user.count();
     },
 
     create: async (event: UserJSON): Promise<{ status: string }> => {
@@ -19,12 +18,12 @@ const UserService = {
             username: event.username ?? "",
             image_url: event.image_url,
             primary_email_address_id: event.email_addresses[0].email_address ?? "",
-            created_at: event.created_at,
-            last_sign_in_at: event.last_sign_in_at,
-            updated_at: event.updated_at,
+            created_at: new Date(event.created_at),
+            last_sign_in_at: event.last_sign_in_at ? new Date(event.last_sign_in_at) : null,
+            updated_at: new Date(event.updated_at),
         };
 
-        const [user] = await db.insert(users).values(userNormalized).returning();
+        const user = await prisma.user.create({ data: userNormalized });
 
         const emailAddresses = event.email_addresses.map(emailAddress => ({
             id: emailAddress.id,
@@ -33,11 +32,11 @@ const UserService = {
         }));
 
         emailAddresses.forEach(async emailAddress => {
-            await db.insert(email_addresses).values(emailAddress);
+            await prisma.emailAddresses.create({ data: emailAddress });
         });
 
         const userPrivilegeRole = { user_id: user.id, role: Role.USER };
-        await db.insert(privilege_roles).values(userPrivilegeRole);
+        await prisma.privilegeRole.create({ data: userPrivilegeRole });
 
         return {
             status: "OK"
@@ -45,34 +44,36 @@ const UserService = {
     },
 
     update: async (id: string, event: UserJSON): Promise<UserResponse> => {
-        const userNormalized = {
-            id: event.id,
-            external_id: event.external_id ?? "",
-            first_name: event.first_name ?? "",
-            last_name: event.last_name ?? "",
-            username: event.username ?? "",
-            image_url: event.image_url,
-            primary_email_address_id: event.email_addresses[0].email_address ?? "",
-            created_at: event.created_at,
-            last_sign_in_at: event.last_sign_in_at,
-            updated_at: event.updated_at,
-        };
-        const [updateUser] = await db.update(users)
-            .set(userNormalized)
-            .where(eq(users.id, id))
-            .returning();
-        if (!updateUser) {
+        try {
+            const userNormalized = {
+                id: event.id,
+                external_id: event.external_id ?? "",
+                first_name: event.first_name ?? "",
+                last_name: event.last_name ?? "",
+                username: event.username ?? "",
+                image_url: event.image_url,
+                primary_email_address_id: event.email_addresses[0].email_address ?? "",
+                created_at: new Date(event.created_at),
+                last_sign_in_at: event.last_sign_in_at ? new Date(event.last_sign_in_at) : null,
+                updated_at: new Date(event.updated_at),
+            };
+            const updateUser = await prisma.user.update({
+                where: { id: id },
+                data: userNormalized,
+            });
+
+            return {
+                success: true,
+                result: {
+                    ...updateUser,
+                    email_addresses: []
+                },
+            };
+        } catch (error) {
             return {
                 success: false,
                 message: "User not found",
             };
-        }
-        return {
-            success: true,
-            result: {
-                ...updateUser,
-                email_addresses: []
-            },
         }
     },
 
@@ -99,31 +100,41 @@ const UserService = {
     // },
 
     findByEmail: async (email: string): Promise<UserResponse> => {
-        const [user] = await db.select().from(users).where(eq(users.primary_email_address_id, email)).limit(1);
+        const user = await prisma.user.findFirst({
+            where: {
+                primary_email_address_id: email
+            },
+        });
+
         if (!user) {
             return {
                 success: false,
                 message: "User not found",
             };
         }
+
         return {
             success: true,
             message: `USER IS FOUND`,
             result: {
                 ...user,
-                email_addresses: []
+                email_addresses: [] // Assuming you will handle email addresses separately
             },
         };
     },
 
     findOne: async (userId: string): Promise<UserResponse> => {
-        const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+        const user = await prisma.user.findFirst({
+            where: { id: userId }
+        });
+
         if (!user) {
             return {
                 success: false,
                 message: "User not found",
             };
         }
+
         return {
             success: true,
             message: `USER IS FOUND`,
@@ -135,25 +146,35 @@ const UserService = {
     },
 
     delete: async (userId: string): Promise<Response> => {
-        await db.delete(email_addresses).where(eq(email_addresses.user_id, userId)).returning();
-        await db.delete(privilege_roles).where(eq(privilege_roles.user_id, userId)).returning();
-        const user = await db.delete(users).where(eq(users.id, userId)).returning();
+        try {
+            await prisma.$transaction([
+                prisma.emailAddresses.deleteMany({
+                    where: { user_id: userId },
+                }),
+                prisma.privilegeRole.deleteMany({
+                    where: { user_id: userId },
+                }),
+                prisma.user.delete({
+                    where: { id: userId },
+                }),
+            ]);
 
-        if (!user) {
+            return {
+                success: true,
+                result: "User deleted successfully",
+            };
+        } catch (error) {
+            // Error handling for not found user or database errors
             return {
                 success: false,
-                message: "User not found",
+                message: "User not found or delete operation failed",
             };
         }
-        return {
-            success: true,
-            result: "User deleted successfully",
-        };
     },
 
     getUserRoleById: async (userId: string): Promise<Role> => {
-        const [privilegeRole] = await db.select().from(privilege_roles).where(eq(privilege_roles.user_id, userId));
-        return privilegeRole.role as Role;
+        const privilegeRole = await prisma.privilegeRole.findFirst({ where: { user_id: userId } });
+        return privilegeRole?.role as Role;
     },
 };
 

@@ -24,7 +24,6 @@ export default function Admin({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
     if (posters.length > 0) return;
     if (fetchedPosters) {
-      console.log("SETTING POSTERS");
       setPosters(fetchedPosters);
     }
   }, [fetchedPosters, setPosters]);

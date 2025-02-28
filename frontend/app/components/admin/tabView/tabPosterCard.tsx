@@ -1,16 +1,33 @@
 import { type types } from "~/lib/client";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 import { Divider } from "~/components/Divider";
+import { IoTrashOutline } from "react-icons/io5";
+import useAuthFetch from "~/hooks/useAuthFetch";
+import { useSetAtom } from "jotai";
+import { postersAtom } from "~/atoms/postersAtom";
 
 interface TabProductCardProps {
   poster: types.PosterDto;
 }
 
-export function TabPosterCard({ poster }: TabProductCardProps) {
+export const TabPosterCard = ({ poster }: TabProductCardProps) => {
+  const { authRequestClient } = useAuthFetch();
+  const setPosters = useSetAtom(postersAtom);
+
+  const handleDeletePoster = async () => {
+    const response = await authRequestClient?.product.deletePoster(poster.id);
+    if (response?.posters) {
+      setPosters(response?.posters);
+    }
+  };
+
   return (
     <Card className="flex flex-col items-center">
       <CardHeader className="text-center flex-col justify-center items-center">
-        <CardTitle>{poster.name}</CardTitle>
+        <div className="flex gap-x-1">
+          <CardTitle>{poster.title}</CardTitle>
+          <IoTrashOutline onClick={() => handleDeletePoster()} className="cursor-pointer text-red-500" />
+        </div>
         <div className="flex text-sm font-serif">
           <p>Created:</p>
           <p className="ml-1 italic">{`${new Date().toISOString().split("T")[0]}`}</p>
@@ -24,7 +41,7 @@ export function TabPosterCard({ poster }: TabProductCardProps) {
           key={poster.id}
           className="w-40 h-40 border-4 border-gray-400 p-0.5 shadow-lg rounded-2xl hover:scale-150 transition-transform duration-150"
           src={poster.posterImageUrl}
-          alt={poster.name}
+          alt={poster.title}
         />
       </CardContent>
 
@@ -38,4 +55,4 @@ export function TabPosterCard({ poster }: TabProductCardProps) {
       </CardFooter>
     </Card>
   );
-}
+};

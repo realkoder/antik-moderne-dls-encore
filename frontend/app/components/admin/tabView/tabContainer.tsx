@@ -6,7 +6,7 @@ import { TabPosterCard } from "./tabPosterCard";
 import { useState } from "react";
 import { postersAtom } from "~/atoms/postersAtom";
 
-export function TabContainer() {
+export const TabContainer = () => {
   const [activeTab, setActiveTab] = useState("products");
   const [searchString, setSearchString] = useState("");
   const posters = useAtomValue(postersAtom);
@@ -34,11 +34,11 @@ export function TabContainer() {
             .filter(
               (poster) =>
                 poster.artistFullName.toLowerCase().includes(searchString) ||
-                poster.name.toLowerCase().includes(searchString) ||
+                poster.title.toLowerCase().includes(searchString) ||
                 poster.createdAt.includes(searchString)
             )
             .map((poster) => (
-              <TabPosterCard key={poster.name} poster={poster} />
+              <TabPosterCard key={poster.title} poster={poster} />
             ))}
         </div>
       </TabsContent>

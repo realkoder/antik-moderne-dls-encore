@@ -8,11 +8,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { ThemeChanger } from "~/components/ThemeChanger";
 import useUserRole from "~/hooks/useUserRole";
 import Cart from "~/components/Cart/Cart";
+import { useAtomValue } from "jotai";
+import { cartPostersAtom } from "~/atoms/cartPostersAtom";
 
 export default function layoutNavbar() {
   const { theme, setTheme } = useTheme();
   const { pathname } = useLocation();
   const { userRole } = useUserRole();
+  const cartPosters = useAtomValue(cartPostersAtom);
 
   useEffect(() => {
     setTheme("light");
@@ -61,14 +64,15 @@ export default function layoutNavbar() {
               <UserButton />
             </SignedIn>
             <Popover>
-              <PopoverTrigger asChild className="relative hover:cursor-pointer hover:bg-gray-200 p-1.5 rounded-full data-[state=open]:bg-gray-200">
+              <PopoverTrigger
+                asChild
+                className="relative hover:cursor-pointer hover:bg-gray-200 p-1.5 rounded-full data-[state=open]:bg-gray-200"
+              >
                 <div>
-
-                <FaCartShopping size={20} className="text-2xl" />
-                <div className="absolute top-0 -right-1 z-50 bg-red-500 text-white rounded-full w-3.5 h-3.5 flex justify-center items-center">
-                  {/* Cart count */}
-                  <span className="text-xs">3</span>
-                </div>
+                  <FaCartShopping size={20} className="text-2xl" />
+                  <div className="absolute top-0 -right-1 z-50 bg-red-500 text-white rounded-full w-3.5 h-3.5 flex justify-center items-center">
+                    <span className="text-xs">{cartPosters.length}</span>
+                  </div>
                 </div>
               </PopoverTrigger>
               <PopoverContent className="w-72 max-h-80 overflow-y-auto">

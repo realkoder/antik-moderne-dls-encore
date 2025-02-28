@@ -55,3 +55,18 @@ export const updatePoster = api<{ posterId: number, posterUpdate: PosterUpdate }
         return { posters };
     }
 );
+
+// Only admin can call this
+export const deletePoster = api<{ posterId: number }, { posters: PosterDto[] }>(
+    { auth: true, expose: true, method: "DELETE", path: "/posters/:posterId" },
+    async ({ posterId }: { posterId: number }): Promise<{ posters: PosterDto[] }> => {
+        const role: Role = getAuthData().role
+
+        if (!role || role !== Role.ADMIN) throw APIError.permissionDenied("You dont have the needed ROLE for this action");
+
+        await PosterService.delete(posterId);
+        const posters = await PosterService.findAll();
+
+        return { posters };
+    }
+);

@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma-db-products/client";
 const prisma = new PrismaClient();
 async function main() {
     const existingPoster = await prisma.poster.findFirst({
-        where: { name: 'Starry Night' },
+        where: { title: 'Starry Night' },
     });
 
     let poster;
@@ -11,7 +11,7 @@ async function main() {
         // If the poster doesn't exist, create it
         poster = await prisma.poster.create({
             data: {
-                name: 'Starry Night',
+                title: 'Starry Night',
                 artistFullName: 'Vincent Van Gogh',
                 posterImageUrl: "https://images.pexels.com/photos/1183992/pexels-photo-1183992.jpeg?auto=compress&cs=tinysrgb&w=1200",
                 formatPrices: {

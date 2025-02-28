@@ -1,79 +1,40 @@
-import type { Pokemon } from "~/types/pokemon";
+import { useAtom } from "jotai";
 import type { Route } from "./+types/posters";
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
-import { SpinnerRoundOutlined } from "spinners-react/lib/esm/SpinnerRoundOutlined";
+import getRequestClient from "~/lib/getRequestClient";
+import { postersAtom } from "~/atoms/postersAtom";
+import { useEffect } from "react";
+import { PosterDisplayer } from "~/components/posters/postersDisplayer";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Posters - Antik Moderne" },
-    { name: "description", content: "Posters" },
-  ];
+  return [{ title: "Posters - Antik Moderne" }, { name: "description", content: "Posters" }];
 }
 
-// export async function loader({ params }: Route.LoaderArgs) {
-//   try {
-//     const pokeApiRes = await fetch("https://pokeapi.co/api/v2/pokemon/3");
-//     if (pokeApiRes.ok) {
-//       const pokemon: Pokemon = await pokeApiRes.json();
-//       return { pokemon };
-//     } else {
-//       console.log("FETCH NOT OK");
-//     }
-//   } catch (error) {
-//     console.log("FETCH NOT OK");
-//   }
-// }
+export function loader({}: Route.LoaderArgs) {
+  return (async () => {
+    const posters = await getRequestClient(undefined).product.getPosters();
+    return posters;
+  })();
+}
 
 // export default function Posters({ loaderData }: Route.ComponentProps) {
-export default function Posters() {
-  const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+export default function Posters({ loaderData }: Route.ComponentProps) {
+  const { posters: fetchedPosters } = loaderData;
+  const [posters, setPosters] = useAtom(postersAtom);
 
-  const fetchPokemon = async (pokemonId: number) => {
-    if (isLoading) return;
-    setIsLoading(true);
-    try {
-      const pokeApiRes = await fetch(
-        "https://pokeapi.co/api/v2/pokemon/" + pokemonId
-      );
-      if (pokeApiRes.ok) {
-        const pokemon: Pokemon = await pokeApiRes.json();
-        pokemon.id = pokemonId;
-        setPokemons((cur) => [...cur, pokemon]);
-      } else {
-        console.log("FETCH NOT OK");
-      }
-    } catch (error) {
-      console.log("FETCH NOT OK", error);
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (posters.length > 0) return;
+    if (fetchedPosters) {
+      setPosters(fetchedPosters);
     }
-  };
-
-  const changePokemon = () => {
-    const randomPokemonId = Math.floor(Math.random() * 1000);
-    fetchPokemon(randomPokemonId);
-  };
+  }, [fetchedPosters, setPosters]);
 
   return (
-    <div>
-      <div className="p-4 text-left">
-        <SpinnerRoundOutlined
-          enabled={isLoading}
-          size={50}
-          thickness={100}
-          speed={100}
-          color="#36ad47"
-        />
-        <Button
-          hidden={isLoading}
-          className="m-2"
-          onClick={() => changePokemon()}
-        >
-          Get a pokemon
-        </Button>
-      </div>
+    <div className="w-full flex flex-col justify-center items-center">
+      <h1 className="text-6xl font-bold mb-4">Antik Moderne Posters</h1>
+      <p className=" text-2xl mb-6">
+        Discover a curated collection of timeless posters that blend the elegance of the past with the modern aesthetic.
+      </p>
+      <PosterDisplayer />
     </div>
   );
 }

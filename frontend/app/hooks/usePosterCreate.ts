@@ -6,45 +6,77 @@ import useAuthFetch from "./useAuthFetch";
 import { toast } from "sonner";
 
 const defaultPoster: types.PosterCreate = {
-    name: "",
+    title: "",
     artistFullName: "",
     posterImageUrl: "",
     formatPrices: [],
 };
 
+const formats = ["A4", "30x30 cm", "30x40 cm", "50x50", "50x70 cm", "70x70 cm", "70x100 cm", "100x100 cm", "100x140 cm"];
 
 export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
     const setPosters = useSetAtom(postersAtom);
     const [posterCreate, setPosterCreate] = useState<types.PosterCreate>(defaultPoster);
     const [format, setFormat] = useState<types.Format | null>();
-    const [price, setPrice] = useState(1000);
+    const [price, setPrice] = useState("1000");
     const [isCreating, setIsCreating] = useState(false);
+    
+    const filteredFormats = formats.filter((format) => !posterCreate.formatPrices.find((posterFormat) => posterFormat.format === format));
+
 
     const { authRequestClient } = useAuthFetch();
 
-    const onAddFormatPrice = () => {
-        if (!format) return;
-        setPosterCreate((cur) => ({ ...cur, formatPrices: [...cur.formatPrices, { format: format, price: price }] }));
-        setPrice(1000);
-        setFormat(null);
-    };
+    const onChangeActions = {
+        onChangeTitle: (title: string) => {
+            setPosterCreate((cur) => ({ ...cur, title }));
+        },
+        onChangeArtistName: (artistName: string) => {
+            setPosterCreate((cur) => ({ ...cur, artistFullName: artistName }));
+        },
+        onChangeUrl: (imageUrl: string) => {
+            setPosterCreate((cur) => ({ ...cur, posterImageUrl: imageUrl }));
+        },
+        onFormatChange: (format: types.Format) => {
+            setFormat(format);
+        },
+        onPriceChange: (price: string) => {
+            setPrice(price);
+        }
+    }
 
-    const onRemoveFormatPrice = (format: types.Format) => {
-        if (!format) return;
-        setPosterCreate((cur) => ({ ...cur, formatPrices: [...cur.formatPrices.filter((formatPrice) => formatPrice.format !== format)] }));
-    };
+    const handleClickActions = {
+        submitPoster: async () => {
+            if (!isPosterCreationValid(posterCreate)) return;
 
-    const onAddCreatePoster = async () => {
-        if (!isPosterCreationValid(posterCreate)) return;
+            setIsCreating(true);
+            const response = await authRequestClient?.product.createPoster({ posterCreate });
+            if (response && response.posters) setPosters(response.posters);
+            setIsCreating(false);
+            changeTabTo("products");
+        },
+        onRemoveFormatPrice: (format: types.Format) => {
+            if (!format) return;
+            setPosterCreate((cur) => ({ ...cur, formatPrices: [...cur.formatPrices.filter((formatPrice) => formatPrice.format !== format)] }));
+        },
+        onAddFormatPrice: () => {
+            const priceNumber = Number(price);
+            if (!priceNumber) {
+                triggerToaster("The price must be number!")
+                setPrice("1000");
+                return;
+            }
 
-        setIsCreating(true);
-        const response = await authRequestClient?.product.createPoster({ posterCreate });
-        if (response && response.posters) setPosters(response.posters);
-        setIsCreating(false);
-        changeTabTo("products");
-    };
+            if (!format) return;
 
-    function triggerToaster(description: string) {
+            setPosterCreate((cur) => ({ ...cur, formatPrices: [...cur.formatPrices, { format: format, price: priceNumber }] }));
+            setPrice("1000");
+            setFormat(null);
+        }
+    }
+
+
+
+    const triggerToaster = (description: string) => {
         toast("Failed to create poster", {
             description,
         });
@@ -54,8 +86,8 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
         if (posterCreate.artistFullName.length === 0) {
             triggerToaster("Artist name for the poster is missing");
             return false;
-        } else if (posterCreate.name.length === 0) {
-            triggerToaster("Poster name is missing");
+        } else if (posterCreate.title.length === 0) {
+            triggerToaster("Poster title is missing");
             return false;
         } else if (posterCreate.formatPrices.length === 0) {
             triggerToaster("At least one format with price have to be defined");
@@ -64,5 +96,5 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
         return true;
     }
 
-    return { posterCreate, onAddFormatPrice, price, setPrice, onRemoveFormatPrice, setFormat, onAddCreatePoster, setPosterCreate, isCreating };
+    return { posterCreate, isCreating, onChangeActions, price, handleClickActions, filteredFormats };
 }

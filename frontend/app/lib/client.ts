@@ -132,6 +132,19 @@ export namespace product {
 }
         }
 
+        /**
+         * Only admin can call this
+         */
+        public async deletePoster(posterId: number): Promise<{
+    posters: types.PosterDto[]
+}> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("DELETE", `/posters/${encodeURIComponent(posterId)}`)
+            return await resp.json() as {
+    posters: types.PosterDto[]
+}
+        }
+
         public async getPoster(posterId: number): Promise<{
     poster: types.PosterDto
 }> {
@@ -218,7 +231,7 @@ export namespace types {
         id: string
     }
 
-    export type Format = "A4" | "30X30 cm" | "30X40 cm" | "50x50" | "50x70 cm" | "70x70 cm" | "70x100 cm" | "100x100 cm" | "100x140 cm"
+    export type Format = "A4" | "30x30 cm" | "30x40 cm" | "50x50" | "50x70 cm" | "70x70 cm" | "70x100 cm" | "100x100 cm" | "100x140 cm"
 
     export interface FormatPriceCreate {
         format: Format
@@ -239,7 +252,7 @@ export namespace types {
     }
 
     export interface PosterCreate {
-        name: string
+        title: string
         artistFullName: string
         posterImageUrl: string
         formatPrices: FormatPriceCreate[]
@@ -247,7 +260,7 @@ export namespace types {
 
     export interface PosterDto {
         id: number
-        name: string
+        title: string
         artistFullName: string
         posterImageUrl: string
         formatPrices: FormatPriceDto[]
@@ -256,7 +269,7 @@ export namespace types {
     }
 
     export interface PosterUpdate {
-        name: string
+        title: string
         artistFullName: string
         posterImageUrl: string
         formatPrices: FormatPriceDto[]

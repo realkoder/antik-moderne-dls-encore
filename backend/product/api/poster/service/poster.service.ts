@@ -32,7 +32,7 @@ const PosterService = {
             const poster = await prismaProducts.$transaction(async (prisma) => {
                 const createdPoster = await prisma.poster.create({
                     data: {
-                        name: posterCreate.name,
+                        title: posterCreate.title,
                         artistFullName: posterCreate.artistFullName,
                         posterImageUrl: posterCreate.posterImageUrl,
                         formatPrices: {
@@ -107,7 +107,7 @@ const PosterService = {
                 await prisma.poster.update({
                     where: { id: id },
                     data: {
-                        name: posterUpdate.name,
+                        title: posterUpdate.title,
                         artistFullName: posterUpdate.artistFullName,
                     },
                 });
@@ -187,8 +187,8 @@ const PosterService = {
 function mapPrismaFormatToTypeScript(prismaFormat: string): Format {
     const mapping: { [key: string]: Format } = {
         "A4": "A4",
-        "Size_30X30_cm": "30X30 cm",
-        "Size_30X40_cm": "30X40 cm",
+        "Size_30x30_cm": "30x30 cm",
+        "Size_30x40_cm": "30x40 cm",
         "Size_50x50": "50x50",
         "Size_50x70_cm": "50x70 cm",
         "Size_70x70_cm": "70x70 cm",
@@ -202,8 +202,8 @@ function mapPrismaFormatToTypeScript(prismaFormat: string): Format {
 function mapTypeScriptToPrismaFormat(typeScriptFormat: Format): FormatEnum {
     const mapping: { [key in Format]: FormatEnum } = {
         "A4": "A4",
-        "30X30 cm": "Size_30X30_cm",
-        "30X40 cm": "Size_30X40_cm",
+        "30x30 cm": "Size_30x30_cm",
+        "30x40 cm": "Size_30x40_cm",
         "50x50": "Size_50x50",
         "50x70 cm": "Size_50x70_cm",
         "70x70 cm": "Size_70x70_cm",

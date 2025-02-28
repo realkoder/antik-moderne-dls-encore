@@ -11,11 +11,11 @@ export const ThemeChanger = () => {
       <div className="flex">
         {theme && theme !== "light" ? (
           <button type="button" onClick={toggleTheme} aria-label="Switch to light mode" className="cursor-pointer">
-            <FaSun className="text-xl text-yellow-500" />
+            <FaSun className="text-xl text-yellow-400" />
           </button>
         ) : (
           <button type="button" onClick={toggleTheme} aria-label="Switch to dark mode" className="cursor-pointer">
-            <FaMoon className="text-xl text-gray-500" />
+            <FaMoon className="text-xl text-black" />
           </button>
         )}
       </div>

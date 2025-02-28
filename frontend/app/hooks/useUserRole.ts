@@ -11,8 +11,9 @@ const useUserRole = () => {
             setUserRole("USER");
             return;
         }
+
         (async () => {
-            const userRole = await authRequestClient.users.getUserRoleForClient();
+            const userRole = await authRequestClient.user.getUserRoleForClient();
             if (userRole) {
                 setUserRole(userRole.role);
             }

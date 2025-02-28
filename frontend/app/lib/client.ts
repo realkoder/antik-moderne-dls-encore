@@ -31,7 +31,8 @@ export function PreviewEnv(pr: number | string): BaseURL {
  */
 export default class Client {
     public readonly admin: admin.ServiceClient
-    public readonly users: users.ServiceClient
+    public readonly product: product.ServiceClient
+    public readonly user: user.ServiceClient
 
 
     /**
@@ -43,7 +44,8 @@ export default class Client {
     constructor(target: BaseURL, options?: ClientOptions) {
         const base = new BaseClient(target, options ?? {})
         this.admin = new admin.ServiceClient(base)
-        this.users = new users.ServiceClient(base)
+        this.product = new product.ServiceClient(base)
+        this.user = new user.ServiceClient(base)
     }
 }
 
@@ -106,7 +108,68 @@ export namespace auth {
     }
 }
 
-export namespace users {
+export namespace product {
+
+    export class ServiceClient {
+        private baseClient: BaseClient
+
+        constructor(baseClient: BaseClient) {
+            this.baseClient = baseClient
+        }
+
+        /**
+         * Only admin can call this
+         */
+        public async createPoster(params: {
+    posterCreate: types.PosterCreate
+}): Promise<{
+    posters: types.PosterDto[]
+}> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("POST", `/posters`, JSON.stringify(params))
+            return await resp.json() as {
+    posters: types.PosterDto[]
+}
+        }
+
+        public async getPoster(posterId: number): Promise<{
+    poster: types.PosterDto
+}> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/posters/${encodeURIComponent(posterId)}`)
+            return await resp.json() as {
+    poster: types.PosterDto
+}
+        }
+
+        public async getPosters(): Promise<{
+    posters: types.PosterDto[]
+}> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("GET", `/posters`)
+            return await resp.json() as {
+    posters: types.PosterDto[]
+}
+        }
+
+        /**
+         * Only admin can call this
+         */
+        public async updatePoster(posterId: number, params: {
+    posterUpdate: types.PosterUpdate
+}): Promise<{
+    posters: types.PosterDto[]
+}> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI("PUT", `/posters/${encodeURIComponent(posterId)}`, JSON.stringify(params))
+            return await resp.json() as {
+    posters: types.PosterDto[]
+}
+        }
+    }
+}
+
+export namespace user {
 
     export class ServiceClient {
         private baseClient: BaseClient
@@ -155,11 +218,48 @@ export namespace types {
         id: string
     }
 
+    export type Format = "A4" | "30X30 cm" | "30X40 cm" | "50x50" | "50x70 cm" | "70x70 cm" | "70x100 cm" | "100x100 cm" | "100x140 cm"
+
+    export interface FormatPriceCreate {
+        format: Format
+        price: number
+    }
+
+    export interface FormatPriceDto {
+        id: number
+        format: Format
+        price: number
+    }
+
     export interface Paginated {
         count: number
         pageSize: number
         totalPages: number
         current: number
+    }
+
+    export interface PosterCreate {
+        name: string
+        artistFullName: string
+        posterImageUrl: string
+        formatPrices: FormatPriceCreate[]
+    }
+
+    export interface PosterDto {
+        id: number
+        name: string
+        artistFullName: string
+        posterImageUrl: string
+        formatPrices: FormatPriceDto[]
+        createdAt: string
+        updatedAt: string
+    }
+
+    export interface PosterUpdate {
+        name: string
+        artistFullName: string
+        posterImageUrl: string
+        formatPrices: FormatPriceDto[]
     }
 
     export interface Response {
@@ -171,15 +271,15 @@ export namespace types {
     export type Role = "USER" | "ADMIN"
 
     export interface UserDto {
-        "created_at": number
+        "created_at": string | null
         "external_id": string
         "first_name": string
         id: string
         "last_name": string
-        "last_sign_in_at": number | null
+        "last_sign_in_at": string | null
         "primary_email_address_id": string | null
         "image_url": string | null
-        "updated_at": number | null
+        "updated_at": string | null
         username: string
         "email_addresses": EmailAddress[]
     }

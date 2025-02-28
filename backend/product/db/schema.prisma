@@ -14,13 +14,13 @@ datasource db {
 }
 
 model Poster {
-  id             Int           @id @default(autoincrement())
-  name           String
-  artistFullName String
-  posterImageUrl String
-  formatPrices   FormatPrice[]
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  id               Int           @id @default(autoincrement())
+  name             String
+  artist_full_name String
+  poster_image_url String
+  formatPrices     FormatPrice[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 
   @@map("posters")
 }
@@ -41,8 +41,8 @@ model FormatPrice {
   id       Int    @id @default(autoincrement())
   format   Format
   price    Int
-  posterId Int
-  poster   Poster @relation(fields: [posterId], references: [id])
+  poster_id Int
+  poster   Poster @relation(fields: [poster_id], references: [id])
 
   @@map("format_prices")
 }

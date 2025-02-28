@@ -19,9 +19,9 @@ export default function layoutNavbar() {
     `${pathname === linkPath ? `border-black border-b ${theme == undefined || theme == "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`;
 
   return (
-    <div className={`h-screen text-center flex flex-col`}>
-      <nav className={"group"}>
-        <div className={`p-4 px-8 flex justify-between items-center`}>
+    <div className="h-screen text-center flex flex-col">
+      <nav className="flex items-center justify-center">
+        <div className="w-[95%] p-4 px-8 flex justify-between items-center">
           <div className="flex space-x-4">
             <NavLink to="/">
               <img className="border border-black grayscale rounded-full" src="/logo.png" width={50} alt="ANTIK MODERNE" />
@@ -58,11 +58,16 @@ export default function layoutNavbar() {
             </SignedIn>
           </div>
         </div>
-        <hr className={`opacity-0 group-hover:opacity-100 ${theme == undefined || theme === "light" ? "border-black" : "border-white"} transition-opacity duration-150`} />
       </nav>
       <div className={"flex-1"}>
         <Outlet />
       </div>
+      <div>
+        <footer className="flex flex-col items-center p-4 mt-6">
+        <img className="border border-black grayscale rounded-full" src="/logo.png" width={50} alt="ANTIK MODERNE" />
+          <p className="italic mt-3">© 2025 ANTIK MODERNE</p>
+        </footer>
+        </div>
     </div>
   );
 }

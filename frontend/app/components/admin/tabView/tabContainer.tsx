@@ -1,9 +1,7 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../ui/card";
-import { Label } from "@radix-ui/react-label";
 import { Input } from "../../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import { Button } from "../../ui/button";
-import { TabProductCard } from "./tabProductCard";
+import { TabCreatePoster } from "./tabCreatePoster";
+import { TabPosterCard } from "./tabPosterCard";
 import { useState } from "react";
 
 const products = [
@@ -63,7 +61,7 @@ export function TabContainer() {
                 product.createdDate.includes(searchString)
             )
             .map((product) => (
-              <TabProductCard
+              <TabPosterCard
                 key={product.productTitle}
                 productTitle={product.productTitle}
                 productImageUrl={product.productImageUrl}
@@ -73,27 +71,10 @@ export function TabContainer() {
             ))}
         </div>
       </TabsContent>
-
+      <TabCreatePoster />
       <TabsContent value="add">
-        <Card>
-          <CardHeader>
-            <CardTitle>Add New Product</CardTitle>
-            <CardDescription>Change your password here. After saving, you'll be logged out.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="current">Current password</Label>
-              <Input id="current" type="password" />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="new">New password</Label>
-              <Input id="new" type="password" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
-        </Card>
+        
+        
       </TabsContent>
     </Tabs>
   );

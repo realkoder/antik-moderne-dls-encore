@@ -1,7 +1,7 @@
 import { prismaProducts } from "../../../db/database";
 
 import { Response } from "../../../../shared/types/api.interface";
-import { Format, PosterCreate, PosterDto } from "../../../types/poster.interface";
+import { Format, PosterCreate, PosterDto, PosterUpdate } from "../../../types/poster.interface";
 import { Format as FormatEnum } from "@prisma-db-products/client";
 
 const PosterService = {
@@ -63,19 +63,26 @@ const PosterService = {
         }
     },
 
-    update: async (id: number, posterCreate: PosterCreate): Promise<Response> => {
+    update: async (id: number, posterUpdate: PosterUpdate): Promise<Response> => {
         try {
-
             await prismaProducts.$transaction(async (prisma) => {
-                const updatedPoster = await prisma.poster.update({
-                    where: { id: id },
-                    data: {
-                        name: posterCreate.name,
-                        artistFullName: posterCreate.artistFullName,
-                    },
+                const existingFormatPrices = await prisma.formatPrice.findMany({
+                    where: { posterId: id },
                 });
 
-                const formatPriceUpdates = posterCreate.formatPrices.map(formatPrice => {
+                const existingFormatPriceIds = existingFormatPrices.map(fp => fp.id);
+
+                const providedFormatPriceIds = posterUpdate.formatPrices
+                    .filter(fp => fp.id !== undefined)
+                    .map(fp => fp.id);
+
+                const formatPriceIdsToDelete = existingFormatPriceIds.filter(id => !providedFormatPriceIds.includes(id));
+
+                await Promise.all(formatPriceIdsToDelete.map(id =>
+                    prisma.formatPrice.delete({ where: { id } })
+                ));
+
+                const formatPriceUpdates = posterUpdate.formatPrices.map(formatPrice => {
                     if (formatPrice.id) {
                         return prisma.formatPrice.update({
                             where: { id: formatPrice.id },
@@ -97,13 +104,21 @@ const PosterService = {
 
                 await Promise.all(formatPriceUpdates);
 
+                await prisma.poster.update({
+                    where: { id: id },
+                    data: {
+                        name: posterUpdate.name,
+                        artistFullName: posterUpdate.artistFullName,
+                    },
+                });
             });
 
             return {
                 success: true,
-                message: "Poster updated"
+                message: "Poster updated successfully."
             };
         } catch (error) {
+            console.error("Error thrown while updating", error);
             return {
                 success: false,
                 message: "Error updating poster",

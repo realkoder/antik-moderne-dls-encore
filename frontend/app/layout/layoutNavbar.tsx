@@ -2,9 +2,12 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/react-router";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
+import { FaCartShopping } from "react-icons/fa6";
+import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 
 import { ThemeChanger } from "~/components/ThemeChanger";
 import useUserRole from "~/hooks/useUserRole";
+import Cart from "~/components/Cart/Cart";
 
 export default function layoutNavbar() {
   const { theme, setTheme } = useTheme();
@@ -16,7 +19,11 @@ export default function layoutNavbar() {
   }, []);
 
   const navLinkClassName = (linkPath: string) =>
-    `${pathname === linkPath ? `border-black border-b ${theme == undefined || theme == "light" ? "border-neutral-950" : "border-neutral-50"}` : ""}`;
+    `${
+      pathname === linkPath
+        ? `border-black border-b ${theme == undefined || theme == "light" ? "border-neutral-950" : "border-neutral-50"}`
+        : ""
+    }`;
 
   return (
     <div className="h-screen text-center flex flex-col">
@@ -34,9 +41,6 @@ export default function layoutNavbar() {
             </NavLink>
             <NavLink to="/posters" className={navLinkClassName("/posters")}>
               Posters
-            </NavLink>
-            <NavLink to="/genres" className={navLinkClassName("/genres")}>
-              Genres
             </NavLink>
             <NavLink to="/about" className={navLinkClassName("/about")}>
               About
@@ -56,6 +60,21 @@ export default function layoutNavbar() {
 
               <UserButton />
             </SignedIn>
+            <Popover>
+              <PopoverTrigger asChild className="relative hover:cursor-pointer hover:bg-gray-200 p-1.5 rounded-full data-[state=open]:bg-gray-200">
+                <div>
+
+                <FaCartShopping size={20} className="text-2xl" />
+                <div className="absolute top-0 -right-1 z-50 bg-red-500 text-white rounded-full w-3.5 h-3.5 flex justify-center items-center">
+                  {/* Cart count */}
+                  <span className="text-xs">3</span>
+                </div>
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="w-72 max-h-80 overflow-y-auto">
+                <Cart />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </nav>
@@ -64,10 +83,10 @@ export default function layoutNavbar() {
       </div>
       <div>
         <footer className="flex flex-col items-center p-4 mt-6">
-        <img className="border border-black grayscale rounded-full" src="/logo.png" width={50} alt="ANTIK MODERNE" />
+          <img className="border border-black grayscale rounded-full" src="/logo.png" width={50} alt="ANTIK MODERNE" />
           <p className="italic mt-3">© 2025 ANTIK MODERNE</p>
         </footer>
-        </div>
+      </div>
     </div>
   );
 }

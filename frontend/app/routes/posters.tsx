@@ -1,6 +1,5 @@
 import type { Pokemon } from "~/types/pokemon";
 import type { Route } from "./+types/posters";
-import { PokemonCard } from "~/components/PokemonCard";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { SpinnerRoundOutlined } from "spinners-react/lib/esm/SpinnerRoundOutlined";
@@ -74,11 +73,6 @@ export default function Posters() {
         >
           Get a pokemon
         </Button>
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {pokemons.map((pokemon) => (
-            <PokemonCard key={pokemon.id} pokemon={pokemon} />
-          ))}
-        </div>
       </div>
     </div>
   );

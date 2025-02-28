@@ -3,48 +3,22 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@radix-ui/react-label";
 import { Button } from "~/components/ui/button";
 import type { types } from "~/lib/client";
-import { useState } from "react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { Divider } from "~/components/Divider";
-import useAuthFetch from "~/hooks/useAuthFetch";
-
-const defaultFormatPrices: types.FormatPriceCreate[] = [{ format: "100x100 cm", price: 2500 }];
-
-const defaultPoster: types.PosterCreate = {
-  name: "SKULL",
-  artistFullName: "Chait Goli",
-  posterImageUrl: "https://images.pexels.com/photos/1918290/pexels-photo-1918290.jpeg?auto=compress&cs=tinysrgb&w=1200",
-  formatPrices: defaultFormatPrices,
-};
+import { Toaster } from "sonner";
+import { usePosterCreate } from "~/hooks/usePosterCreate";
 
 const formats = ["A4", "30X30 cm", "30X40 cm", "50x50", "50x70 cm", "70x70 cm", "70x100 cm", "100x100 cm", "100x140 cm"];
 
-export function TabCreatePoster() {
-  const [posterCreate, setPosterCreate] = useState<types.PosterCreate>(defaultPoster);
-  const [format, setFormat] = useState<types.Format | null>();
-  const [price, setPrice] = useState(1000);
+interface TabCreatePosterProps {
+  changeTabTo: (tab: string) => void;
+}
 
-  const { authRequestClient } = useAuthFetch();
+export function TabCreatePoster({ changeTabTo }: TabCreatePosterProps) {
+  const { posterCreate, setPosterCreate, isCreating, onAddCreatePoster, price, setPrice,setFormat, onAddFormatPrice, onRemoveFormatPrice } =
+    usePosterCreate(changeTabTo);
 
   const filteredFormats = formats.filter((format) => !posterCreate.formatPrices.find((posterFormat) => posterFormat.format === format));
-
-  const onAddFormatPrice = () => {
-    if (!format) return;
-    setPosterCreate((cur) => ({ ...cur, formatPrices: [...cur.formatPrices, { format: format, price: price }] }));
-    setPrice(1000);
-    setFormat(null);
-  };
-
-  const onRemoveFormatPrice = (format: types.Format) => {
-    if (!format) return;
-    setPosterCreate((cur) => ({ ...cur, formatPrices: [...cur.formatPrices.filter((formatPrice) => formatPrice.format !== format)] }));
-  };
-
-  const onAddCreatePoster = async () => {
-    if (posterCreate.formatPrices.length === 0 || posterCreate.name.length === 0 || posterCreate.artistFullName.length === 0) return;
-    const posters = await authRequestClient?.product.createPoster({ posterCreate });
-    console.log("POSTERS", posters);
-  };
 
   return (
     <Card>
@@ -86,7 +60,7 @@ export function TabCreatePoster() {
         </div>
         <img
           key={posterCreate.posterImageUrl}
-          className="w-40 h-40 border-4 border-gray-400 p-0.5 shadow-lg rounded-2xl hover:scale-150 transition-transform duration-150"
+          className="w-40 h-40 border-4 border-gray-400 p-0.5 shadow-lg rounded-2xl"
           src={posterCreate.posterImageUrl}
           alt={posterCreate.name}
         />
@@ -119,6 +93,7 @@ export function TabCreatePoster() {
         <Divider />
       </CardContent>
       <CardFooter className="w-full flex flex-col items-center justify-center">
+        <Toaster />
         {posterCreate.formatPrices.map((formatPrice) => (
           <div key={formatPrice.format} className="w-[60%] flex items-center justify-between">
             <div className="flex flex-col">
@@ -130,7 +105,9 @@ export function TabCreatePoster() {
             </Button>
           </div>
         ))}
-        <Button onClick={() => onAddCreatePoster()}>Add the created poster</Button>
+        <Button disabled={isCreating} onClick={() => onAddCreatePoster()}>
+          Add the created poster
+        </Button>
       </CardFooter>
     </Card>
   );

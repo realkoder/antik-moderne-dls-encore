@@ -1,21 +1,9 @@
 import type { Route } from "./+types/home";
-import { NavLink } from "react-router";
+import { Link, NavLink, redirect } from "react-router";
 import getRequestClient from "~/lib/getRequestClient";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "~/components/ui/select";
 import { useState } from "react";
-
-interface FormatPrice {
-  format: string;
-  price: number;
-}
+import type { types } from "~/lib/client";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "ANTIK MODERNE" }, { name: "description", content: "Welcome to Antik Moderne!" }];
@@ -24,7 +12,6 @@ export function meta({}: Route.MetaArgs) {
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
     const posters = await getRequestClient(undefined).product.getPosters();
-    console.log("POSTER", posters);
     return posters;
   })();
 }
@@ -32,11 +19,14 @@ export function loader({}: Route.LoaderArgs) {
 export default function Home({ loaderData }: Route.ComponentProps) {
   const { posters } = loaderData;
 
-  const [selectedFormats, setSelectedFormats] = useState<Record<string, FormatPrice>>({});
+  const [selectedFormats, setSelectedFormats] = useState<Record<string, types.FormatPriceDto>>({});
 
-
-  const getCurrentFormatPrice = (posterId: number, formatPrices: FormatPrice[]): FormatPrice => {
+  const getCurrentFormatPrice = (posterId: number, formatPrices: types.FormatPriceDto[]): types.FormatPriceDto => {
     return selectedFormats[posterId] || formatPrices[0];
+  };
+
+  const handleViewPoster = (posterId: number) => {
+    redirect(`/poster/${posterId}`);
   };
 
   return (
@@ -65,10 +55,14 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       <div className="grid grid-cols-3 gap-12 w-[90%]">
         {posters.slice(0, 3).map((poster) => {
           const currentFormatPrice = getCurrentFormatPrice(poster.id, poster.formatPrices);
-          
+
           return (
-            <div key={poster.id} className="w-[22rem] h-auto p-3 flex flex-col justify-center items-center rounded-lg hover:border hover:border-[#cfcfcf] hover:cursor-pointer">
-              <img src="/poster-mock.png" className="w-[95%] h-full rounded-lg" />
+            <Link
+              to={`/poster/${poster.id}`}
+              key={poster.id}
+              className="w-[22rem] h-auto p-3 flex flex-col justify-center items-center rounded-lg hover:border hover:border-[#cfcfcf] hover:cursor-pointer"
+            >
+              <img src={poster.posterImageUrl} alt={poster.name} className="w-[95%] h-full rounded-lg" />
               <div className="flex justify-between w-[90%] pt-2">
                 <div className="flex flex-col items-start">
                   <p className="font-semibold">{poster.name}</p>
@@ -78,13 +72,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                 </div>
                 <div className="flex flex-col items-end">
                   <div className="flex flex-col items-end">
-                    <Select 
+                    <Select
                       onValueChange={(format) => {
-                        const selectedFormat = poster.formatPrices.find(fp => fp.format === format);
+                        const selectedFormat = poster.formatPrices.find((fp) => fp.format === format);
                         if (selectedFormat) {
-                          setSelectedFormats(prev => ({
+                          setSelectedFormats((prev) => ({
                             ...prev,
-                            [poster.id]: selectedFormat
+                            [poster.id]: selectedFormat,
                           }));
                         }
                       }}
@@ -96,7 +90,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Formats:</SelectLabel>
-                          {poster.formatPrices.map((formatPrice: FormatPrice) => (
+                          {poster.formatPrices.map((formatPrice: types.FormatPriceDto) => (
                             <SelectItem key={formatPrice.format} value={formatPrice.format}>
                               {formatPrice.format}
                             </SelectItem>
@@ -108,10 +102,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
                   </div>
                 </div>
               </div>
-              <button className="border border-black bg-white p-2 font-semibold drop-shadow-mg hover:cursor-pointer hover:scale-105 mt-2">
+              <button
+                onClick={() => handleViewPoster(poster.id)}
+                className="border border-black bg-white p-2 font-semibold drop-shadow-mg hover:cursor-pointer hover:scale-105 mt-2"
+              >
                 View Poster →
               </button>
-            </div>
+            </Link>
           );
         })}
       </div>

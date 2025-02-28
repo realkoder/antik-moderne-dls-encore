@@ -14,13 +14,13 @@ datasource db {
 }
 
 model Poster {
-  id               Int           @id @default(autoincrement())
-  name             String
-  artist_full_name String
-  poster_image_url String
-  formatPrices     FormatPrice[]
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  id             Int           @id @default(autoincrement())
+  name           String
+  artistFullName String        @map("artist_full_name")
+  posterImageUrl String        @map("poster_image_url")
+  formatPrices   FormatPrice[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
   @@map("posters")
 }
@@ -38,11 +38,11 @@ enum Format {
 }
 
 model FormatPrice {
-  id       Int    @id @default(autoincrement())
-  format   Format
-  price    Int
+  id        Int    @id @default(autoincrement())
+  format    Format
+  price     Int
   poster_id Int
-  poster   Poster @relation(fields: [poster_id], references: [id])
+  poster    Poster @relation(fields: [poster_id], references: [id])
 
   @@map("format_prices")
 }

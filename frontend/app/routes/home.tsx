@@ -30,7 +30,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="w-full flex flex-col justify-center items-center">
-      <div className="relative flex flex-col w-[95%] h-[700px]">
+      <div className="flex flex-col w-[95%] h-[700px]">
         <img key="poster-hero.jpg" src="/poster-hero.png" alt="poster-hero" className="w-full h-full object-cover" />
         <div className="absolute flex flex-col top-1/5 left-1/5">
           <h1 className="text-6xl text-white text-left font-bold mb-4">Welcome to Antik Moderne</h1>

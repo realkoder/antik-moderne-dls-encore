@@ -12,7 +12,7 @@ export const CartItem = ({ poster }: CartItemProps) => {
 
   return (
     <div className="relative flex items-center justify-start w-full mt-2">
-      <MdRemoveCircle onClick={() => setCartPosters(cur => [...cur.filter(cartPoster => cartPoster.id !== poster.id)])} className="absolute -left-1 -top-1 bg-white rounded-full w-4 h-4 text-red-500 cursor-pointer font-semibold z-50" />
+      <MdRemoveCircle onClick={() => setCartPosters(cur => [...cur.filter(cartPoster => cartPoster.id !== poster.id)])} className="absolute -left-1 -top-1 rounded-full w-4 h-4 text-red-500 cursor-pointer font-semibold z-50" />
       <img src={poster.posterImageUrl} alt={poster.title} className="rounded-md w-12 h-12" />
       <div className="flex flex-col items-start justify-start w-full ml-2">
         <h2 className="text-sm font-semibold">{poster.title}</h2>

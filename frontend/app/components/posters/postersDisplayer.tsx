@@ -20,7 +20,7 @@ export const PosterDisplayer = () => {
 
   return (
     <div className="grid grid-cols-3 gap-12 w-[90%]">
-      {posters.slice(0, 3).map((poster) => {
+      {posters.map((poster) => {
         const currentFormatPrice = getCurrentFormatPrice(poster.id, poster.formatPrices);
 
         return (
@@ -71,7 +71,7 @@ export const PosterDisplayer = () => {
             </div>
             <button
               onClick={() => handleViewPoster(poster.id)}
-              className="border border-black bg-white p-2 font-semibold drop-shadow-mg hover:cursor-pointer hover:scale-105 mt-2"
+              className="border border-black p-2 font-semibold drop-shadow-mg hover:cursor-pointer hover:scale-105 mt-2"
             >
               View Poster →
             </button>

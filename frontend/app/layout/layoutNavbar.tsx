@@ -29,7 +29,7 @@ export default function layoutNavbar() {
     }`;
 
   return (
-    <div className="h-screen text-center flex flex-col">
+    <div className="min-h-screen text-center flex flex-col">
       <nav className="flex items-center justify-center">
         <div className="w-[95%] p-4 px-8 flex justify-between items-center">
           <div className="flex space-x-4">

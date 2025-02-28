@@ -21,7 +21,7 @@ const Cart = () => {
       <div className="w-full flex items-center justify-start">
         <button
           hidden={cartPosters.length < 1}
-          className="border border-black bg-white py-1 px-1.5 font-semibold drop-shadow-mg hover:cursor-pointer hover:scale-105 mt-2"
+          className="border border-black  py-1 px-1.5 font-semibold drop-shadow-mg hover:cursor-pointer hover:scale-105 mt-2"
         >
           Checkout
         </button>

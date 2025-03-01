@@ -33,7 +33,6 @@ model RemovedPoster {
   deletedAt DateTime @default(now())
   poster    Poster   @relation(fields: [posterId], references: [id])
 
-  @@index([posterId, deletedAt], name: "idx_posterId_deletedAt")
   @@map("removed_posters")
 }
 

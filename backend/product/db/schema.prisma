@@ -14,15 +14,27 @@ datasource db {
 }
 
 model Poster {
-  id             Int           @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   title          String
-  artistFullName String        @map("artist_full_name")
-  posterImageUrl String        @map("poster_image_url")
+  artistFullName String          @map("artist_full_name")
+  posterImageUrl String          @map("poster_image_url")
   formatPrices   FormatPrice[]
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  RemovedPoster  RemovedPoster[]
 
   @@map("posters")
+}
+
+// Thombstone pattern
+model RemovedPoster {
+  id        Int      @id @default(autoincrement())
+  posterId  Int      @map("poster_id")
+  deletedAt DateTime @default(now())
+  poster    Poster   @relation(fields: [posterId], references: [id])
+
+  @@index([posterId, deletedAt], name: "idx_posterId_deletedAt")
+  @@map("removed_posters")
 }
 
 enum Format {

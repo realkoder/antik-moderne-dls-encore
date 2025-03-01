@@ -20,7 +20,7 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
     const [format, setFormat] = useState<types.Format | null>();
     const [price, setPrice] = useState("1000");
     const [isCreating, setIsCreating] = useState(false);
-    
+
     const filteredFormats = formats.filter((format) => !posterCreate.formatPrices.find((posterFormat) => posterFormat.format === format));
 
 
@@ -46,13 +46,19 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
 
     const handleClickActions = {
         submitPoster: async () => {
-            if (!isPosterCreationValid(posterCreate)) return;
-
+            if (isCreating || !authRequestClient || !isPosterCreationValid(posterCreate)) return;
             setIsCreating(true);
-            const response = await authRequestClient?.product.createPoster({ posterCreate });
-            if (response && response.posters) setPosters(response.posters);
-            setIsCreating(false);
-            changeTabTo("products");
+
+            try {
+                const response = await authRequestClient.product.createPoster({ posterCreate });
+                if (response && response.posters) setPosters(response.posters);
+                changeTabTo("products");
+            } catch (error) {
+                triggerToaster("An error with the creation of the poster");
+                console.error("Error");
+            } finally {
+                setIsCreating(false);
+            }
         },
         onRemoveFormatPrice: (format: types.Format) => {
             if (!format) return;
@@ -73,8 +79,6 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
             setFormat(null);
         }
     }
-
-
 
     const triggerToaster = (description: string) => {
         toast("Failed to create poster", {

@@ -30,7 +30,7 @@ export default function Admin({ loaderData }: Route.ComponentProps) {
 
   return (
     <div className="p-4 px-8 flex flex-col items-center">
-      <h1 className="text-4xl font-bold mb-4">🗝️ ADMIN STUFF 🗝️</h1>
+      <h1 className="text-4xl font-bold mb-4">Managing posters</h1>
       <TabContainer />
     </div>
   );

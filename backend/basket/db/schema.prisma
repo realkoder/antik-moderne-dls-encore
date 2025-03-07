@@ -1,0 +1,37 @@
+// For any changes make a migration by running: npx prisma migrate dev
+// Migration naming convention: <incremenatl_number>_<changes_made>.<up/down>
+
+generator client {
+    provider      = "prisma-client-js"
+    binaryTargets = ["native", "debian-openssl-3.0.x"]
+    //                REMEMEBER TO CHANGE TO THE EXACT db-<dbname>...
+    output        = "../../node_modules/@prisma-db-baskets/client" // Since we have multiple DB and multiple schema.prisma we have to this
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = "postgresql://backend-2tui:shadow-cuosrlr38u1lquc8stog@127.0.0.1:9500/baskets?sslmode=disable"
+}
+
+model Basket {
+    id         Int          @id @default(autoincrement())
+    user_id    Int
+    createdAt  DateTime     @default(now()) @map("created_at")
+    updatedAt  DateTime     @updatedAt @map("updated_at")
+    BasketItem BasketItem[]
+
+    @@index([user_id])
+    @@map("baskets")
+}
+
+model BasketItem {
+    id        Int      @id @default(autoincrement())
+    posterId  String   @map("poster_id")
+    basketId  Int
+    quantity  Int      @default(1)
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    basket    Basket   @relation(fields: [basketId], references: [id])
+
+    @@map("basket_items")
+}

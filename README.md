@@ -140,7 +140,7 @@ We have choosen to use [Clerk](https://clerk.com/docs) for user creation and sig
 
 There exists a lot of different Typescript ORM's but we chosen to work with _Prisma_ since it's proudction ready state, it's support of migrations, it has a very declarative data modeling and an intuitive API to improve developer performance.
 
-The database is making use of _Thombstone pattern_ where data actually never is deleted, but moved to a removed table for a given datamodel. Also using immutable pattern, where data never actaully is changed when updating instead new data is inserted.
+The database is making use of _Thombstone pattern_ where data actually never is deleted, but moved to a removed table for a given datamodel.
 
 Commands to configure _Prisma_
 

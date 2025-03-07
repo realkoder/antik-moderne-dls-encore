@@ -21,7 +21,6 @@ model Poster {
   formatPrices   FormatPrice[]
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
-  RemovedPoster  RemovedPoster[]
 
   @@map("posters")
 }
@@ -30,8 +29,10 @@ model Poster {
 model RemovedPoster {
   id        Int      @id @default(autoincrement())
   posterId  Int      @map("poster_id")
-  deletedAt DateTime @default(now())
-  poster    Poster   @relation(fields: [posterId], references: [id])
+  title          String
+  artistFullName String
+  posterImageUrl String
+  deletedAt      DateTime @default(now())
 
   @@map("removed_posters")
 }
@@ -56,4 +57,15 @@ model FormatPrice {
   poster   Poster @relation(fields: [posterId], references: [id])
 
   @@map("format_prices")
+}
+
+// Thombstone pattern
+model RemovedFormatPrice {
+  id       Int    @id @default(autoincrement())
+  format   Format
+  price    Int
+  posterId Int    @map("poster_id")
+  deletedAt DateTime @default(now())
+
+  @@map("removed_format_prices")
 }

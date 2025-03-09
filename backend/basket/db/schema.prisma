@@ -15,19 +15,21 @@ datasource db {
 
 model Basket {
     id         Int          @id @default(autoincrement())
-    user_id    Int
+    userId     String?         @map("user_id")
+    guid       String?
     createdAt  DateTime     @default(now()) @map("created_at")
     updatedAt  DateTime     @updatedAt @map("updated_at")
-    BasketItem BasketItem[]
+    basketItems BasketItem[]
 
-    @@index([user_id])
+    @@index([userId])
+    @@index([guid])
     @@map("baskets")
 }
 
 model BasketItem {
     id        Int      @id @default(autoincrement())
     posterId  String   @map("poster_id")
-    basketId  Int
+    basketId  Int      @map("basket_id")
     quantity  Int      @default(1)
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")

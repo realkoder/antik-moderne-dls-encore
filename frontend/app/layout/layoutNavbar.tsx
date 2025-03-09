@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/react-router";
+import { SignedIn, SignedOut, useAuth, UserButton } from "@clerk/react-router";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
@@ -10,6 +10,7 @@ import useUserRole from "~/hooks/useUserRole";
 import Cart from "~/components/Cart/Cart";
 import { useAtomValue } from "jotai";
 import { cartPostersAtom } from "~/atoms/cartPostersAtom";
+import useAuthFetch from "~/hooks/useAuthFetch";
 
 export default function layoutNavbar() {
   const { theme, setTheme } = useTheme();
@@ -20,6 +21,18 @@ export default function layoutNavbar() {
   useEffect(() => {
     setTheme("light");
   }, []);
+
+  const { userId } = useAuth();
+  const { authRequestClient } = useAuthFetch();
+
+  useEffect(() => {
+    console.log("USERID", userId);
+    if (userId && authRequestClient) {
+      (async () => {
+        const response = await authRequestClient?.basket.createBasketByUserId();
+      })();
+    }
+  }, [authRequestClient]);
 
   const navLinkClassName = (linkPath: string) =>
     `${
@@ -34,7 +47,12 @@ export default function layoutNavbar() {
         <div className="w-[95%] p-4 px-8 flex justify-between items-center">
           <div className="flex space-x-4">
             <NavLink to="/">
-              <img className="border border-black grayscale rounded-full" src="/logo.png" width={50} alt="ANTIK MODERNE" />
+              <img
+                className="border border-black grayscale rounded-full"
+                src="/logo.png"
+                width={50}
+                alt="ANTIK MODERNE"
+              />
             </NavLink>
             <ThemeChanger />
           </div>

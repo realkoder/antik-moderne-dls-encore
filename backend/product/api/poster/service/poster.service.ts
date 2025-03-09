@@ -5,10 +5,6 @@ import { Format, PosterCreate, PosterDto, PosterUpdate } from "../../../types/po
 import { Format as FormatEnum, RemovedPoster } from "@prisma-db-products/client";
 
 const PosterService = {
-    count: async (): Promise<number> => {
-        return await prismaProducts.poster.count();
-    },
-
     create: async (posterCreate: PosterCreate): Promise<Response> => {
         try {
             await prismaProducts.$transaction(async (prisma) => {

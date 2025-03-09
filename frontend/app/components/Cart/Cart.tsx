@@ -2,6 +2,7 @@ import { useAtomValue } from "jotai";
 import { cartPostersAtom } from "~/atoms/cartPostersAtom";
 import { CartItem } from "./CartItem";
 
+
 const Cart = () => {
   const cartPosters = useAtomValue(cartPostersAtom);
 

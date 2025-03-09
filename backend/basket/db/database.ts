@@ -1,14 +1,14 @@
 import { SQLDatabase } from "encore.dev/storage/sqldb";
-import { PrismaClient } from "@prisma-db-products/client";
+import { PrismaClient } from "@prisma-db-baskets/client";
 
-const DB = new SQLDatabase("products", {
+const DB = new SQLDatabase("baskets", {
   migrations: {
     path: "migrations",
     source: "prisma",
   },
 });
 
-const prismaProducts = new PrismaClient({
+const prismaBaskets = new PrismaClient({
   datasources: {
     db: {
       url: DB.connectionString,
@@ -16,4 +16,4 @@ const prismaProducts = new PrismaClient({
   },
 });
 
-export { prismaProducts };
+export { prismaBaskets };

@@ -348,20 +348,20 @@ export namespace types {
         guid: string | null
         createdAt: string
         updatedAt: string
-        basketItems: BasketItem[]
-    }
-
-    export interface BasketItem {
-        id: number
-        posterId: string
-        quantity: number
-        createdAt: string
-        updatedAt: string
+        basketItems: BasketItemDto[]
     }
 
     export interface BasketItemCreate {
-        posterId: string
+        posterId: number
         quantity: number
+    }
+
+    export interface BasketItemDto {
+        id: number
+        poster: PosterDto
+        quantity: number
+        createdAt: string
+        updatedAt: string
     }
 
     export interface EmailAddress {

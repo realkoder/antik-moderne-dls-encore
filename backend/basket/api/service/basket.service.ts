@@ -1,5 +1,6 @@
+import PosterService from "../../../product/api/poster/service/poster.service";
 import { prismaBaskets } from "../../db/database";
-import { BasketDto, BasketItem, BasketItemCreate } from "../../types/basket.interface";
+import { BasketDto, BasketItemCreate } from "../../types/basket.interface";
 import { APIError } from "encore.dev/api";
 
 const BasketService = {
@@ -45,7 +46,28 @@ const BasketService = {
 
         if (!basket) throw APIError.aborted("Something went wrong finding basket");
 
-        return basket;
+        if (basket.basketItems && basket.basketItems.length > 0) {
+            const basketItemsWithPosters = await Promise.all(basket.basketItems.map(async (item) => {
+                const poster = await PosterService.findOne(item.posterId);
+                if (!poster) {
+                    throw new Error(`Poster with ID ${item.posterId} not found`);
+                }
+                return {
+                    ...item,
+                    poster,
+                };
+            }));
+            return {
+                ...basket,
+                basketItems: basketItemsWithPosters,
+            };
+        }
+
+        return {
+            ...basket,
+            basketItems: [],
+        };
+
     },
 
     addItemToBasket: async (identifier: { userId?: string; guid?: string }, basketItemCreate: BasketItemCreate): Promise<BasketDto> => {

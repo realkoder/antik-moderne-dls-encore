@@ -2,8 +2,8 @@ import { useSetAtom } from "jotai";
 import { useState } from "react";
 import { postersAtom } from "~/atoms/postersAtom";
 import type { types } from "~/lib/client";
-import useAuthFetch from "./useAuthFetch";
 import { toast } from "sonner";
+import useAuthFetch from "./useAuthFetch";
 
 const defaultPoster: types.PosterCreate = {
     title: "",
@@ -22,7 +22,6 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
     const [isCreating, setIsCreating] = useState(false);
 
     const filteredFormats = formats.filter((format) => !posterCreate.formatPrices.find((posterFormat) => posterFormat.format === format));
-
 
     const { authRequestClient } = useAuthFetch();
 
@@ -46,10 +45,11 @@ export const usePosterCreate = (changeTabTo: (tab: string) => void) => {
 
     const handleClickActions = {
         submitPoster: async () => {
-            if (isCreating || !authRequestClient || !isPosterCreationValid(posterCreate)) return;
+            if (isCreating || !isPosterCreationValid(posterCreate)) return;
             setIsCreating(true);
 
             try {
+                if (!authRequestClient) return;
                 const response = await authRequestClient.product.createPoster({ posterCreate });
                 if (response && response.posters) setPosters(response.posters);
                 changeTabTo("products");

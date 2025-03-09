@@ -34,7 +34,8 @@
     "sonner": "^2.0.1",
     "spinners-react": "^1.0.10",
     "tailwind-merge": "^3.0.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@react-router/dev": "^7.1.5",

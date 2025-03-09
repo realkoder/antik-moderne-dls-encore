@@ -1,8 +1,7 @@
 import getRequestClient from "~/lib/getRequestClient";
 import type { Route } from "./+types/poster";
 import { CiShoppingBasket } from "react-icons/ci";
-import { useSetAtom } from "jotai";
-import { cartPostersAtom } from "~/atoms/cartPostersAtom";
+import useCart from "~/hooks/useCart";
 
 export function loader({ params }: Route.LoaderArgs) {
   const posterId = Number(params.posterId);
@@ -18,7 +17,7 @@ export function loader({ params }: Route.LoaderArgs) {
 
 export default function Poster({ loaderData }: Route.ComponentProps) {
   const { poster } = loaderData;
-  const setCartPosters = useSetAtom(cartPostersAtom);
+  const { addItemToCart } = useCart();
 
   return (
     <div className="w-full h-full flex items-center justify-around mt-8">
@@ -37,7 +36,9 @@ export default function Poster({ loaderData }: Route.ComponentProps) {
             <div key={formatPrice.id} className="w-[65%] flex items-center justify-between space-x-2 mt-4">
               <p>{formatPrice.format}</p>
               <button
-                onClick={() => {setCartPosters(cur=> [...cur, poster])}}
+                onClick={() => {
+                  addItemToCart({ posterId: poster.id, quantity: 1 });
+                }}
                 className="flex items-center justify-center border border-black p-1 hover:cursor-pointer hover:scale-105 mt-2 relative group h-8 w-28"
               >
                 <CiShoppingBasket className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out" />

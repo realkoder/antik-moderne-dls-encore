@@ -1,22 +1,24 @@
+import { PosterDto } from "../../product/types/poster.interface";
+
 export interface BasketDto {
     id: number;
     userId: string | null; // Either has userId or GUID if client isn't signed in
     guid: string | null; //Globally Unique Identifier (GUID)
     createdAt: Date;
     updatedAt: Date;
-    basketItems: BasketItem[];
+    basketItems: BasketItemDto[];
 }
 
-export interface BasketItem {
+export interface BasketItemDto {
     id: number;
-    posterId: string;
+    poster: PosterDto;
     quantity: number;
     createdAt: Date;
     updatedAt: Date;
 }
 
 export interface BasketItemCreate {
-    posterId: string;
+    posterId: number;
     quantity: number;
 }
 

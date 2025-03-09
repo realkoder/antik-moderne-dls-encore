@@ -6,7 +6,7 @@ import BasketService from "../service/basket.service";
 export const getBasketUserId = api<{}, { basket: BasketDto }>(
     { auth: true, expose: true, method: "GET", path: "/basket-userid" },
     async (): Promise<{ basket: BasketDto }> => {
-        const userId = getAuthData().userId;
+        const userId = getAuthData().userID;
 
         if (!userId) throw APIError.permissionDenied("userid is missing");
 
@@ -50,7 +50,7 @@ export const createBasketByGuid = api<{ guid: string }, { basket: BasketDto }>(
 export const addItemToBasketByUserId = api<{ basketItemCreate: BasketItemCreate }, { basket: BasketDto }>(
     { auth: true, expose: true, method: "POST", path: "/basket-userid-add" },
     async ({ basketItemCreate }): Promise<{ basket: BasketDto }> => {
-        const userId: string = getAuthData().userId;
+        const userId: string = getAuthData().userID;
 
         if (!userId) throw APIError.permissionDenied("userid is missing");
 
@@ -68,7 +68,7 @@ export const addItemToBasketByGuid = api<{ guid: string, basketItemCreate: Baske
 export const removeItemFromBasketByUserId = api<{ basketItemId: number }, { basket: BasketDto }>(
     { auth: true, expose: true, method: "DELETE", path: "/basket-userid-remove" },
     async ({ basketItemId }): Promise<{ basket: BasketDto }> => {
-        const userId: string = getAuthData().userId;
+        const userId: string = getAuthData().userID;
 
         if (!userId) throw APIError.permissionDenied("userid is missing");
 

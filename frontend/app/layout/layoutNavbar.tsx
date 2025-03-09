@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, useAuth, UserButton } from "@clerk/react-router";
+import { SignedIn, SignedOut, UserButton } from "@clerk/react-router";
 import { useTheme } from "next-themes";
 import { useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
@@ -9,30 +9,19 @@ import { ThemeChanger } from "~/components/ThemeChanger";
 import useUserRole from "~/hooks/useUserRole";
 import Cart from "~/components/Cart/Cart";
 import { useAtomValue } from "jotai";
-import { cartPostersAtom } from "~/atoms/cartPostersAtom";
-import useAuthFetch from "~/hooks/useAuthFetch";
+import { cartAtom } from "~/atoms/cartAtom";
+import useCart from "~/hooks/useCart";
 
 export default function layoutNavbar() {
   const { theme, setTheme } = useTheme();
   const { pathname } = useLocation();
   const { userRole } = useUserRole();
-  const cartPosters = useAtomValue(cartPostersAtom);
+  const cart = useAtomValue(cartAtom);
+  useCart();
 
   useEffect(() => {
     setTheme("light");
   }, []);
-
-  const { userId } = useAuth();
-  const { authRequestClient } = useAuthFetch();
-
-  useEffect(() => {
-    console.log("USERID", userId);
-    if (userId && authRequestClient) {
-      (async () => {
-        const response = await authRequestClient?.basket.createBasketByUserId();
-      })();
-    }
-  }, [authRequestClient]);
 
   const navLinkClassName = (linkPath: string) =>
     `${
@@ -89,7 +78,7 @@ export default function layoutNavbar() {
                 <div>
                   <FaCartShopping size={20} className="text-2xl" />
                   <div className="absolute top-0 -right-1 z-50 bg-red-500 text-white rounded-full w-3.5 h-3.5 flex justify-center items-center">
-                    <span className="text-xs">{cartPosters.length}</span>
+                    <span className="text-xs">{cart && cart.basketItems.length}</span>
                   </div>
                 </div>
               </PopoverTrigger>

@@ -7,16 +7,19 @@ const useUserRole = () => {
     const { authRequestClient } = useAuthFetch();
 
     useEffect(() => {
-        if (!authRequestClient) {
-            setUserRole("USER");
-            return;
-        }
-
+        console.log("WE are running");
         (async () => {
-            const userRole = await authRequestClient.user.getUserRoleForClient();
-            if (userRole) {
-                setUserRole(userRole.role);
+            if (!authRequestClient) {
+                setUserRole("USER");
+                return;
             }
+
+            (async () => {
+                const userRole = await authRequestClient.user.getUserRoleForClient();
+                if (userRole) {
+                    setUserRole(userRole.role);
+                }
+            })()
         })();
     }, [authRequestClient]);
 

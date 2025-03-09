@@ -2,20 +2,22 @@ import { type types } from "~/lib/client";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../ui/card";
 import { Divider } from "~/components/Divider";
 import { IoTrashOutline } from "react-icons/io5";
-import useAuthFetch from "~/hooks/useAuthFetch";
 import { useSetAtom } from "jotai";
 import { postersAtom } from "~/atoms/postersAtom";
+import useAuthFetch from "~/hooks/useAuthFetch";
 
 interface TabProductCardProps {
   poster: types.PosterDto;
 }
 
 export const TabPosterCard = ({ poster }: TabProductCardProps) => {
-  const { authRequestClient } = useAuthFetch();
   const setPosters = useSetAtom(postersAtom);
+  const { authRequestClient } = useAuthFetch();
 
   const handleDeletePoster = async () => {
-    const response = await authRequestClient?.product.deletePoster(poster.id);
+    if (!authRequestClient) return;
+
+    const response = await authRequestClient.product.deletePoster(poster.id);
     if (response?.posters) {
       setPosters(response?.posters);
     }

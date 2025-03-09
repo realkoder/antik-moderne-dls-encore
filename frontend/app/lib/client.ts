@@ -119,75 +119,50 @@ export namespace basket {
             this.baseClient = baseClient
         }
 
-        public async addItemToBasketByGuid(params: {
-    guid: string
+        public async addItemToBasket(params: {
+    guid?: string
     basketItemCreate: types.BasketItemCreate
 }): Promise<{
     basket: types.BasketDto
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/basket-guid-add`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("POST", `/basket/add-item`, JSON.stringify(params))
             return await resp.json() as {
     basket: types.BasketDto
 }
         }
 
-        public async addItemToBasketByUserId(params: {
-    basketItemCreate: types.BasketItemCreate
+        public async createBasket(params: {
+    guid?: string
 }): Promise<{
     basket: types.BasketDto
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/basket-userid-add`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("POST", `/basket`, JSON.stringify(params))
             return await resp.json() as {
     basket: types.BasketDto
 }
         }
 
-        public async createBasketByGuid(params: {
-    guid: string
+        public async getBasket(params: {
+    guid?: string
 }): Promise<{
     basket: types.BasketDto
 }> {
+            // Convert our params into the objects we need for the request
+            const query = makeRecord<string, string | string[]>({
+                guid: params.guid,
+            })
+
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/basket-guid`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("GET", `/basket`, undefined, {query})
             return await resp.json() as {
     basket: types.BasketDto
 }
         }
 
-        public async createBasketByUserId(): Promise<{
-    basket: types.BasketDto
-}> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/basket-userid`)
-            return await resp.json() as {
-    basket: types.BasketDto
-}
-        }
-
-        public async getBasketByGuid(guid: string): Promise<{
-    basket: types.BasketDto
-}> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/basket-guid/${encodeURIComponent(guid)}`)
-            return await resp.json() as {
-    basket: types.BasketDto
-}
-        }
-
-        public async getBasketUserId(): Promise<{
-    basket: types.BasketDto
-}> {
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/basket-userid`)
-            return await resp.json() as {
-    basket: types.BasketDto
-}
-        }
-
-        public async removeItemFromBasketByGuid(params: {
-    guid: string
+        public async removeItemFromBasket(params: {
+    guid?: string
     basketItemId: number
 }): Promise<{
     basket: types.BasketDto
@@ -199,24 +174,7 @@ export namespace basket {
             })
 
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("DELETE", `/basket-guid-remove`, undefined, {query})
-            return await resp.json() as {
-    basket: types.BasketDto
-}
-        }
-
-        public async removeItemFromBasketByUserId(params: {
-    basketItemId: number
-}): Promise<{
-    basket: types.BasketDto
-}> {
-            // Convert our params into the objects we need for the request
-            const query = makeRecord<string, string | string[]>({
-                basketItemId: String(params.basketItemId),
-            })
-
-            // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("DELETE", `/basket-userid-remove`, undefined, {query})
+            const resp = await this.baseClient.callTypedAPI("DELETE", `/basket/remove-item`, undefined, {query})
             return await resp.json() as {
     basket: types.BasketDto
 }

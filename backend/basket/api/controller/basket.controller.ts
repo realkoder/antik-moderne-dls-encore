@@ -3,82 +3,88 @@ import { getAuthData } from "~encore/auth";
 import { BasketDto, BasketItemCreate } from "../../types/basket.interface";
 import BasketService from "../service/basket.service";
 
-export const getBasketUserId = api<{}, { basket: BasketDto }>(
-    { auth: true, expose: true, method: "GET", path: "/basket-userid" },
-    async (): Promise<{ basket: BasketDto }> => {
-        const userId = getAuthData().userID;
+export const getBasket = api<{ guid?: string }, { basket: BasketDto }>(
+    { auth: false, expose: true, method: "GET", path: "/basket" },
+    async ({ guid }): Promise<{ basket: BasketDto }> => {
+        let userId: string | undefined;
 
-        if (!userId) throw APIError.permissionDenied("userid is missing");
+        try {
+            userId = getAuthData().userID;
+            console.log("HEY GOT USERID", userId);
+        } catch (error) {
+            console.error("Error getting the authData", error);
+        }
 
-        const basket = await BasketService.findBasket({ userId });
+        if (!userId && !guid) {
+            throw APIError.invalidArgument("Either userId or guid must be provided");
+        }
+
+        const basket = await BasketService.findBasket({ userId, guid });
+
+        if (!basket) {
+            throw APIError.notFound("Basket not found");
+        }
 
         return { basket };
     }
 );
 
-export const getBasketByGuid = api<{ guid: string }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "GET", path: "/basket-guid/:guid" }, // Path includes :guid
+export const createBasket = api<{ guid?: string }, { basket: BasketDto }>(
+    { auth: false, expose: true, method: "POST", path: "/basket" },
     async ({ guid }): Promise<{ basket: BasketDto }> => {
+        let userId: string | undefined;
 
-        console.log("HEY", guid);
-        const basket = await BasketService.findBasket({ guid });
+        try {
+            userId = getAuthData().userID;
+        } catch (error) {
+            console.error("Error getting the authData", error);
+        }
+
+        if (!userId && !guid) {
+            throw APIError.invalidArgument("Either userId or guid must be provided");
+        }
+
+        const basket = await BasketService.createBasket({ userId, guid });
 
         return { basket };
     }
 );
 
-export const createBasketByUserId = api<{}, { basket: BasketDto }>(
-    { auth: true, expose: true, method: "POST", path: "/basket-userid" },
-    async (): Promise<{ basket: BasketDto }> => {
-        const userId: string = getAuthData().userID;
-
-        if (!userId) throw APIError.permissionDenied("userid is missing");
-
-        console.log("CALLED", userId);
-
-        return { basket: await BasketService.createBasket({ userId }) }
-    }
-);
-
-export const createBasketByGuid = api<{ guid: string }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "POST", path: "/basket-guid" },
-    async ({ guid }): Promise<{ basket: BasketDto }> => {
-        return { basket: await BasketService.createBasket({ guid }) };
-    }
-);
-
-export const addItemToBasketByUserId = api<{ basketItemCreate: BasketItemCreate }, { basket: BasketDto }>(
-    { auth: true, expose: true, method: "POST", path: "/basket-userid-add" },
-    async ({ basketItemCreate }): Promise<{ basket: BasketDto }> => {
-        const userId: string = getAuthData().userID;
-
-        if (!userId) throw APIError.permissionDenied("userid is missing");
-
-        return { basket: await BasketService.addItemToBasket({ userId }, basketItemCreate) }
-    }
-);
-
-export const addItemToBasketByGuid = api<{ guid: string, basketItemCreate: BasketItemCreate }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "POST", path: "/basket-guid-add" },
+export const addItemToBasket = api<{ guid?: string, basketItemCreate: BasketItemCreate }, { basket: BasketDto }>(
+    { auth: false, expose: true, method: "POST", path: "/basket/add-item" },
     async ({ guid, basketItemCreate }): Promise<{ basket: BasketDto }> => {
-        return { basket: await BasketService.addItemToBasket({ guid }, basketItemCreate) };
+
+        let userId: string | undefined;
+
+        try {
+            userId = getAuthData().userID;
+        } catch (error) {
+            console.error("Error getting the authData", error);
+        }
+
+        if (!userId && !guid) {
+            throw APIError.invalidArgument("Either userId or guid must be provided");
+        }
+
+        return { basket: await BasketService.addItemToBasket({ userId, guid }, basketItemCreate) }
     }
 );
 
-export const removeItemFromBasketByUserId = api<{ basketItemId: number }, { basket: BasketDto }>(
-    { auth: true, expose: true, method: "DELETE", path: "/basket-userid-remove" },
-    async ({ basketItemId }): Promise<{ basket: BasketDto }> => {
-        const userId: string = getAuthData().userID;
-
-        if (!userId) throw APIError.permissionDenied("userid is missing");
-
-        return { basket: await BasketService.removeItemFromBasket({ userId }, basketItemId) }
-    }
-);
-
-export const removeItemFromBasketByGuid = api<{ guid: string, basketItemId: number }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "DELETE", path: "/basket-guid-remove" },
+export const removeItemFromBasket = api<{ guid?: string, basketItemId: number }, { basket: BasketDto }>(
+    { auth: false, expose: true, method: "DELETE", path: "/basket/remove-item" },
     async ({ guid, basketItemId }): Promise<{ basket: BasketDto }> => {
-        return { basket: await BasketService.removeItemFromBasket({ guid }, basketItemId) };
+        let userId: string | undefined;
+
+        try {
+            userId = getAuthData().userID;
+        } catch (error) {
+            console.error("Error getting the authData", error);
+        }
+
+        if (!userId && !guid) {
+            throw APIError.invalidArgument("Either userId or guid must be provided");
+        }
+
+        return { basket: await BasketService.removeItemFromBasket({ userId, guid }, basketItemId) }
     }
 );

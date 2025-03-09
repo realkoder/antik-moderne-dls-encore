@@ -24,13 +24,13 @@ const useCart = () => {
         if (cart && cart.userId === userId) return;
         (async () => {
             if (authRequestClient && userId) {
-                const response = await authRequestClient.basket.createBasketByUserId();
+                const response = await authRequestClient.basket.createBasket({guid: undefined});
                 if (response) {
                     setCart(response.basket);
                 }
             } else {
                 if (localstorageGuid) {
-                    const response = await getRequestClient(undefined).basket.createBasketByGuid({ guid: localstorageGuid });
+                    const response = await getRequestClient(undefined).basket.createBasket({ guid: localstorageGuid });
                     if (response) {
                         setCart(response.basket);
                     }
@@ -43,11 +43,10 @@ const useCart = () => {
         let response;
         if (userId) {
             if (!authRequestClient) return;
-            response = await authRequestClient.basket.addItemToBasketByUserId({ basketItemCreate });
+            response = await authRequestClient.basket.addItemToBasket({ basketItemCreate });
         } else {
-            console.log("GUID", guid);
             if (guid) {
-                response = await getRequestClient(undefined).basket.addItemToBasketByGuid({ guid, basketItemCreate });
+                response = await getRequestClient(undefined).basket.addItemToBasket({ guid, basketItemCreate });
             }
         }
 
@@ -60,12 +59,11 @@ const useCart = () => {
         let response;
         if (userId) {
             if (!authRequestClient) return;
-            response = await authRequestClient.basket.removeItemFromBasketByUserId({ basketItemId: cartItemId });
+            response = await authRequestClient.basket.removeItemFromBasket({ basketItemId: cartItemId });
         } else {
             const guid = localStorage.getItem("cartguid");
-            console.log("GUID", guid);
             if (guid) {
-                response = await getRequestClient(undefined).basket.removeItemFromBasketByGuid({ guid, basketItemId: cartItemId });
+                response = await getRequestClient(undefined).basket.removeItemFromBasket({ guid, basketItemId: cartItemId });
             }
         }
 

@@ -6,8 +6,9 @@
 			"bundle_source": true
 		}
 	},
-	"allow_origins_without_credentials": ["*"],
-	"allow_origins_with_credentials": [
-		"https://antik-moderne-dls-encore.vercel.app"
-	]
+	"global_cors": {
+    "allow_origins_with_credentials": [
+      "https://antik-moderne-dls-encore.vercel.app"
+    ],
+  }
 }

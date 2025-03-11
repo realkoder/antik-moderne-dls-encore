@@ -10,7 +10,6 @@ export const getBasket = api<{ guid?: string }, { basket: BasketDto }>(
 
         try {
             userId = getAuthData().userID;
-            console.log("HEY GOT USERID", userId);
         } catch (error) {
             console.error("Error getting the authData", error);
         }

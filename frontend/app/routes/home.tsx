@@ -1,44 +1,57 @@
 import type { Route } from "./+types/home";
-import Client, { Local } from "~/lib/client";
+import { NavLink } from "react-router";
 import getRequestClient from "~/lib/getRequestClient";
-import { useAuth } from "@clerk/react-router";
-import { Button } from "~/components/ui/button";
+import { PosterDisplayer } from "~/components/posters/postersDisplayer";
+import { useEffect } from "react";
+import { useAtom } from "jotai";
+import { postersAtom } from "~/atoms/postersAtom";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "ANTIK MODERNE" },
-    { name: "description", content: "Welcome to Antik Moderne!" },
-  ];
+  return [{ title: "ANTIK MODERNE" }, { name: "description", content: "Welcome to Antik Moderne!" }];
 }
 
+export function loader({}: Route.LoaderArgs) {
+  return (async () => {
+    const posters = await getRequestClient(undefined).product.getPosters();
+    return posters;
+  })();
+}
 
-export default function Home() {
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const { posters: fetchedPosters } = loaderData;
+  const [posters, setPosters] = useAtom(postersAtom);
 
-  const {getToken} = useAuth();
-
-  const handleFetc = async () => {
-    const token = await getToken();
-    new Client(Local).admin.getHelloWorld().then(res => console.log("LOOK, helloworldRES", res))
-    if (!token) return
-    getRequestClient(token).admin.getDashboardData().then(res => console.log("LOOK, AUTH CALL DASHBOARDDATE", res));
-  }
+  useEffect(() => {
+    if (posters.length > 0) return;
+    if (fetchedPosters) {
+      setPosters(fetchedPosters);
+    }
+  }, [fetchedPosters, setPosters]);
 
   return (
-    <div className="flex-row justify-center text-center">
-      <h1 className="text-4xl font-bold mb-4">Welcome to Antik Moderne</h1>
-      <p className="text-lg mb-6">
-        Discover a curated collection of timeless posters that blend the
-        elegance of the past with the modern aesthetic.
-      </p>
-      <div className="flex justify-center">
-        <a
-          href="/posters"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Shop Now
-        </a>
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="flex flex-col w-[95%] h-[700px]">
+        <img key="poster-hero.jpg" src="/poster-hero.png" alt="poster-hero" className="w-full h-full object-cover" />
+        <div className="absolute flex flex-col top-1/5 left-1/5">
+          <h1 className="text-6xl text-white text-left font-bold mb-4">Welcome to Antik Moderne</h1>
+          <p className=" pt-4 w-1/2 text-white text-left text-2xl mb-6">
+            Discover a curated collection of timeless posters that blend the elegance of the past with the modern aesthetic.
+          </p>
+          <NavLink
+            to="/posters"
+            className="px-6 py-2 font-medium bg-white text-black w-fit transition-all shadow-[3px_3px_0px_black] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px]"
+          >
+            Shop Now →
+          </NavLink>
+        </div>
       </div>
-      <Button onClick={() => handleFetc()}>NOWW</Button>
+      <div className="flex items-center w-[90%]">
+        <h1 className="text-6xl text-black text-center font-bold mb-10 pt-10 mr-6">Featured Posters</h1>
+        <NavLink to="/posters" className="hover:underline hover:cursor-pointer mt-2">
+          See All →
+        </NavLink>
+      </div>
+      <PosterDisplayer />
     </div>
   );
 }

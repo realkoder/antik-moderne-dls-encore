@@ -5,6 +5,8 @@ import { secret } from "encore.dev/config";
 
 import log from "encore.dev/log";
 import { AUTHORIZED_PARTIES } from "./config";
+import { Role } from "../user/types/user.interface";
+import { user as usersService } from "~encore/clients";
 
 const clerkSecretKey = secret("ClerkSecretKey");
 
@@ -20,11 +22,11 @@ interface AuthData {
   userID: string;
   imageUrl: string;
   emailAddress: string | null;
+  role: Role;
 }
 
 const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> => {
   const token = params.authorization.replace("Bearer ", "");
-  console.log("HEY EXECTUED", token)
 
   if (!token) {
     throw APIError.unauthenticated("no token provided");
@@ -37,15 +39,19 @@ const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> 
     });
 
     const user = await clerkClient.users.getUser(result.sub);
+    const { role } = await usersService.getUserRoleForAuth({ userId: user.id });
+
+    if (!role) throw APIError.unauthenticated("Missing role");
 
     return {
       userID: user.id,
       imageUrl: user.imageUrl,
       emailAddress: user.emailAddresses[0].emailAddress || null,
+      role: role
     };
   } catch (e) {
     log.error(e);
-    throw APIError.unauthenticated("invalid token", e as Error);
+    throw APIError.unauthenticated("invalid token or missing role", e as Error);
   }
 });
 

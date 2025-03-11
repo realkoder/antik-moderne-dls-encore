@@ -1,12 +1,10 @@
-import { SignIn, SignInButton, SignUp } from "@clerk/react-router";
-import type { Route } from "./+types/genres";
+import { SignIn, SignUp } from "@clerk/react-router";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import type { Route } from "./+types/sign-in";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "Signin - Antik Moderne" },
-    { name: "description", content: "Signin" },
-  ];
+  return [{ title: "Signin - Antik Moderne" }, { name: "description", content: "Signin" }];
 }
 
 export default function SignInPage() {

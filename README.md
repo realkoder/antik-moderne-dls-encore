@@ -44,6 +44,10 @@ Our e-commerce platform is a comprehensive online marketplace designed to facili
 
 <br>
 
+---
+
+<br>
+
 ## Requirements
 
 ### Functional Requirements
@@ -96,20 +100,26 @@ Our e-commerce platform is a comprehensive online marketplace designed to facili
 - Integration of a support ticket system and live chat for customer inquiries.
 - Implement monitoring solutions to track system performance and user behavior.
 
-## System Architecture design
-
-TODO ================== ADD A COMPONENT DIAGRAM ==================
-TODO ================== ADD SOMETHING ABOUT CLERK AUTH ==================
-
-The whole project is organzied as a _mono-repo_ with two directories: `backend` & `frontend`. The backend system consists of following micro-services: `admin-service` `auth-service` `email-service` `product-service`.
-
-For the backend **[Encore](https://encore.dev)** is used as a backend framework and frontend is builded with [React Router v7](https://reactrouter.com/home).
+<br>
 
 ---
 
 <br>
 
-**Encore** provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [NSQ](https://nsq.io/overview/design.html) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
+## System Architecture design
+
+**Micro-service architecture**
+
+![Micro-service architecture](images/micro-service-architecture.png "Micro-service Architecture")
+
+The whole project is organzied as a _mono-repo_ with two directories: `backend` & `frontend`. The backend system consists of following micro-services: `admin-service` `auth-service` `email-service` `product-service`.
+
+For the backend **[Encore](https://encore.dev)** is used as a backend framework and frontend is builded with [React Router v7](https://reactrouter.com/home).
+Encore is a newer backend development framework designed to streamline creation, deployment and maintenance of cloud-native applications. It's based on a high-performance [Rust runtime](https://encore.dev/docs/ts/concepts/benefits), _Rust_ focus on safety and concurrency enables _Encore_ to offer a high-performance runtime environment that is both fast and reliable.
+
+Encore supports _TypeScript_ out of the box. This integration enhances code quality and developer productivity by catching errors early in the development process. Further more _Encore_ provides a super efficient feature which is this script for frontend _package.json_ `"gen": "encore gen client backend-2tui --output=./app/lib/client.ts --env=local"`. This scripts generates all the callable API endpoints for the given services with typesafe input outputs.
+
+**Encore** provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [GCP](https://cloud.google.com/pubsub) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
 
 #### Key Features of Encore's Pub/Sub System:
 
@@ -120,11 +130,37 @@ For the backend **[Encore](https://encore.dev)** is used as a backend framework 
 
 By leveraging Encore's pub/sub system, `antik-moderne` ensures efficient and reliable inter-service communication, laying the foundation for a robust and scalable e-commerce platform.
 
-TODO ===== Something about the frameworks Rust-based runtime, nodejs, typescript etc.
+#### Authorization outsourced to Clerk
+
+We have choosen to use [Clerk](https://clerk.com/docs) for user creation and signup. It can be a true struggle to enhance _SSO / OAuth Protocol / OpenID_ on your own and especially _Apple single-sign-on_ [setup Apple sign in](https://www.kyle-melton.com/blog/2022-02-how-to-setup-sign-in-with-apple) since _Apple SSO_ only accepts https connections which mean you have to configure _nginx reverse proxy_ for local dev experience. ALl this is [Clerk social connection](https://clerk.com/docs/authentication/social-connections/oauth#configuration) dealing with, and they do also provide custom user handling with the use of webhook calling with [Svix](https://www.svix.com) - so we are also persisting our users.
+
+<br>
+
+### Database and use of Typescript ORM Prisma
+
+There exists a lot of different Typescript ORM's but we chosen to work with _Prisma_ since it's proudction ready state, it's support of migrations, it has a very declarative data modeling and an intuitive API to improve developer performance.
+
+The database is making use of _Thombstone pattern_ where data actually never is deleted, but moved to a removed table for a given datamodel.
+
+Commands to configure _Prisma_
+
+```bash
+# Install prisma
+npm install prisma --save-dev
+
+# To get the shadow db connection url to Encore.ts shadow database, run:
+encore db conn-uri <database name> --shadow
+
+# To initialize Prisma, run the following command from within your service folder:
+npx prisma init --url <shadow db connection url>
+```
+
+[Encores Prisma docs](https://encore.dev/docs/ts/develop/orms/prisma)
+[Encores Prisma github example](https://github.com/encoredev/examples/tree/main/ts/prisma)
 
 ---
 
-<br>
+### Frontend
 
 **React Router v7**: We've chosen React Router v7 for its dynamic routing capabilities in React applications. This version brings significant improvements in terms of performance and flexibility, allowing us to implement complex routing scenarios with ease. It supports both SSR and CSR, enabling us to optimize our application for performance and SEO.
 

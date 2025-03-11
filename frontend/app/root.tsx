@@ -1,11 +1,4 @@
-import {
-  isRouteErrorResponse,
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "react-router";
+import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import type { Route } from "./+types/root";
 
@@ -17,14 +10,14 @@ import "./app.css";
 
 import { rootAuthLoader } from "@clerk/react-router/ssr.server";
 
-import {
-  ClerkProvider,
-} from "@clerk/react-router";
+import { ClerkProvider } from "@clerk/react-router";
+
+import { Provider } from "jotai";
 
 export async function loader(args: Route.LoaderArgs) {
   // const secretKey = process.env.VITE_CLERK_SECRET_KEY;
   // return rootAuthLoader(args, { secretKey });
-  return rootAuthLoader(args);
+  return rootAuthLoader(args, {});
 }
 
 export const links: Route.LinksFunction = () => [
@@ -60,19 +53,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App({ loaderData }: Route.ComponentProps) {
   return (
-    <ClerkProvider
-      loaderData={loaderData}
-      signUpFallbackRedirectUrl="/"
-      signInFallbackRedirectUrl="/"
-    >
+    <ClerkProvider loaderData={loaderData} signUpFallbackRedirectUrl="/" signInFallbackRedirectUrl="/">
       <main>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Outlet />
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+          <Provider>
+            <Outlet />
+          </Provider>
         </ThemeProvider>
       </main>
     </ClerkProvider>
@@ -86,10 +72,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
-    details =
-      error.status === 404
-        ? "The requested page could not be found."
-        : error.statusText || details;
+    details = error.status === 404 ? "The requested page could not be found." : error.statusText || details;
   } else if (import.meta.env.DEV && error && error instanceof Error) {
     details = error.message;
     stack = error.stack;

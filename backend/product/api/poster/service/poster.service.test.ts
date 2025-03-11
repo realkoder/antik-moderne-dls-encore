@@ -12,6 +12,7 @@ describe('PosterService service test', () => {
             console.log("Truncating tables...");
             await prismaProducts.$executeRaw`TRUNCATE TABLE "format_prices" CASCADE`;
             await prismaProducts.$executeRaw`TRUNCATE TABLE "posters" CASCADE`;
+            await prismaProducts.$executeRaw`TRUNCATE TABLE "poster_snapshots" CASCADE`;
             await prismaProducts.$executeRaw`TRUNCATE TABLE "removed_posters" CASCADE`;
             await prismaProducts.$executeRaw`TRUNCATE TABLE "removed_format_prices" CASCADE`;
             await PosterService.create({

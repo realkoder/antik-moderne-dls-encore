@@ -14,21 +14,35 @@ datasource db {
 }
 
 model Poster {
-  id             Int             @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   title          String
-  artistFullName String          @map("artist_full_name")
-  posterImageUrl String          @map("poster_image_url")
+  artistFullName String        @map("artist_full_name")
+  posterImageUrl String        @map("poster_image_url")
   formatPrices   FormatPrice[]
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
 
   @@map("posters")
 }
 
+// Snapshot pattern to make posters immutable
+model PosterSnapshot {
+  id             Int      @id @default(autoincrement())
+  posterId       Int      @map("poster_id")
+  title          String
+  artistFullName String   @map("artist_full_name")
+  posterImageUrl String   @map("poster_image_url")
+  formatPrices   Json     @map("format_prices")
+  version        Int      @default(1)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("poster_snapshots")
+}
+
 // Thombstone pattern
 model RemovedPoster {
-  id        Int      @id @default(autoincrement())
-  posterId  Int      @map("poster_id")
+  id             Int      @id @default(autoincrement())
+  posterId       Int      @map("poster_id")
   title          String
   artistFullName String
   posterImageUrl String
@@ -61,10 +75,10 @@ model FormatPrice {
 
 // Thombstone pattern
 model RemovedFormatPrice {
-  id       Int    @id @default(autoincrement())
-  format   Format
-  price    Int
-  posterId Int    @map("poster_id")
+  id        Int      @id @default(autoincrement())
+  format    Format
+  price     Int
+  posterId  Int      @map("poster_id")
   deletedAt DateTime @default(now())
 
   @@map("removed_format_prices")

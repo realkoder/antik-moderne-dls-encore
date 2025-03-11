@@ -3,8 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "install": "npm install --legacy-peer-deps",
-    "build": "react-router build",
+    "build": "npm run install-deps && react-router build",
     "dev": "react-router dev",
     "start": "dotenv -e .env.production -- react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",

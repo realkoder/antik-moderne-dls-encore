@@ -5,5 +5,6 @@
 		"docker": {
 			"bundle_source": true
 		}
-	}
+	},
+	"allow_origins_with_credentials": ["https://antik-moderne-dls-encore-dyx0l591r-realkoders-projects.vercel.app"],
 }

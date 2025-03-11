@@ -215,6 +215,25 @@ ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
 
 <br>
 
+---
+
+<br>
+
+
+### Deployment
+
+Frontend deployed through _Vercel_
+Backend is deployed with _Encore_ in staging env, since that's free.
+
+[Deployed app](https://antik-moderne-dls-encore.vercel.app)
+
+<br>
+
+---
+
+<br>
+
+
 ## Bonus links and miscellaneous
 
 _PostgreSQL_ is used as databasse - where _[Drizzle](https://orm.drizzle.team)_ is used as _ORM_.

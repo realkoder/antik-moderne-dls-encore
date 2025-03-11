@@ -6,5 +6,6 @@
 			"bundle_source": true
 		}
 	},
-	"allow_origins_with_credentials": ["https://antik-moderne-dls-encore-dyx0l591r-realkoders-projects.vercel.app"],
+	"allow_origins_without_credentials": ["*"],
+	"allow_origins_with_credentials": ["*"],
 }

@@ -3,6 +3,7 @@ import { prismaProducts } from "../../../db/database";
 import { Response } from "../../../../shared/types/api.interface";
 import { Format, PosterCreate, PosterDto, PosterUpdate } from "../../../types/poster.interface";
 import { Format as FormatEnum, RemovedPoster } from "@prisma-db-products/client";
+import { APIError } from "encore.dev/api";
 
 const PosterService = {
     create: async (posterCreate: PosterCreate): Promise<Response> => {
@@ -42,6 +43,27 @@ const PosterService = {
     update: async (id: number, posterUpdate: PosterUpdate): Promise<Response> => {
         try {
             await prismaProducts.$transaction(async (prisma) => {
+
+                const currentPoster = await prisma.poster.findUnique({
+                    where: { id },
+                    include: { formatPrices: true },
+                });
+
+                if (!currentPoster) {
+                    throw APIError.notFound("Poster not found");
+                }
+
+                await prisma.posterSnapshot.create({
+                    data: {
+                        posterId: currentPoster.id,
+                        title: currentPoster.title,
+                        artistFullName: currentPoster.artistFullName,
+                        posterImageUrl: currentPoster.posterImageUrl,
+                        formatPrices: JSON.stringify(currentPoster.formatPrices),
+                        version: (await prisma.posterSnapshot.count({ where: { posterId: id } })) + 1,
+                    },
+                });
+
                 const existingFormatPrices = await prisma.formatPrice.findMany({
                     where: { posterId: id },
                 });
@@ -134,29 +156,6 @@ const PosterService = {
 
         return { ...poster, formatPrices: formatPricesFixed };
     },
-
-    // delete: async (posterId: number): Promise<Response> => {
-    //     try {
-    //         await prismaProducts.$transaction([
-    //             prismaProducts.formatPrice.deleteMany({
-    //                 where: { posterId: posterId },
-    //             }),
-    //             prismaProducts.poster.delete({
-    //                 where: { id: posterId },
-    //             }),
-    //         ]);
-
-    //         return {
-    //             success: true,
-    //             result: "Poster deleted successfully",
-    //         };
-    //     } catch (error) {
-    //         return {
-    //             success: false,
-    //             message: "Poster not existing or delete operation failed",
-    //         };
-    //     }
-    // },
 
     delete: async (posterId: number): Promise<Response> => {
         try {

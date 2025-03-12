@@ -10,7 +10,8 @@
     "generate:users": "npx prisma generate --schema=user/db/schema.prisma",
     "generate:products": "npx prisma generate --schema=product/db/schema.prisma",
     "generate:baskets": "npx prisma generate --schema=basket/db/schema.prisma",
-    "postinstall": "npm run generate:users && npm run generate:products && npm run generate:baskets "
+    "generate:organizations": "npx prisma generate --schema=organization/db/schema.prisma",
+    "postinstall": "npm run generate:users && npm run generate:products && npm run generate:baskets && npm run generate:organizations "
   },
   "devDependencies": {
     "@types/node": "^20",

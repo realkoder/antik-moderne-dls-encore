@@ -1,6 +1,6 @@
 import { prismaUsers } from "../../../db/database"
 
-import { UserJSON } from "@clerk/backend";
+import { OrganizationDomain, UserJSON } from "@clerk/backend";
 import { Role, UserResponse } from "../../../types/user.interface";
 import { Response } from "../../../../shared/types/api.interface";
 
@@ -9,7 +9,7 @@ const UserService = {
         return await prismaUsers.user.count();
     },
 
-    create: async (event: UserJSON): Promise<{ status: string }> => {
+    create: async (event: UserJSON, org: OrganizationDomain): Promise<{ status: string }> => {
         const userNormalized = {
             id: event.id,
             external_id: event.external_id ?? "",

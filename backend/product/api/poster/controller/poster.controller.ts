@@ -30,8 +30,6 @@ export const createPoster = api<{ posterCreate: PosterCreate }, { posters: Poste
     async ({ posterCreate }: { posterCreate: PosterCreate }): Promise<{ posters: PosterDto[] }> => {
         const role: Role = getAuthData().role
 
-        console.log("UYOUOO", posterCreate);
-
         if (!role || role !== Role.ADMIN) throw APIError.permissionDenied("You dont have the needed ROLE for this action");
 
         await PosterService.create(posterCreate);

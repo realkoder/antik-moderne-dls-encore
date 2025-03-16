@@ -14,39 +14,33 @@ datasource db {
 }
 
 model Poster {
-  id             Int           @id @default(autoincrement())
-  title          String
-  artistFullName String        @map("artist_full_name")
-  posterImageUrl String        @map("poster_image_url")
-  formatPrices   FormatPrice[]
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @updatedAt @map("updated_at")
+  id                 Int                 @id @default(autoincrement())
+  posterDescriptions PosterDescription[]
+  removedPoster      RemovedPoster?
 
   @@map("posters")
 }
 
 // Snapshot pattern to make posters immutable
-model PosterSnapshot {
-  id             Int      @id @default(autoincrement())
-  posterId       Int      @map("poster_id")
-  title          String
-  artistFullName String   @map("artist_full_name")
-  posterImageUrl String   @map("poster_image_url")
-  formatPrices   Json     @map("format_prices")
-  version        Int      @default(1)
-  createdAt      DateTime @default(now()) @map("created_at")
+model PosterDescription {
+  id                      Int                      @id @default(autoincrement())
+  posterId                Int                      @map("poster_id")
+  title                   String
+  artistFullName          String                   @map("artist_full_name")
+  posterImageUrl          String                   @map("poster_image_url")
+  createdAt               DateTime                 @default(now()) @map("created_at")
+  poster                  Poster                   @relation(fields: [posterId], references: [id])
+  formatPriceDescriptions FormatPriceDescription[]
 
-  @@map("poster_snapshots")
+  @@map("poster_descriptions")
 }
 
 // Thombstone pattern
 model RemovedPoster {
-  id             Int      @id @default(autoincrement())
-  posterId       Int      @map("poster_id")
-  title          String
-  artistFullName String
-  posterImageUrl String
-  deletedAt      DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  posterId  Int      @unique @map("poster_id")
+  removedAt DateTime @default(now()) @map("removed_at")
+  poster    Poster   @relation(fields: [posterId], references: [id])
 
   @@map("removed_posters")
 }
@@ -64,22 +58,33 @@ enum Format {
 }
 
 model FormatPrice {
-  id       Int    @id @default(autoincrement())
-  format   Format
-  price    Int
-  posterId Int    @map("poster_id")
-  poster   Poster @relation(fields: [posterId], references: [id])
+  id                      Int                      @id @default(autoincrement())
+  removedFormatPrice      RemovedFormatPrice?
+  formatPriceDescriptions FormatPriceDescription[]
 
   @@map("format_prices")
 }
 
+// Snapshot pattern
+model FormatPriceDescription {
+  id                  Int               @id @default(autoincrement())
+  formatPriceId       Int               @map("format_price_id")
+  price               Int
+  format              Format
+  posterDescriptionId Int               @map("poster_id")
+  createdAt           DateTime          @default(now()) @map("created_at")
+  posterDescription   PosterDescription @relation(fields: [posterDescriptionId], references: [id])
+  formatPrice         FormatPrice       @relation(fields: [formatPriceId], references: [id])
+
+  @@map("format_price_descriptions")
+}
+
 // Thombstone pattern
 model RemovedFormatPrice {
-  id        Int      @id @default(autoincrement())
-  format    Format
-  price     Int
-  posterId  Int      @map("poster_id")
-  deletedAt DateTime @default(now())
+  id            Int         @id @default(autoincrement())
+  formatPriceId Int         @unique @map("format_price_id")
+  removedAt     DateTime    @default(now()) @map("removed_at")
+  formatPrice   FormatPrice @relation(fields: [formatPriceId], references: [id])
 
   @@map("removed_format_prices")
 }

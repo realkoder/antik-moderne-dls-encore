@@ -18,7 +18,7 @@ const PosterService = {
                     data: {}
                 });
 
-                await prisma.posterDescription.create({
+                const createdPosterDescription = await prisma.posterDescription.create({
                     data: {
                         posterId: createdPoster.id,
                         title: posterCreate.title,
@@ -33,7 +33,7 @@ const PosterService = {
                     await prisma.formatPriceDescription.create({
                         data: {
                             formatPriceId: createdFormatPrice.id,
-                            posterDescriptionId: createdPoster.id,
+                            posterDescriptionId: createdPosterDescription.id,
                             format: mapTypeScriptToPrismaFormat(format),
                             price,
                             createdAt: new Date(),

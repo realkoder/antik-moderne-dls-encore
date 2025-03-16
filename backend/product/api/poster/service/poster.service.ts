@@ -4,7 +4,6 @@ import { Response } from "../../../../shared/types/api.interface";
 import { Format, PosterCreate, PosterDto, PosterUpdate } from "../../../types/poster.interface";
 import { Format as FormatEnum, RemovedPoster } from "@prisma-db-products/client";
 import { APIError } from "encore.dev/api";
-import { updatePoster } from "../controller/poster.controller";
 
 const PosterService = {
     create: async (posterCreate: PosterCreate): Promise<Response> => {
@@ -27,9 +26,9 @@ const PosterService = {
                         posterImageUrl: posterCreate.posterImageUrl,
                     }
                 });
-
+                const createdFormatPrice = await prisma.formatPrice.create({});
+                
                 await Promise.all(posterCreate.formatPrices.map(async ({ format, price }) => {
-                    const createdFormatPrice = await prisma.formatPrice.create({});
 
                     await prisma.formatPriceDescription.create({
                         data: {

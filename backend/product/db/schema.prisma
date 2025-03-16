@@ -35,7 +35,7 @@ model PosterDescription {
   @@map("poster_descriptions")
 }
 
-// Thombstone pattern
+// Tombstone pattern
 model RemovedPoster {
   id        Int      @id @default(autoincrement())
   posterId  Int      @unique @map("poster_id")
@@ -79,7 +79,7 @@ model FormatPriceDescription {
   @@map("format_price_descriptions")
 }
 
-// Thombstone pattern
+// Tombstone pattern
 model RemovedFormatPrice {
   id            Int         @id @default(autoincrement())
   formatPriceId Int         @unique @map("format_price_id")

@@ -18,7 +18,6 @@ export interface PosterDto {
     posterImageUrl: string;
     formatPrices: FormatPriceDto[];
     createdAt: Date;
-    updatedAt: Date;
 }
 
 export interface PosterUpdate {

@@ -1,0 +1,54 @@
+// For any changes make a migration by running: npx prisma migrate dev
+// Migration naming convention: <incremenatl_number>_<changes_made>.<up/down>
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+  output        = "../../node_modules/@prisma-db-organizations/client" // Since we have multiple DB and multiple schema.prisma we have to this
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://backend-2tui:shadow-cuosrlr38u1lquc8stog@127.0.0.1:9500/organizations?sslmode=disable"
+}
+
+model Organization {
+  id        String               @id
+  name      String               @db.VarChar(200)
+  createdBy String               @db.VarChar(200)
+  slug      String               @unique
+  imageUrl  String?              @map("image_url")
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+  domains   OrganizationDomain[]
+
+  @@map("organizations")
+}
+
+model OrganizationDomain {
+  id                      String         @id
+  organizationId          String         @map("organization_id")
+  name                    String         @db.VarChar(200)
+  enrollmentMode          String         @map("enrollment_mode")
+  affiliationEmailAddress String         @map("affiliation_email_address")
+  totalPendingInvitations Int            @map("total_pending_invitations")
+  totalPendingSuggestions Int            @map("total_pending_suggestions")
+  primaryEmailAddressId   String?        @map("primary_email_address_id") @db.VarChar(200)
+  createdAt               DateTime?      @map("created_at")
+  updatedAt               DateTime?      @map("updated_at")
+  organization            Organization   @relation(fields: [organizationId], references: [id])
+  Verification            Verification[]
+
+  @@map("organization_domains")
+}
+
+model Verification {
+  organizationDomainId String              @id @map("organization_domain_id")
+  attempts             Int
+  status               String              @db.VarChar(200)
+  strategy             String              @db.VarChar(200)
+  expireAt             DateTime            @map("expire_at")
+  OrganizationDomain   OrganizationDomain? @relation(fields: [organizationDomainId], references: [id])
+
+  @@map("verifications")
+}

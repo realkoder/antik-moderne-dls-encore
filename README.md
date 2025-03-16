@@ -159,6 +159,9 @@ npx prisma init --url <shadow db connection url>
 [Encores Prisma docs](https://encore.dev/docs/ts/develop/orms/prisma)
 [Encores Prisma github example](https://github.com/encoredev/examples/tree/main/ts/prisma)
 
+#### ERD Products db - implementing snapshot and tombstone pattern
+![ERD products](images/erd-products.png)
+
 ---
 
 ### Frontend

@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
+    "tsdoc": "tsdoc --src=basket/api/controller/basket.controller.ts",
     "generate:users": "npx prisma generate --schema=user/db/schema.prisma",
     "generate:products": "npx prisma generate --schema=product/db/schema.prisma",
     "generate:baskets": "npx prisma generate --schema=basket/db/schema.prisma",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@types/node": "^20",
     "prisma": "^6.4.1",
+    "tsdoc-markdown": "^1.2.0",
     "typescript": "^5.2.2",
     "vitest": "^3.0.7"
   },

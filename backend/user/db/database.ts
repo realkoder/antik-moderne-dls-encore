@@ -11,7 +11,8 @@ const DB = new SQLDatabase("users", {
 const prismaUsers = new PrismaClient({
   datasources: {
     db: {
-      url: DB.connectionString,
+      // url: DB.connectionString,
+      url: "postgresql://postgres:admin@postgres:5432/users",
     },
   },
 });

@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "app_id": "antik-moderne-backend",
+    "env_name": "development",
+    "env_type": "development",
+    "cloud": "gcp",
+    "base_url": "https://antik-moderne-dls-encore.vercel.app"
+  },
+  "sql_servers": [
+    {
+      "host": "postgres:5431",
+      "databases": {
+        "products": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        },
+        "baskets": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        },
+        "users": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        },
+        "organizations": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "type": "prometheus",
+    "remote_write_url": "https://my-remote-write-url"
+  },
+  "graceful_shutdown": {
+    "total": 30
+  },
+  
+  "secrets": {
+    "AppSecret": {
+      "$env": "APP_SECRET"
+    },
+    "ClerkSecretKey": {
+      "$env": "CLERK_SECRET_KEY"
+    },
+    "ResendApiKey": {
+      "$env": "RESEND_API_KEY"
+    },
+    "WebhookSigningSecretKey": {
+      "$env": "WEBHOOK_SIGNING_SECRET_KEY"
+    },
+    "ENCORE_PUBSUB_DEBUG": {
+      "$env": "ENCORE_PUBSUB_DEBUG"
+    },
+    "PUBSUB_EMULATOR_HOST": {
+      "$env": "PUBSUB_EMULATOR_HOST"
+    },
+    "PUBSUB_PROJECT_ID": {
+      "$env": "PUBSUB_PROJECT_ID"
+    }
+  }
+}

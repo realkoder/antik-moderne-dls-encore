@@ -11,7 +11,8 @@ const DB = new SQLDatabase("baskets", {
 const prismaBaskets = new PrismaClient({
   datasources: {
     db: {
-      url: DB.connectionString,
+      // url: DB.connectionString,
+      url: "postgresql://postgres:admin@postgres:5432/baskets",
     },
   },
 });

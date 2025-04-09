@@ -3,7 +3,7 @@ import { api } from "encore.dev/api";
 import { secret } from "encore.dev/config";
 import { Webhook } from "svix";
 import UserService from "../services/user.service";
-import { UserAddedTopic } from "../messaging/userAddedTopic";
+// import { UserAddedTopic } from "../messaging/userAddedTopic";
 
 const WebhookSigningSecretKey = secret("WebhookSigningSecretKey");
 
@@ -64,7 +64,7 @@ export const webhookHandler = api.raw(
                 const email = event.data.email_addresses[0].email_address;
                 await UserService.create(event.data);
                 if (email) {
-                    await UserAddedTopic.publish({ name: event.data.first_name ?? "MissingName", email });
+                    // await UserAddedTopic.publish({ name: event.data.first_name ?? "MissingName", email });
                 }
             } catch (e) {
                 console.error("Error with creating user by webhook", e);

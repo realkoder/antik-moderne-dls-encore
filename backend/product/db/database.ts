@@ -11,7 +11,8 @@ const DB = new SQLDatabase("products", {
 const prismaProducts = new PrismaClient({
   datasources: {
     db: {
-      url: DB.connectionString,
+      // url: DB.connectionString,
+      url: "postgresql://postgres:admin@postgres:5432/products",
     },
   },
 });

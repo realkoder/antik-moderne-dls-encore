@@ -154,12 +154,16 @@ encore db conn-uri <database name> --shadow
 
 # To initialize Prisma, run the following command from within your service folder:
 npx prisma init --url <shadow db connection url>
+
+# To execute a new migration regarding changes by DDL
+npx prisma migrate dev --name <short_descriptive_name>
 ```
 
 [Encores Prisma docs](https://encore.dev/docs/ts/develop/orms/prisma)
 [Encores Prisma github example](https://github.com/encoredev/examples/tree/main/ts/prisma)
 
 #### ERD Products db - implementing snapshot and tombstone pattern
+
 ![ERD products](images/erd-products.png)
 
 ---
@@ -223,7 +227,6 @@ ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
 
 <br>
 
-
 ### Deployment
 
 Frontend deployed through _Vercel_
@@ -237,6 +240,22 @@ Backend is deployed with _Encore_ in staging env, since that's free.
 
 <br>
 
+### Self Hosting Encore applications
+
+With __Encore__ applications, a lot happens behind the scenes, which means many features come out of the box, such as pub/sub messaging, database setup with migration logic, testing automation, and gatekeeper servicing. To run in production and ensure everything operates smoothly, your setup may depend on __Encore__, which can be costly. Therefore, they provide the option to self-host. This is accomplished by using the command `encore build docker`, which allows you to either package the entire __Encore__ application into a single Docker image or dockerize each specific service individually.
+To build the Encore application with Docker, it requires an **infra-config.json** file to specify dependencies such as databases, environment variables, and pub/sub configurations.
+
+```bash
+# Command to build whole encore app in one docker image
+encore build docker --base=node:20-bullseye --config infra-config.json --arch=arm64 antikmoderne:v1
+```
+
+
+<br>
+
+---
+
+<br>
 
 ## Bonus links and miscellaneous
 

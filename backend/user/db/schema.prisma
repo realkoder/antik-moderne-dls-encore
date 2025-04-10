@@ -1,4 +1,4 @@
-// For any changes make a migration by running: npx prisma migrate dev
+// For any changes make a migration by running: npx prisma migrate dev --name
 // Migration naming convention: <incremenatl_number>_<changes_made>.<up/down>
 
 generator client {

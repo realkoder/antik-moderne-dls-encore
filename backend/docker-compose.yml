@@ -24,13 +24,6 @@ services:
     image: antikmoderne:v1
     env_file:
       - .env.docker.dev
-    # environment:
-    #   WEBHOOK_SIGNING_SECRET_KEY: ${WEBHOOK_SIGNING_SECRET_KEY}
-    #   SERVICE_API_KEY: ${SERVICE_API_KEY}
-    #   DB_PASSWORD: ${DB_PASSWORD}
-    #   APP_SECRET: ${APP_SECRET}
-    #   RESEND_API_KEY: ${RESEND_API_KEY}
-    #   CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
     ports:
       - "4000:8080"
     depends_on:
@@ -60,18 +53,7 @@ services:
   #     - pubsub-data:/pubsub-data
   #     - gcloud-config:/root/.config
 
-    # pubsub:
-    #   container_name: pubsub_emulator
-    #   image: google/cloud-sdk:latest
-    #   command: gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
-    #   ports:
-    #     - "8085:8085"
-    #   environment:
-    #     PUBSUB_PROJECT_ID: antikmoderne
-    #   volumes:
-    #     - gcloud-config:/root/.config
-
 volumes:
   postgres_data: {}
   gcloud-config: {}
-  pubsub-data: {}
+  # pubsub-data: {}

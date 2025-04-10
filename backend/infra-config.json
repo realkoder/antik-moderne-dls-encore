@@ -44,7 +44,6 @@
   "graceful_shutdown": {
     "total": 30
   },
-  
   "secrets": {
     "AppSecret": {
       "$env": "APP_SECRET"

@@ -86,7 +86,7 @@ export const createBasket = api<{ guid?: string }, { basket: BasketDto }>(
         try {
             userId = getAuthData().userID;
         } catch (error) {
-            console.error("Error getting the authData", error);
+            // console.error("Error getting the authData", error);
         }
 
         if (!userId && !guid) {

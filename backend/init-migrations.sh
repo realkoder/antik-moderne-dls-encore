@@ -37,26 +37,3 @@ for SERVICE_DIR in /docker-entrypoint-initdb.d/migrations_*; do
         fi
     done
 done
-# Run all SQL migration files in the migrations directory
-# for file in /docker-entrypoint-initdb.d/migrations_user/*.sql; do
-#     echo "Running migration: $file"
-#     psql -U postgres -d antik_moderne_db -f "$file"
-# done
-
-# # Run all SQL migration files in the product migrations directory
-# for file in /docker-entrypoint-initdb.d/migrations_product/*.sql; do
-#     echo "Running product migration: $file"
-#     psql -U postgres -d antik_moderne_db -f "$file"
-# done
-
-# # Run all SQL migration files in the basket migrations directory
-# for file in /docker-entrypoint-initdb.d/migrations_basket/*.sql; do
-#     echo "Running basket migration: $file"
-#     psql -U postgres -d antik_moderne_db -f "$file"
-# done
-
-# # Run all SQL migration files in the organization migrations directory
-# for file in /docker-entrypoint-initdb.d/migrations_organization/*.sql; do
-#     echo "Running organization migration: $file"
-#     psql -U postgres -d antik_moderne_db -f "$file"
-# done

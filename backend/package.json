@@ -24,7 +24,7 @@
   "dependencies": {
     "@clerk/backend": "^1.18.0",
     "@prisma/client": "^6.4.1",
-    "encore.dev": "^1.46.16",
+    "encore.dev": "^1.46.17",
     "pg": "^8.13.3",
     "resend": "^4.1.2",
     "svix": "^1.59.2"

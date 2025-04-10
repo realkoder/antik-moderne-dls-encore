@@ -249,7 +249,7 @@ To build the Encore application with Docker, it requires an **infra-config.json*
 # Command to build whole encore app in one docker image
 encore build docker --base=node:20-bullseye --config infra-config.json --arch=arm64 antikmoderne:v1
 ```
-
+![raised issue pubsub pull req closed](/images/raised-issue-pubsub-pull-req-closed.png)
 
 <br>
 

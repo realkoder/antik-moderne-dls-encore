@@ -39,4 +39,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND_APP }}:${{ env.SHORT_SHA }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND_APP }}:latest

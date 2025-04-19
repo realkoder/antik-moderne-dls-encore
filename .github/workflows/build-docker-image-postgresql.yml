@@ -39,4 +39,4 @@ jobs:
 #           context: ./backend
 #           file: ./backend/Dockerfile.postgres
 #           push: true
-#           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_POSTGRES }}:${{ env.SHORT_SHA }}
+#           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_POSTGRES }}:latest

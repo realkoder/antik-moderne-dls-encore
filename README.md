@@ -18,15 +18,15 @@ We adopt the **SCRUM framework** to efficiently manage our development process a
 
 > This is our attended approach
 
-- Configure a **SCRUM backlog** as a dynamic, prioritized list of features and tasks that evolve as our project progresses. We will be using JIRA to manage this backlog, enabling easy addition, prioritization, and updates.
+- Configure a **SCRUM backlog** as a dynamic, prioritized list of features and tasks that evolve as our project progresses. We will be using Jira to manage this backlog, enabling easy addition, prioritization, and updates.
 
 - **Sprint** fixed period (typically two weeks) during which specific tasks are completed and prepared for review. It is a time-boxed effort.
 
-- **Sprint backlog** consists of tasks selected from the SCRUM backlog for the current sprint, determined during sprint planning. It is managed in **JIRA**, with tasks assigned to the team.
+- **Sprint backlog** consists of tasks selected from the SCRUM backlog for the current sprint, determined during sprint planning. It is managed in Jira, with tasks assigned to the team.
 
 - **Sprint planning** is a meeting at the start of each sprint where the team selects tasks based on priority, goals, and capacity. This sets the direction for the sprint.
 
-- We use **JIRA** to manage both the SCRUM and sprint backlogs. Its features allow us to create user stories, plan sprints, track issues, and report progress, enhancing visibility and collaboration among team members and stakeholders.
+- We use _Jira_ to manage both the SCRUM and sprint backlogs. Its features allow us to create user stories, plan sprints, track issues, and report progress, enhancing visibility and collaboration among team members and stakeholders.
 
 <br>
 
@@ -249,7 +249,7 @@ To build the Encore application with Docker, it requires an **infra-config.json*
 # Command to build whole encore app in one docker image
 encore build docker --base=node:20-bullseye --config infra-config.json --arch=arm64 antikmoderne:v1
 ```
-![raised issue pubsub pull req closed](/images/raised-issue-pubsub-pull-req-closed.png)
+![raised issue pubsub pull req closed](images/raised-issue-pubsub-pull-req-closed.png)
 
 <br>
 

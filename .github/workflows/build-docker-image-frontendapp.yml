@@ -1,0 +1,42 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [develop]
+    # paths:
+    #     - 'frontend/**'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_FRONTEND_APP: antik-moderne/frontend-app
+  IMAGE_NAME_ENCORE_APP: antik-moderne/encore-app
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN_GITHUB }}
+
+      # Build and push Frontend image
+      - name: Build and push Frontend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND_APP }}:${GITHUB_SHA:0:7}

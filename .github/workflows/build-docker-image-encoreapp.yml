@@ -37,7 +37,7 @@ jobs:
 #         with:
 #           registry: ${{ env.REGISTRY }}
 #           username: ${{ github.actor }}
-#           password: ${{ secrets.GHCR_ACCESS_TOKEN }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
 #       # Build and push Encore app image
 #       - name: Build Encore Docker image

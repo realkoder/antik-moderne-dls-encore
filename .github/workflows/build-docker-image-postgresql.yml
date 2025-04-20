@@ -30,7 +30,7 @@ jobs:
 #         with:
 #           registry: ${{ env.REGISTRY }}
 #           username: ${{ github.actor }}
-#           password: ${{ secrets.GHCR_ACCESS_TOKEN }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
 #       # Build and push Postgres image
 #       - name: Build and Push Postgres Docker Image

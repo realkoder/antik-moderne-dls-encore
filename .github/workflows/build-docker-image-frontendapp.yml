@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: Build and Push Docker Images - FrontendApp
 
 on:
   push:
@@ -40,3 +40,4 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND_APP }}:latest
+          platforms: linux/arm64,linux/amd64

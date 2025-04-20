@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encore-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: encore-app
+  template:
+    metadata:
+      labels:
+        app: encore-app
+    spec:
+      containers:
+        - name: encore-app
+          image: ghcr.io/realkoder/encore-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /app/application_default_credentials.json
+            - name: NODE_ENV
+              value: production
+          volumeMounts:
+            - name: app-credentials
+              mountPath: /app/application_default_credentials.json
+              subPath: application_default_credentials.json
+      volumes:
+        - name: app-credentials
+          hostPath:
+            path: ./backend/application_default_credentials.json

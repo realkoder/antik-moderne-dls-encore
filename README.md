@@ -250,6 +250,25 @@ ERROR: failed to solve: failed to push ghcr.io/antik-moderne/frontend-app:latest
 Error: buildx failed with: ERROR: failed to solve: failed to push ghcr.io/antik-moderne/frontend-app:latest: unexpected status from POST request to https://ghcr.io/v2/antik-moderne/frontend-app/blobs/uploads/: 403 Forbidden
 ```
 
+Relevant kubectl commands:
+
+```bash
+# Check kubernetes cluster status
+kubectl cluster-info
+
+# Check nodes status
+kubectl get nodes
+
+# Check pods status
+kubectl get pods --all-namespaces
+
+# Creatig the configmap  based on .env.production
+kubectl create configmap frontend-env --from-env-file=frontend/.env.sample
+
+# Apply deployment and service files
+kubectl apply -f k8s/frontend/deployment.yml
+kubectl apply -f k8s/frontend/service.yml
+```
 
 
 ### Self Hosting ReactRouter-v7 applications

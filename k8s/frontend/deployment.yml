@@ -1,0 +1,47 @@
+# This is using a configmap for setting the env from .env.production 
+# command: kubectl create configmap frontend-env --from-env-file=frontend/.env.production
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app
+  labels:
+    app: frontend-app
+spec:
+  replicas: 3  # Number of replicas
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      containers:
+      - name: frontend-app
+        image: ghcr.io/realkoder/frontend-app:latest
+        ports:
+        - containerPort: 3000  # Port your app listens on
+        env:
+        - name: NODE_ENV
+          value: "production"  # Set environment variables as needed
+        - name: VITE_CLERK_PUBLISHABLE_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-env
+              key: VITE_CLERK_PUBLISHABLE_KEY
+        - name: CLERK_SECRET_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-env
+              key: CLERK_SECRET_KEY
+        - name: CLERK_SIGN_IN_FALLBACK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-env
+              key: CLERK_SIGN_IN_FALLBACK_URL
+        - name: CLERK_SIGN_IN_URL
+          valueFrom:
+            configMapKeyRef:
+              name: frontend-env
+              key: CLERK_SIGN_IN_URL

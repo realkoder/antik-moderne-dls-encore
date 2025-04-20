@@ -241,10 +241,10 @@ Backend is deployed with _Encore_ in staging env, since that's free.
 <br>
 
 ### Self hosting
-Spend a lot of time figurering out the GHCR access - lastly I found out that i had to be signed in on local machine to make the `${{secrets.GITHUB_TOKEN}}` work-
+Spend a lot of time figurering out the GHCR access - lastly I found out that i had to be signed in on local machine to make the `${{secrets.GITHUB_TOKEN}}` work:
 
 ```bash
-docker login --username <username> --password <github-generated-access-token> ghrc.io
+docker login --username <github_username> --password <github-generated-access-token> ghrc.io
 ```
 
 

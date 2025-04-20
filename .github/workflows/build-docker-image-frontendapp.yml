@@ -19,6 +19,12 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug Credentials
+        run: |
+          echo "Logging in as user: ${{ github.actor }}"
+          echo "Using registry: ${{ env.REGISTRY }}"
+          echo " PASSS: ${{ secrets.GHCR_PAT }}"
+          
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -33,12 +39,6 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
 
 
-      - name: Debug Credentials
-        run: |
-          echo "Logging in as user: ${{ github.actor }}"
-          echo "Using registry: ${{ env.REGISTRY }}"
-          echo " PASSS: ${{ env.GHCR_PAT }}"
-         # Do NOT echo the password or token for security reasons          
 
       # Build and push Frontend image
       - name: Build and push Frontend Docker Image

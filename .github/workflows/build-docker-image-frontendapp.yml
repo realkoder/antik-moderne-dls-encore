@@ -3,8 +3,8 @@ name: Build and Push Docker Images - FrontendApp
 on:
   push:
     branches: [develop]
-    paths:
-        - 'frontend/**'
+    # paths:
+    #     - 'frontend/**'
 
 permissions:
   contents: read

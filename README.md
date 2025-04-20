@@ -262,12 +262,18 @@ kubectl get nodes
 # Check pods status
 kubectl get pods --all-namespaces
 
+# Get applied deployments
+kubectl get deployments
+
 # Creatig the configmap  based on .env.production
 kubectl create configmap frontend-env --from-env-file=frontend/.env.sample
 
 # Apply deployment and service files
 kubectl apply -f k8s/frontend/deployment.yml
 kubectl apply -f k8s/frontend/service.yml
+
+# Remove an applied deployment
+kubectl delete deployment <deployment-name>
 ```
 
 

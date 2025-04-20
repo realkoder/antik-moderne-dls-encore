@@ -30,7 +30,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN_GITHUB }}
+          password: ${{ secrets.GHCR_ACCESS_TOKEN }}
 
       # Build and push Frontend image
       - name: Build and push Frontend Docker Image

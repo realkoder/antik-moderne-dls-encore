@@ -119,7 +119,7 @@ Encore is a newer backend development framework designed to streamline creation,
 
 Encore supports _TypeScript_ out of the box. This integration enhances code quality and developer productivity by catching errors early in the development process. Further more _Encore_ provides a super efficient feature which is this script for frontend _package.json_ `"gen": "encore gen client backend-2tui --output=./app/lib/client.ts --env=local"`. This scripts generates all the callable API endpoints for the given services with typesafe input outputs.
 
-**Encore** provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [GCP](https://cloud.google.com/pubsub) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
+_Encore_ provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [GCP](https://cloud.google.com/pubsub) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
 
 #### Key Features of Encore's Pub/Sub System:
 

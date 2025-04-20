@@ -240,6 +240,29 @@ Backend is deployed with _Encore_ in staging env, since that's free.
 
 <br>
 
+
+### Self Hosting ReactRouter-v7 applications
+
+_ReactRouterv7_ comes out of the box with prebuilt _Dockerfile_. to build container image follow on:
+
+```bash
+# Ensure to be placed inside /frontend
+docker build -t frontendapp .
+
+# Start the container with .env.production file
+docker run -d --env-file .env.production -p 3000:3000 --name frontendapp frontendapp
+```
+
+The docker image is making use of the npm scripts `build & start` where the start script is using `dotenv-cli` to set the environment variables from .env.production env-file.
+
+```json
+  "scripts": {
+    "build": "react-router build",
+    "start": "dotenv -e .env.production -- react-router-serve ./build/server/index.js",
+  }
+```
+
+
 ### Self Hosting Encore applications
 
 With __Encore__ applications, a lot happens behind the scenes, which means many features come out of the box, such as pub/sub messaging, database setup with migration logic, testing automation, and gatekeeper servicing. To run in production and ensure everything operates smoothly, your setup may depend on __Encore__, which can be costly. Therefore, they provide the option to self-host. This is accomplished by using the command `encore build docker`, which allows you to either package the entire __Encore__ application into a single Docker image or dockerize each specific service individually.

@@ -241,14 +241,15 @@ Backend is deployed with _Encore_ in staging env, since that's free.
 <br>
 
 ### Self hosting
-Spend a lot of time figurering out the GHCR access - lastly I found out that i had to be signed in on local machine to make the `${{secrets.GITHUB_TOKEN}}` work:
+Spend a lot of time figurering out the GHCR access - took me hours to figure out that we wasn't allowed to have the repo name in image like _ghcr.io/antik-moderne/frontend-app_ but it should contain the github repo owners username....
+
+This was the cryptic error we were stuck with, since it didn't say anything about bad naming convention for the push command:
 
 ```bash
-docker login --username <github_username> --password <github-generated-access-token> ghrc.io
+ERROR: failed to solve: failed to push ghcr.io/antik-moderne/frontend-app:latest: unexpected status from POST request to https://ghcr.io/v2/antik-moderne/frontend-app/blobs/uploads/: 403 Forbidden
+Error: buildx failed with: ERROR: failed to solve: failed to push ghcr.io/antik-moderne/frontend-app:latest: unexpected status from POST request to https://ghcr.io/v2/antik-moderne/frontend-app/blobs/uploads/: 403 Forbidden
 ```
 
-
-[Helpfull guide for making it work with GHCR access to push images](https://medium.com/devopsturkiye/pushing-docker-images-to-githubs-registry-manual-and-automated-methods-19cce3544eb1)
 
 
 ### Self Hosting ReactRouter-v7 applications

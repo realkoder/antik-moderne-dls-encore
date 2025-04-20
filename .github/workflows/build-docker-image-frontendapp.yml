@@ -13,18 +13,17 @@ permissions:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME_FRONTEND_APP: antik-moderne/frontend-app
-  IMAGE_NAME_ENCORE_APP: antik-moderne/encore-app
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+
+    
     steps:
-      - name: Debug Credentials
+      - name: Debug Tag Value
         run: |
-          echo "Logging in as user: ${{ github.actor }}"
-          echo "Using registry: ${{ env.REGISTRY }}"
-          echo " PASSS: ${{ secrets.GHCR_PAT }}"
-          
+          echo "Tag value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND_APP }}:latest"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -37,7 +36,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
-
 
 
       # Build and push Frontend image

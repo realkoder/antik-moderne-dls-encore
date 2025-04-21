@@ -4,11 +4,26 @@ services:
 
   # Connection string: docker exec -it postgresdb psql -U postgres -d antik_moderne_db
   # To generate the pgdump.sql file: docker compose exec -T postgres pg_dump -U postgres music_database > pgdump.sql
+  # postgres:
+  #   container_name: postgresdb
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_PASSWORD: admin
+  #   ports:
+  #     - "5431:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./user/db/migrations:/docker-entrypoint-initdb.d/migrations_users  # User migrations
+  #     - ./product/db/migrations:/docker-entrypoint-initdb.d/migrations_products  # Product migrations
+  #     - ./basket/db/migrations:/docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
+  #     - ./organization/db/migrations:/docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
+  #     - ./init-migrations.sh:/docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
+
   postgres:
     container_name: postgresdb
-    image: postgres:latest
-    environment:
-      POSTGRES_PASSWORD: admin
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
     ports:
       - "5431:5432"
     volumes:

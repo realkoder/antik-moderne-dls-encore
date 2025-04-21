@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: encore-app
-          image: ghcr.io/realkoder/encore-app:latest
+          image: ghcr.io/realkoder/antik-moderne-encore-app:latest
           ports:
             - containerPort: 8080
           env:

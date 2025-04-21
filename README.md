@@ -274,6 +274,9 @@ kubectl apply -f k8s/frontend/service.yml
 
 # Remove an applied deployment
 kubectl delete deployment <deployment-name>
+
+# Delete pods in this case encore-app
+kubectl delete pods -l app=encore-app
 ```
 
 

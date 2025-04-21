@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend-app
-        image: ghcr.io/realkoder/frontend-app:latest
+        image: ghcr.io/realkoder/antik-moderne-frontend-app:latest
         ports:
         - containerPort: 3000  # Port your app listens on
         env:

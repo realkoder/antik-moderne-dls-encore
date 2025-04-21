@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  replicas: 1
+  replicas: 1  # Adjust the number of replicas as needed
   selector:
     matchLabels:
       app: postgres
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: ghcr.io/realkoder/antik-moderne-postgres:latest
+        image: ghcr.io/realkoder/postgres:latest
         ports:
         - containerPort: 5432
         env:
@@ -25,12 +25,32 @@ spec:
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
-        - name: migrations
-          mountPath: /docker-entrypoint-initdb.d
+        - name: user-migrations
+          mountPath: /docker-entrypoint-initdb.d/migrations_users  # User migrations
+        - name: product-migrations
+          mountPath: /docker-entrypoint-initdb.d/migrations_products  # Product migrations
+        - name: basket-migrations
+          mountPath: /docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
+        - name: organization-migrations
+          mountPath: /docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
       volumes:
       - name: postgres-data
         persistentVolumeClaim:
           claimName: postgres-pvc  # Reference to the PVC
-      - name: migrations
+      - name: user-migrations
         hostPath:
-          path: /path/to/your/migrations  # Adjust this path to your local migrations directory
+          path: /path/to/your/user/db/migrations  # Adjust this path to your local user migrations directory
+      - name: product-migrations
+        hostPath:
+          path: /path/to/your/product/db/migrations  # Adjust this path to your local product migrations directory
+      - name: basket-migrations
+        hostPath:
+          path: /path/to/your/basket/db/migrations  # Adjust this path to your local basket migrations directory
+      - name: organization-migrations
+        hostPath:
+          path: /path/to/your/organization/db/migrations  # Adjust this path to your local organization migrations directory
+      - name: init-script
+        hostPath:
+          path: /path/to/your/init-migrations.sh  # Adjust this path to your local init script

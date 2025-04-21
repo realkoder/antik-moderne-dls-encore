@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  replicas: 1  # Adjust the number of replicas as needed
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
@@ -41,16 +41,16 @@ spec:
           claimName: postgres-pvc  # Reference to the PVC
       - name: user-migrations
         hostPath:
-          path: /path/to/your/user/db/migrations  # Adjust this path to your local user migrations directory
+          path: /backend/user/db/migrations
       - name: product-migrations
         hostPath:
-          path: /path/to/your/product/db/migrations  # Adjust this path to your local product migrations directory
+          path: /backend/product/db/migrations
       - name: basket-migrations
         hostPath:
-          path: /path/to/your/basket/db/migrations  # Adjust this path to your local basket migrations directory
+          path: /backend/basket/db/migrations
       - name: organization-migrations
         hostPath:
-          path: /path/to/your/organization/db/migrations  # Adjust this path to your local organization migrations directory
+          path: /backend/organization/db/migrations
       - name: init-script
         hostPath:
-          path: /path/to/your/init-migrations.sh  # Adjust this path to your local init script
+          path: /backend/init-migrations.sh

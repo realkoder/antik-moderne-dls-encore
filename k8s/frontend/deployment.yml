@@ -21,10 +21,11 @@ spec:
       - name: frontend-app
         image: ghcr.io/realkoder/antik-moderne-frontend-app:latest
         ports:
-        - containerPort: 3000  # Port your app listens on
+        - containerPort: 3000
+        # Some of the env's uses the generated configmap: kubectl create configmap frontend-env --from-env-file=frontend/.env.sample
         env:
         - name: NODE_ENV
-          value: "production"  # Set environment variables as needed
+          value: "local-kubernetes"
         - name: VITE_CLERK_PUBLISHABLE_KEY
           valueFrom:
             configMapKeyRef:

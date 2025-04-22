@@ -40,4 +40,7 @@ jobs:
           file: ./frontend/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND_APP }}:latest
+          build-args: |
+            VITE_ENV=${{ secrets.VITE_ENV }}
+            VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
           platforms: linux/arm64,linux/amd64

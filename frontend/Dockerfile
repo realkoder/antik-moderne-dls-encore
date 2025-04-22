@@ -9,10 +9,19 @@ WORKDIR /app
 RUN npm ci --omit=dev --legacy-peer-deps
 
 FROM node:20-alpine AS build-env
+
+# Build arguments (NOT stored in final image)
+ARG VITE_ENV
+ARG VITE_CLERK_PUBLISHABLE_KEY
+
+# Create temporary .env file from build args
+RUN echo "VITE_ENV=$VITE_ENV" > .env.production && \
+    echo "VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY" >> .env.production
+
 COPY . /app/
 COPY --from=development-dependencies-env /app/node_modules /app/node_modules
 WORKDIR /app
-RUN npm run build
+RUN npm run build -- --mode production
 
 FROM node:20-alpine
 COPY ./package.json package-lock.json /app/

@@ -282,6 +282,9 @@ kubectl delete deployment <deployment-name>
 kubectl delete pods -l app=encore-app
 ```
 
+##### Kubernetes Info
+The algorithm used by _services_ in _Kubernetes_ depends on the specific type of _service_ default is _round-robin algorithm_ used, where each pod get's a turn to receive a request where all the pods are cycled through in order.
+
 
 ### Self Hosting ReactRouter-v7 applications
 

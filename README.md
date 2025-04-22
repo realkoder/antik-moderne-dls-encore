@@ -266,7 +266,10 @@ kubectl get pods --all-namespaces
 kubectl get deployments
 
 # Creatig the configmap  based on .env.production
-kubectl create configmap frontend-env --from-env-file=frontend/.env.sample
+kubectl create configmap frontend-env --from-env-file=frontend/.env.production
+
+# Verify the secrets stored in a configmap
+kubectl describe configmap frontend-env
 
 # Apply deployment and service files
 kubectl apply -f k8s/frontend/deployment.yml

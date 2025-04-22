@@ -69,4 +69,6 @@ sketch
 .env.develop
 .env.production
 
+configmap.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,react,remix

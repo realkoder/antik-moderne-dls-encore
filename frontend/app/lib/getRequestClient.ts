@@ -8,9 +8,6 @@ import Client, { Environment, Local, LocalKubernetes } from "./client";
 const getRequestClient = (token: string | undefined) => {
   const env = import.meta.env.DEV ? Local : import.meta.env.VITE_ENV === "local-kubernetes" ? LocalKubernetes : Environment("staging");
 
-  console.log("This is import.meta.env", import.meta.env);
-  console.log("This is import.meta.env.VITE_ENV", import.meta.env.VITE_ENV);
-
   return new Client(env, {
     auth: { authorization: token || "" },
   });

@@ -1,4 +1,4 @@
-import Client, { Environment, Local } from "./client";
+import Client, { Environment, Local, LocalKubernetes } from "./client";
 
 
 /**
@@ -6,7 +6,7 @@ import Client, { Environment, Local } from "./client";
  * If we are running the frontend locally we assume that our Encore backend is also running locally.
  */
 const getRequestClient = (token: string | undefined) => {
-  const env = import.meta.env.DEV ? Local : import.meta.env.VITE_ENV === "local-kubernetes" ? Local : Environment("staging");
+  const env = import.meta.env.DEV ? Local : import.meta.env.VITE_ENV === "local-kubernetes" ? LocalKubernetes : Environment("staging");
 
   console.log("This is import.meta.env", import.meta.env);
   console.log("This is import.meta.env.VITE_ENV", import.meta.env.VITE_ENV);

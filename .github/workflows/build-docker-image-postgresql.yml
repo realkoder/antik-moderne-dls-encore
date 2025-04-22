@@ -3,8 +3,8 @@ name: Build and Push Docker Images - Postgresql
 on:
   push:
     branches: [develop]
-    # paths:
-    #     - 'backend/**/db/schema.prisma'
+    paths:
+        - 'backend/**/db/schema.prisma'
 
 permissions:
   contents: read

@@ -11,6 +11,7 @@
 export type BaseURL = string
 
 export const Local: BaseURL = "http://localhost:4000"
+export const LocalKubernetes: BaseURL = "http://localhost:30002"
 
 /**
  * Environment returns a BaseURL for calling the cloud environment with the given name.

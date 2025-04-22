@@ -33,8 +33,8 @@ spec:
           mountPath: /docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
         - name: organization-migrations
           mountPath: /docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
-        - name: init-script
-          mountPath: /docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
+        # - name: init-script
+        #   mountPath: /docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
       volumes:
       - name: postgres-data
         persistentVolumeClaim:
@@ -51,6 +51,6 @@ spec:
       - name: organization-migrations
         hostPath:
           path: /backend/organization/db/migrations
-      - name: init-script
-        hostPath:
-          path: /backend/init-migrations.sh
+      # - name: init-script
+      #   hostPath:
+      #     path: /backend/init-migrations.sh

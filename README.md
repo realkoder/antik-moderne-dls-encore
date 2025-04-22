@@ -275,6 +275,9 @@ kubectl describe configmap frontend-env
 kubectl apply -f k8s/frontend/deployment.yml
 kubectl apply -f k8s/frontend/service.yml
 
+# Describe a pod
+kubectl describe pod <pod_name>
+
 # Remove an applied deployment
 kubectl delete deployment <deployment-name>
 

@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: frontend-app
 spec:
-  type: NodePort  # Change to ClusterIP if you don't need external access
+  type: NodePort # Change to ClusterIP if you don't need external access
   ports:
-  - port: 3000        # Port exposed by the service
-    targetPort: 3000  # Port your app listens on
-    nodePort: 30001 
+    - port: 3000 # Port exposed by the service
+      targetPort: 3000 # Port your app listens on
+      nodePort: 30001
   selector:
     app: frontend-app

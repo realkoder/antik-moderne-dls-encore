@@ -3,8 +3,8 @@ name: Build and Push Docker Images EncoreApp
 on:
   push:
     branches: [develop]
-    paths:
-      - 'backend/**'
+    # paths:
+    #   - 'backend/**'
 
 permissions:
   contents: read
@@ -42,7 +42,7 @@ jobs:
       # Build and push Encore app image
       - name: Build Encore Docker image
         working-directory: ./backend
-        run: /home/runner/.encore/bin/encore build docker --base=node:20-bullseye --config ./infra-config.json ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_ENCORE_APP }}:latest
+        run: /home/runner/.encore/bin/encore build docker --base=node:20-bullseye --arch=arm64 --config ./infra-config.json ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_ENCORE_APP }}:latest
 
       - name: Push Encore Docker image
         run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_ENCORE_APP }}:latest

@@ -10,7 +10,7 @@ RUN npm ci --omit=dev --legacy-peer-deps
 
 FROM node:20-alpine AS build-env
 
-# Build arguments (NOT stored in final image)
+# Important to add the VITE_ENV like this else they will not be available to set at runtime
 ARG VITE_ENV
 ARG VITE_CLERK_PUBLISHABLE_KEY
 

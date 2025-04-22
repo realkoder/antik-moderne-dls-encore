@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: ghcr.io/realkoder/postgres:latest
+        image: ghcr.io/realkoder/antik-moderne-postgres:latest
         ports:
         - containerPort: 5432
         env:

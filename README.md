@@ -265,6 +265,9 @@ kubectl get pods --all-namespaces
 # Get applied deployments
 kubectl get deployments
 
+# Create a namespace for
+kubectl create namespace antik-moderne
+
 # Creatig the configmap  based on .env.production
 kubectl create configmap frontend-env --from-env-file=frontend/.env.production
 

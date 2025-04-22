@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment
+  namespace: antik-moderne
   labels:
     app: postgres
 spec:
@@ -25,32 +26,7 @@ spec:
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
-        - name: user-migrations
-          mountPath: /docker-entrypoint-initdb.d/migrations_users  # User migrations
-        - name: product-migrations
-          mountPath: /docker-entrypoint-initdb.d/migrations_products  # Product migrations
-        - name: basket-migrations
-          mountPath: /docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
-        - name: organization-migrations
-          mountPath: /docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
-        # - name: init-script
-        #   mountPath: /docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
       volumes:
       - name: postgres-data
         persistentVolumeClaim:
           claimName: postgres-pvc  # Reference to the PVC
-      - name: user-migrations
-        hostPath:
-          path: /backend/user/db/migrations
-      - name: product-migrations
-        hostPath:
-          path: /backend/product/db/migrations
-      - name: basket-migrations
-        hostPath:
-          path: /backend/basket/db/migrations
-      - name: organization-migrations
-        hostPath:
-          path: /backend/organization/db/migrations
-      # - name: init-script
-      #   hostPath:
-      #     path: /backend/init-migrations.sh

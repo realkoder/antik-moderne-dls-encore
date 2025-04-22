@@ -13,7 +13,7 @@ const DB = new SQLDatabase("users", {
 const prismaUsers = new PrismaClient({
   datasources: {
     db: {
-      url: isSelfHost ? "postgresql://postgres:admin@postgres:5432/users" : DB.connectionString,
+      url: isSelfHost ? "postgresql://postgres:admin@antik-moderne:5432/users" : DB.connectionString,
     },
   },
 });

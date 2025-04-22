@@ -17,6 +17,7 @@ import { Provider } from "jotai";
 export async function loader(args: Route.LoaderArgs) {
   // const secretKey = process.env.VITE_CLERK_SECRET_KEY;
   // return rootAuthLoader(args, { secretKey });
+  console.log("ARGS IS ALSO IMPORTANT NOW", args);
   return rootAuthLoader(args, {});
 }
 

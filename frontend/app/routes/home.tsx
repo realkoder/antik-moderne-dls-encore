@@ -5,6 +5,7 @@ import { PosterDisplayer } from "~/components/posters/postersDisplayer";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { postersAtom } from "~/atoms/postersAtom";
+import type { types } from "~/lib/client";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "ANTIK MODERNE" }, { name: "description", content: "Welcome to Antik Moderne!" }];
@@ -12,8 +13,13 @@ export function meta({}: Route.MetaArgs) {
 
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
-    const posters = await getRequestClient(undefined).product.getPosters();
-    return posters;
+    try {
+      const posters = await getRequestClient(undefined).product.getPosters();
+      return posters;
+    } catch (e) {
+      console.error("Error fethcing posters", e);
+      return { posters: [] as types.PosterDto[] };
+    }
   })();
 }
 
@@ -35,7 +41,8 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <div className="absolute flex flex-col top-1/5 left-1/5">
           <h1 className="text-6xl text-white text-left font-bold mb-4">Welcome to Antik Moderne</h1>
           <p className=" pt-4 w-1/2 text-white text-left text-2xl mb-6">
-            Discover a curated collection of timeless posters that blend the elegance of the past with the modern aesthetic.
+            Discover a curated collection of timeless posters that blend the elegance of the past with the modern
+            aesthetic.
           </p>
           <NavLink
             to="/posters"

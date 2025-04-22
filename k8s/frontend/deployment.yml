@@ -1,6 +1,3 @@
-# This is using a configmap for setting the env from .env.production 
-# command: kubectl create configmap frontend-env --from-env-file=frontend/.env.production
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:

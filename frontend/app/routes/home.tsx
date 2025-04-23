@@ -14,8 +14,14 @@ export function meta({}: Route.MetaArgs) {
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
     try {
-      const posters = await getRequestClient(undefined).product.getPosters();
-      return posters;
+      // const posters = await getRequestClient(undefined).product.getPosters();
+      const posters3000 = await fetch("http://frontend-app:3000/posters");
+      const postersLocalhost = await fetch("http://frontend-app:3000/posters");
+
+      console.log("HEY POSTERS ON frotnend", posters3000);
+      console.log("HEY POSTERS ON frotnend", postersLocalhost);
+      // return posters;
+      return { posters: [] as types.PosterDto[] };
     } catch (e) {
       console.error("Error fethcing posters", e);
       return { posters: [] as types.PosterDto[] };

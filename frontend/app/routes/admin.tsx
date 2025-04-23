@@ -14,9 +14,6 @@ export function meta({}: Route.MetaArgs) {
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
     try {
-      const testFetch = await fetch("http://frontend-app:3000/posters");
-      console.log("TESTFETCH!!!", await testFetch.json());
-
       const posters = await getRequestClient(undefined).product.getPosters();
       return posters;
     } catch (e) {

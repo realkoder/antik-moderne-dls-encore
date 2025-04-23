@@ -14,12 +14,20 @@ export function meta({}: Route.MetaArgs) {
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
     try {
-      const testFetch = await fetch("http://frontend-app:3000/posters");
-      console.log("TESTFETCH!!!", await testFetch.json());
+      console.log("WE GONNA FETCH IT!");
+      const testFetch = await fetch("http://encore-app:8080/posters");
+      if (testFetch.ok) {
+        console.log("TESTFETCH!!!", await testFetch.json());
+        const posters = await testFetch.json();
+        return posters as { posters: types.PosterDto[] };
+      }
 
-      const posters = await getRequestClient(undefined).product.getPosters();
+      console.log("TESTFETCH, not ok!!!", await testFetch.json());
 
-      return posters;
+      // const posters = await getRequestClient(undefined).product.getPosters();
+
+      // return posters;
+      return { posters: [] as types.PosterDto[] };
     } catch (e) {
       console.error("Error fethcing posters", e);
       return { posters: [] as types.PosterDto[] };

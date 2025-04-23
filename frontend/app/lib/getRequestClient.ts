@@ -8,7 +8,7 @@ import Client, { Environment, Local, LocalKubernetes } from "./client";
 const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
   let env: string;
   if (isSSRFetch) {
-    env = "http://frontend-app:30001"
+    env = "http://frontend-app:3000"
   } else {
     env = import.meta.env.DEV ? Local : import.meta.env.VITE_ENV === "local-kubernetes" ? LocalKubernetes : Environment("staging");
   }

@@ -15,6 +15,7 @@ export function loader({}: Route.LoaderArgs) {
   return (async () => {
     try {
       const posters = await getRequestClient(undefined, true).product.getPosters();
+
       return posters;
     } catch (e) {
       console.error("Error fethcing posters", e);

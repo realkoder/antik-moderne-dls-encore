@@ -4,6 +4,7 @@ import getRequestClient from "~/lib/getRequestClient";
 import { postersAtom } from "~/atoms/postersAtom";
 import { useEffect } from "react";
 import { PosterDisplayer } from "~/components/posters/postersDisplayer";
+import type { types } from "~/lib/client";
 
 export function meta({}: Route.MetaArgs) {
   return [{ title: "Posters - Antik Moderne" }, { name: "description", content: "Posters" }];
@@ -11,8 +12,13 @@ export function meta({}: Route.MetaArgs) {
 
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
-    const posters = await getRequestClient(undefined).product.getPosters();
-    return posters;
+    try {
+      const posters = await getRequestClient(undefined).product.getPosters();
+      return posters;
+    } catch (e) {
+      console.error("Error fethcing posters", e);
+      return { posters: [] as types.PosterDto[] };
+    }
   })();
 }
 

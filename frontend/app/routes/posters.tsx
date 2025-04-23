@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
     try {
-      const posters = await getRequestClient(undefined).product.getPosters();
+      const posters = await getRequestClient(undefined, true).product.getPosters();
       return posters;
     } catch (e) {
       console.error("Error fethcing posters", e);

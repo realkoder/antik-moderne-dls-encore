@@ -39,7 +39,7 @@
   ],
   "metrics": {
     "type": "prometheus",
-    "remote_write_url": "https://my-remote-write-url"
+    "remote_write_url": "http://prometheus.monitoring:9090"
   },
   "graceful_shutdown": {
     "total": 30

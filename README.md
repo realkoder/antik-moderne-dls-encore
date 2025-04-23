@@ -286,6 +286,9 @@ kubectl delete deployment <deployment-name>
 
 # Delete pods in this case encore-app
 kubectl delete pods -l app=encore-app
+
+# Kubectl interact with postgresql db
+kubectl exec -it <pod_name> -- psql -U postgres
 ```
 
 ##### Kubernetes Info

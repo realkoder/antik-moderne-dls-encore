@@ -40,7 +40,9 @@
   "metrics": {
     "type": "prometheus",
     "collection_interval": 15,
-    "remote_write_url": "http://prometheus.monitoring:9090/api/v1/write"
+    "remote_write_url": {
+      "$env": "PROMETHEUS_REMOTE_WRITE_URL"
+    }
   },
   "graceful_shutdown": {
     "total": 30

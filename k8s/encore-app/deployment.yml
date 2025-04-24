@@ -62,6 +62,8 @@ spec:
                 configMapKeyRef:
                   name: encore-app-credentials
                   key: ENCORE_SELF_HOST
+            - name: PROMETHEUS_REMOTE_WRITE_URL
+              value: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/write"
           volumeMounts:
             - name: encore-app-credentials
               mountPath: /app/application_default_credentials.json

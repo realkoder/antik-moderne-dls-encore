@@ -22,6 +22,8 @@ spec:
         - name: prometheus-config
           mountPath: /etc/prometheus/
         args:
+        # wget to test remote-write-endpoint: wget -q -O - --post-data='test_metric 1' --header='Content-Type: application/x-protobuf' -S http://prometheus.monitoring:9090/api/v1/write
+        - --web.enable-remote-write-receiver
         - --config.file=/etc/prometheus/prometheus.yml
       volumes:
       - name: prometheus-config

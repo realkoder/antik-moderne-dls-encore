@@ -1,6 +1,8 @@
 import { SQLDatabase } from "encore.dev/storage/sqldb";
 import { PrismaClient } from "@prisma-db-users/client";
 
+const isSelfHost = process.env.ENCORE_SELF_HOST === 'true';
+
 const DB = new SQLDatabase("users", {
   migrations: {
     path: "migrations",
@@ -11,7 +13,7 @@ const DB = new SQLDatabase("users", {
 const prismaUsers = new PrismaClient({
   datasources: {
     db: {
-      url: DB.connectionString,
+      url: isSelfHost ? "postgresql://postgres:admin@postgres:5432/users" : DB.connectionString,
     },
   },
 });

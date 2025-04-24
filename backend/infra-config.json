@@ -1,0 +1,86 @@
+{
+  "metadata": {
+    "app_id": "antik-moderne-backend",
+    "env_name": "development",
+    "env_type": "development",
+    "cloud": "gcp",
+    "base_url": "http://localhost"
+  },
+  "sql_servers": [
+    {
+      "host": "postgres:5431",
+      "databases": {
+        "products": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        },
+        "baskets": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        },
+        "users": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        },
+        "organizations": {
+          "username": "postgres",
+          "password": {
+            "$env": "DB_PASSWORD"
+          }
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "type": "prometheus",
+    "collection_interval": 15,
+    "remote_write_url": "http://prometheus.monitoring:9090/api/v1/write"
+  },
+  "graceful_shutdown": {
+    "total": 30
+  },
+  "secrets": {
+    "AppSecret": {
+      "$env": "APP_SECRET"
+    },
+    "ClerkSecretKey": {
+      "$env": "CLERK_SECRET_KEY"
+    },
+    "ResendApiKey": {
+      "$env": "RESEND_API_KEY"
+    },
+    "WebhookSigningSecretKey": {
+      "$env": "WEBHOOK_SIGNING_SECRET_KEY"
+    },
+    "ENCORE_PUBSUB_DEBUG": {
+      "$env": "ENCORE_PUBSUB_DEBUG"
+    },
+    "GOOGLE_APPLICATION_CREDENTIALS": {
+      "$env": "GOOGLE_APPLICATION_CREDENTIALS"
+    }
+  },
+  "pubsub": [
+    {
+      "type": "gcp_pubsub",
+      "project_id": "intellitask-451209",
+      "topics": {
+        "user-added": {
+          "name": "user-added",
+          "project_id": "intellitask-451209",
+          "subscriptions": {
+            "welcome-email": {
+              "name": "welcome-email",
+              "project_id": "intellitask-451209"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

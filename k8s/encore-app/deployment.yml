@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: encore-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: encore-app
+  template:
+    metadata:
+      labels:
+        app: encore-app
+    spec:
+      containers:
+        - name: encore-app
+          image: ghcr.io/realkoder/antik-moderne-encore-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /app/application_default_credentials.json
+            - name: NODE_ENV
+              value: production
+            - name: WEBHOOK_SIGNING_SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: WEBHOOK_SIGNING_SECRET_KEY
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: DB_PASSWORD
+            - name: APP_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: APP_SECRET
+            - name: RESEND_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: RESEND_API_KEY
+            - name: CLERK_SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: CLERK_SECRET_KEY
+            - name: RUST_BACKTRACE
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: RUST_BACKTRACE
+            - name: ENCORE_PUBSUB_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: ENCORE_PUBSUB_DEBUG
+            - name: ENCORE_SELF_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: encore-app-credentials
+                  key: ENCORE_SELF_HOST
+          volumeMounts:
+            - name: encore-app-credentials
+              mountPath: /app/application_default_credentials.json
+              subPath: application_default_credentials.json
+      volumes:
+        - name: encore-app-credentials
+          configMap:
+            name: encore-app-credentials

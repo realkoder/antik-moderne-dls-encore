@@ -8,11 +8,11 @@ const resendApiKey = secret("ResendApiKey");
 const resend = new Resend(resendApiKey());
 
 const sendEmail = async ({ name, email }: UserRequest) => {
-  const msg = {
-    from: 'welcome@realkoder.com',
-    to: email,
-    subject: 'Welcome to Antik Moderne',
-    html: `
+    const msg = {
+        from: 'welcome@realkoder.com',
+        to: email,
+        subject: 'Welcome to Antik Moderne',
+        html: `
       <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; color: #333;">
         <h2>Welcome to Antik Moderne, ${name}!</h2>
         <p>We're thrilled to have you join our community of art and poster enthusiasts. At Antik Moderne, we believe in the power of art to transform spaces and inspire lives.</p>
@@ -22,17 +22,18 @@ const sendEmail = async ({ name, email }: UserRequest) => {
         <p>Warm regards,<br>The Antik Moderne Team</p>
       </div>
     `
-  };
+    };
 
-  try {
-    await resend.emails.send(msg);
-  } catch (error) {
-    console.error(error);
-    throw APIError.internal("Failed to send email with Resend");
-  }
+    try {
+        await resend.emails.send(msg);
+    } catch (error) {
+        console.error(error);
+        throw APIError.internal("Failed to send email with Resend");
+    }
 }
+
 new Subscription(UserAddedTopic, "welcome-email", {
-  handler: async (event) => {
-    await sendEmail(event);
-  },
+    handler: async (event) => {
+        await sendEmail(event);
+    },
 });

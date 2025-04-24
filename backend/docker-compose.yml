@@ -1,0 +1,78 @@
+
+  # Build the encore images: encore build docker --base=node:20-bullseye --config infra-config.json --arch=arm64 antikmoderne:v1
+services:
+
+  # Connection string: docker exec -it postgresdb psql -U postgres -d antik_moderne_db
+  # To generate the pgdump.sql file: docker compose exec -T postgres pg_dump -U postgres music_database > pgdump.sql
+  # postgres:
+  #   container_name: postgresdb
+  #   image: postgres:latest
+  #   environment:
+  #     POSTGRES_PASSWORD: admin
+  #   ports:
+  #     - "5431:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./user/db/migrations:/docker-entrypoint-initdb.d/migrations_users  # User migrations
+  #     - ./product/db/migrations:/docker-entrypoint-initdb.d/migrations_products  # Product migrations
+  #     - ./basket/db/migrations:/docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
+  #     - ./organization/db/migrations:/docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
+  #     - ./init-migrations.sh:/docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
+
+  postgres:
+    container_name: postgresdb
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./user/db/migrations:/docker-entrypoint-initdb.d/migrations_users  # User migrations
+      - ./product/db/migrations:/docker-entrypoint-initdb.d/migrations_products  # Product migrations
+      - ./basket/db/migrations:/docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
+      - ./organization/db/migrations:/docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
+      - ./init-migrations.sh:/docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
+
+  encore:
+    container_name: encore_app
+    image: antikmoderne:v1
+    env_file:
+      - .env.docker.dev  
+    volumes:
+      - ./application_default_credentials.json:/app/application_default_credentials.json
+    ports:
+      - "4000:8080"
+    depends_on:
+      - postgres
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/application_default_credentials.json
+
+
+  # pubsub:
+  #   container_name: pubsub_emulator
+  #   image: google/cloud-sdk:latest
+  #   command: >
+  #     bash -c "
+  #       gcloud beta emulators pubsub start --host-port=0.0.0.0:8085 &
+  #       sleep 10 &&
+  #       export PUBSUB_EMULATOR_HOST=localhost:8085 &&
+  #       gcloud config set auth/disable_credentials true &&
+  #       gcloud config set project antikmoderne &&
+  #       gcloud config set api_endpoint_overrides/pubsub http://localhost:8085/ &&
+  #       gcloud pubsub topics create user-added &&
+  #       gcloud pubsub subscriptions create welcome-email --topic=user-added &&
+  #       tail -f /dev/null
+  #     "
+  #   ports:
+  #     - "8085:8085"
+  #   environment:
+  #     PUBSUB_PROJECT_ID: antikmoderne
+  #   volumes:
+  #     - pubsub-data:/pubsub-data
+  #     - gcloud-config:/root/.config
+
+volumes:
+  postgres_data: {}
+  gcloud-config: {}
+  # pubsub-data: {}

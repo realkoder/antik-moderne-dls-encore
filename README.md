@@ -18,15 +18,15 @@ We adopt the **SCRUM framework** to efficiently manage our development process a
 
 > This is our attended approach
 
-- Configure a **SCRUM backlog** as a dynamic, prioritized list of features and tasks that evolve as our project progresses. We will be using JIRA to manage this backlog, enabling easy addition, prioritization, and updates.
+- Configure a **SCRUM backlog** as a dynamic, prioritized list of features and tasks that evolve as our project progresses. We will be using Jira to manage this backlog, enabling easy addition, prioritization, and updates.
 
 - **Sprint** fixed period (typically two weeks) during which specific tasks are completed and prepared for review. It is a time-boxed effort.
 
-- **Sprint backlog** consists of tasks selected from the SCRUM backlog for the current sprint, determined during sprint planning. It is managed in **JIRA**, with tasks assigned to the team.
+- **Sprint backlog** consists of tasks selected from the SCRUM backlog for the current sprint, determined during sprint planning. It is managed in Jira, with tasks assigned to the team.
 
 - **Sprint planning** is a meeting at the start of each sprint where the team selects tasks based on priority, goals, and capacity. This sets the direction for the sprint.
 
-- We use **JIRA** to manage both the SCRUM and sprint backlogs. Its features allow us to create user stories, plan sprints, track issues, and report progress, enhancing visibility and collaboration among team members and stakeholders.
+- We use _Jira_ to manage both the SCRUM and sprint backlogs. Its features allow us to create user stories, plan sprints, track issues, and report progress, enhancing visibility and collaboration among team members and stakeholders.
 
 <br>
 
@@ -119,7 +119,7 @@ Encore is a newer backend development framework designed to streamline creation,
 
 Encore supports _TypeScript_ out of the box. This integration enhances code quality and developer productivity by catching errors early in the development process. Further more _Encore_ provides a super efficient feature which is this script for frontend _package.json_ `"gen": "encore gen client backend-2tui --output=./app/lib/client.ts --env=local"`. This scripts generates all the callable API endpoints for the given services with typesafe input outputs.
 
-**Encore** provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [GCP](https://cloud.google.com/pubsub) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
+_Encore_ provides built-in support for service-to-service communication through its pub/sub system. This feature allows services within the Encore application to publish and subscribe to events, facilitating loose coupling and enhancing the system's scalability and maintainability. This [pub/sub](https://encore.dev/docs/platform/infrastructure/infra) is implemented by the use of [GCP](https://cloud.google.com/pubsub) which is a realtime distributed messaging platform just like _RabbitMQ_, _Kafka_ etc.
 
 #### Key Features of Encore's Pub/Sub System:
 
@@ -154,10 +154,17 @@ encore db conn-uri <database name> --shadow
 
 # To initialize Prisma, run the following command from within your service folder:
 npx prisma init --url <shadow db connection url>
+
+# To execute a new migration regarding changes by DDL
+npx prisma migrate dev --name <short_descriptive_name>
 ```
 
 [Encores Prisma docs](https://encore.dev/docs/ts/develop/orms/prisma)
 [Encores Prisma github example](https://github.com/encoredev/examples/tree/main/ts/prisma)
+
+#### ERD Products db - implementing snapshot and tombstone pattern
+
+![ERD products](images/erd-products.png)
 
 ---
 
@@ -220,7 +227,6 @@ ngrok http --url=sharp-moth-exciting.ngrok-free.app 4000
 
 <br>
 
-
 ### Deployment
 
 Frontend deployed through _Vercel_
@@ -234,6 +240,99 @@ Backend is deployed with _Encore_ in staging env, since that's free.
 
 <br>
 
+### Self hosting
+Spend a lot of time figurering out the GHCR access - took me hours to figure out that we wasn't allowed to have the repo name in image like _ghcr.io/antik-moderne/frontend-app_ but it should contain the github repo owners username....
+
+This was the cryptic error we were stuck with, since it didn't say anything about bad naming convention for the push command:
+
+```bash
+ERROR: failed to solve: failed to push ghcr.io/antik-moderne/frontend-app:latest: unexpected status from POST request to https://ghcr.io/v2/antik-moderne/frontend-app/blobs/uploads/: 403 Forbidden
+Error: buildx failed with: ERROR: failed to solve: failed to push ghcr.io/antik-moderne/frontend-app:latest: unexpected status from POST request to https://ghcr.io/v2/antik-moderne/frontend-app/blobs/uploads/: 403 Forbidden
+```
+
+Relevant kubectl commands:
+
+```bash
+# Check kubernetes cluster status
+kubectl cluster-info
+
+# Check nodes status
+kubectl get nodes
+
+# Check pods status
+kubectl get pods --all-namespaces
+
+# Get applied deployments
+kubectl get deployments
+
+# Create a namespace for
+kubectl create namespace antik-moderne
+
+# Creatig the configmap  based on .env.production
+kubectl create configmap frontend-env --from-env-file=frontend/.env.production
+
+# Verify the secrets stored in a configmap
+kubectl describe configmap frontend-env
+
+# Apply deployment and service files
+kubectl apply -f k8s/frontend/deployment.yml
+kubectl apply -f k8s/frontend/service.yml
+
+# Describe a pod
+kubectl describe pod <pod_name>
+
+# Remove an applied deployment
+kubectl delete deployment <deployment-name>
+
+# Delete pods in this case encore-app
+kubectl delete pods -l app=encore-app
+
+# Kubectl interact with postgresql db
+kubectl exec -it <pod_name> -- psql -U postgres
+```
+
+##### Kubernetes Info
+The algorithm used by _services_ in _Kubernetes_ depends on the specific type of _service_ default is _round-robin algorithm_ used, where each pod get's a turn to receive a request where all the pods are cycled through in order.
+
+
+### Self Hosting ReactRouter-v7 applications
+
+_ReactRouterv7_ comes out of the box with prebuilt _Dockerfile_. to build container image follow on:
+
+```bash
+# Ensure to be placed inside /frontend
+docker build -t frontendapp .
+
+# Start the container with .env.production file
+docker run -d --env-file .env.production -p 3000:3000 --name frontendapp frontendapp
+```
+
+The docker image is making use of the npm scripts `build & start` where the start script is using `dotenv-cli` to set the environment variables from .env.production env-file.
+
+```json
+  "scripts": {
+    "build": "react-router build",
+    "start": "dotenv -e .env.production -- react-router-serve ./build/server/index.js",
+  }
+```
+
+
+### Self Hosting Encore applications
+
+With __Encore__ applications, a lot happens behind the scenes, which means many features come out of the box, such as pub/sub messaging, database setup with migration logic, testing automation, and gatekeeper servicing. To run in production and ensure everything operates smoothly, your setup may depend on __Encore__, which can be costly. Therefore, they provide the option to self-host. This is accomplished by using the command `encore build docker`, which allows you to either package the entire __Encore__ application into a single Docker image or dockerize each specific service individually.
+To build the Encore application with Docker, it requires an **infra-config.json** file to specify dependencies such as databases, environment variables, and pub/sub configurations.
+
+```bash
+# Command to build whole encore app in one docker image
+encore build docker --base=node:20-bullseye --config infra-config.json --arch=arm64 antikmoderne:v1
+```
+![raised issue pubsub pull req closed](images/raised-issue-pubsub-pull-req-closed.png)
+
+<br>
+
+---
+
+<br>
 
 ## Bonus links and miscellaneous
 

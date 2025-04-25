@@ -1,0 +1,5 @@
+server:
+  global:
+    scrape_interval: 15s
+  remoteWrite:
+    - url: "http://prometheus-server.monitoring.svc.cluster.local:9090/api/v1/write"

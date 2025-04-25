@@ -295,6 +295,117 @@ kubectl exec -it <pod_name> -- psql -U postgres
 The algorithm used by _services_ in _Kubernetes_ depends on the specific type of _service_ default is _round-robin algorithm_ used, where each pod get's a turn to receive a request where all the pods are cycled through in order.
 
 
+#### Prometheus with Grafana
+
+Installing _Prometheus_ and _Grafana_ with _Helm_.
+
+```bash
+# Create monitoring namespace
+kubectl create namespace monitoring
+
+# Add the needed repos for helm
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+# Add following content to k8s/prometheus/values.yml
+# server:
+#   extraFlags:
+#     - web.enable-remote-write-receiver
+
+# Install Prometheus with remote write enabled which is needed Encore selfhosting
+helm install prometheus prometheus-community/prometheus -n monitoring -f k8s/prometheus/values.yml
+
+# Should give this output
+#################################################################################
+
+# Get the Alertmanager URL by running these commands in the same shell:
+#  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app.kubernetes.io/name=alertmanager,app.kubernetes.io/instance=prometheus" -o jsonpath="{.items[0].metadata.name}")
+#  kubectl --namespace monitoring port-forward $POD_NAME 9093
+#################################################################################
+######   WARNING: Pod Security Policy has been disabled by default since    #####
+######            it deprecated after k8s 1.25+. use                        #####
+######            (index .Values "prometheus-node-exporter" "rbac"          #####
+###### .          "pspEnabled") with (index .Values                         #####
+######            "prometheus-node-exporter" "rbac" "pspAnnotations")       #####
+######            in case you still need it.                                #####
+#################################################################################
+
+# The Prometheus PushGateway can be accessed via port 9091 on the following DNS name from within your cluster:
+# prometheus-prometheus-pushgateway.monitoring.svc.cluster.local
+
+# Get the PushGateway URL by running these commands in the same shell:
+#  export POD_NAME=$(kubectl get pods --namespace monitoring -l "app=prometheus-pushgateway,component=pushgateway" -o jsonpath="{.items[0].metadata.name}")
+#  kubectl --namespace monitoring port-forward $POD_NAME 9091
+
+#################################################################################
+
+# Expose Prometheus
+kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext -n monitoring
+
+# Next install Grafana
+helm install grafana grafana/grafana \
+  --namespace monitoring \
+  --set service.type=NodePort \
+  --set adminPassword=encore-metrics
+  --set service.type=LoadBalancer \
+  --set datasources.datasources\\.yaml.apiVersion=1 \
+  --set datasources.datasources\\.yaml.datasources[0].name=Prometheus \
+  --set datasources.datasources\\.yaml.datasources[0].type=prometheus \
+  --set datasources.datasources\\.yaml.datasources[0].url=http://prometheus-server.monitoring.svc.cluster.local:80 \
+  --set datasources.datasources\\.yaml.datasources[0].access=proxy
+
+# Should give this output
+#################################################################################
+
+# NAME: grafana
+# LAST DEPLOYED: Thu Apr 24 22:00:14 2025
+# NAMESPACE: monitoring
+# STATUS: deployed
+# REVISION: 1
+# NOTES:
+# 1. Get your 'admin' user password by running:
+
+#    kubectl get secret --namespace monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+# 2. The Grafana server can be accessed via port 80 on the following DNS name from within your cluster:
+
+#    grafana.monitoring.svc.cluster.local
+
+#    Get the Grafana URL to visit by running these commands in the same shell:
+#      export NODE_PORT=$(kubectl get --namespace monitoring -o jsonpath="{.spec.ports[0].nodePort}" services grafana)
+#      export NODE_IP=$(kubectl get nodes --namespace monitoring -o jsonpath="{.items[0].status.addresses[0].address}")
+#      echo http://$NODE_IP:$NODE_PORT
+
+# 3. Login with the password from step 1 and the username: admin
+#################################################################################
+######   WARNING: Persistence is disabled!!! You will lose your data when   #####
+######            the Grafana pod is terminated.                            #####
+#################################################################################
+
+#################################################################################
+
+# Get the password
+kubectl get secret -n monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode
+
+# Get external grafana port
+kubectl get svc grafana -n monitoring
+# Grafana is accessible at: http://localhost:30714
+
+```
+
+Bonus commands:
+```bash
+# Upgrading helm Prometheus
+   helm upgrade prometheus prometheus-community/prometheus \
+     --namespace monitoring \
+     -f k8s/prometheus/values.yml
+```
+
+
+
+
 ### Self Hosting ReactRouter-v7 applications
 
 _ReactRouterv7_ comes out of the box with prebuilt _Dockerfile_. to build container image follow on:

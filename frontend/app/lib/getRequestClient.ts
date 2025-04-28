@@ -10,8 +10,14 @@ const DeployedProdBaseURL = "https://antik-moderne.realkoder.com";
 const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
   let env: string;
   const VITE_ENV = import.meta.env.VITE_ENV;
-  if (isSSRFetch && (VITE_ENV === "local-kubernetes") || VITE_ENV === "selfhost-prod") {
-    env = "http://encore-app:8080"
+  if (isSSRFetch) {
+    console.log("NOW WE FECH SSR - VITE_ENV", VITE_ENV);
+    if (VITE_ENV === "selfhost-prod") {
+      env = "http://localhost:4000"
+    } else {
+
+      env = "http://encore-app:8080"
+    }
   } else {
     if (import.meta.env.VITE_ENV === "selfhost-prod") {
       env = DeployedProdBaseURL;

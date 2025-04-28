@@ -10,14 +10,9 @@ const DeployedProdBaseURL = "https://antik-moderne.realkoder.com";
 const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
   let env: string;
   const VITE_ENV = import.meta.env.VITE_ENV;
-  if (isSSRFetch) {
-    if (VITE_ENV === "selfhost-prod") {
-      // env = "http://localhost:4000"
-      env = "http://encore-app:8080";
-      console.log("LOOK AT ME THIS IS BASEURL", env);
-    } else {
-      env = "http://encore-app:8080"
-    }
+
+  if (isSSRFetch && (VITE_ENV === "local-kubernetes") || VITE_ENV === "selfhost-prod") {
+    env = "http://encore-app:8080";
   } else {
     if (import.meta.env.VITE_ENV === "selfhost-prod") {
       env = DeployedProdBaseURL;
@@ -25,6 +20,7 @@ const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
       env = import.meta.env.DEV ? Local : import.meta.env.VITE_ENV === "local-kubernetes" ? LocalKubernetes : Environment("staging");
     }
   }
+
 
   return new Client(env, {
     auth: { authorization: token || "" },

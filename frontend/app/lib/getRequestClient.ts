@@ -11,7 +11,6 @@ const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
   let env: string;
   const VITE_ENV = import.meta.env.VITE_ENV;
   if (isSSRFetch) {
-    console.log("NOW WE FECH SSR - VITE_ENV", VITE_ENV);
     if (VITE_ENV === "selfhost-prod") {
       env = "http://localhost:4000"
     } else {

@@ -25,8 +25,6 @@ async function main() {
     } else {
         poster = existingPoster;
     }
-
-    console.log({ poster });
 }
 
 main()

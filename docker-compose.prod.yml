@@ -7,25 +7,24 @@
 
 services:
   postgres:
-    container_name: postgres-db
+    container_name: postgresdb
     image: ghcr.io/realkoder/antik-moderne-postgres:latest
     pull_policy: always
     restart: always
+    env_file:
+      - .env.docker.prod
     ports:
       - "5431:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./user/db/migrations:/docker-entrypoint-initdb.d/migrations_users  # User migrations
-      - ./product/db/migrations:/docker-entrypoint-initdb.d/migrations_products  # Product migrations
-      - ./basket/db/migrations:/docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
-      - ./organization/db/migrations:/docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
-      - ./init-migrations.sh:/docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
 
-  encore:
+  encore-app:
     container_name: encore-app
     image: ghcr.io/realkoder/antik-moderne-encore-app:latest
+    pull_policy: always
+    restart: always
     env_file:
-      - .env.docker.dev  
+      - .env.docker.prod
     volumes:
       - ./application_default_credentials.json:/app/application_default_credentials.json
     ports:
@@ -38,6 +37,8 @@ services:
   antik-moderne-app:
     container_name: antik-moderne-app
     image: ghcr.io/realkoder/antik-moderne-frontend-app
+    env_file:
+      - .env.docker.prod
     pull_policy: always
     restart: always
     ports:
@@ -45,4 +46,3 @@ services:
 
 volumes:
   postgres_data: {}
-  gcloud-config: {}

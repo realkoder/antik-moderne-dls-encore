@@ -1,7 +1,7 @@
 import Client, { Environment, Local } from "./client";
 
 const LocalKubernetes = "http://localhost:30002";
-const DeployedProdBaseURL = "https://antik-moderne.com";
+const DeployedProdBaseURL = "https://antik-moderne.realkoder.com";
 
 /**
  * Returns the generated Encore request client for either the local or staging environment.

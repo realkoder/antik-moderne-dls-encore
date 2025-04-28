@@ -14,8 +14,8 @@ const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
     if (VITE_ENV === "selfhost-prod") {
       // env = "http://localhost:4000"
       env = "http://encore-app:8080";
+      console.log("LOOK AT ME THIS IS BASEURL", env);
     } else {
-
       env = "http://encore-app:8080"
     }
   } else {
@@ -25,7 +25,6 @@ const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
       env = import.meta.env.DEV ? Local : import.meta.env.VITE_ENV === "local-kubernetes" ? LocalKubernetes : Environment("staging");
     }
   }
-
 
   return new Client(env, {
     auth: { authorization: token || "" },

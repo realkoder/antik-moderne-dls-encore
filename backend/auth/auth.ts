@@ -38,12 +38,8 @@ const myAuthHandler = authHandler(async (params: AuthParams): Promise<AuthData> 
       secretKey: clerkSecretKey(),
     });
 
-    console.log("LOOK RESULT", result);
-    
     const user = await clerkClient.users.getUser(result.sub);
-    console.log("LOOK RETURNED USER", user);
     const { role } = await usersService.getUserRoleForAuth({ userId: user.id });
-    console.log("LOOK RETURNED ROLE", role);
     if (!role) throw APIError.unauthenticated("Missing role");
 
     return {

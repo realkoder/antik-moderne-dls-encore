@@ -12,7 +12,8 @@ const getRequestClient = (token: string | undefined, isSSRFetch?: boolean) => {
   const VITE_ENV = import.meta.env.VITE_ENV;
   if (isSSRFetch) {
     if (VITE_ENV === "selfhost-prod") {
-      env = "http://localhost:4000"
+      // env = "http://localhost:4000"
+      env = "http://encore-app:8080";
     } else {
 
       env = "http://encore-app:8080"

@@ -19,7 +19,7 @@ const sendEmail = async ({ name, email }: UserRequest) => {
         <p>As a welcome gift, here's a <strong>10% discount</strong> on your first purchase! Just use the code <strong>WELCOME10</strong> at checkout.</p>
         <p>If you have any questions or need assistance, feel free to contact us at <a href="mailto:support@realkoder.com" style="color: #1a82e2;">support@realkoder.com</a>.</p>
         <p>Thank you for choosing Antik Moderne. Let's make your space beautiful together!</p>
-        <p>Warm regards,<br>The Antik Moderne Team</p>
+        <p>Warm regards,<br>The Antik Moderne Team xD</p>
       </div>
     `
     };

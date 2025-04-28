@@ -38,7 +38,7 @@ services:
     container_name: antik-moderne-app
     image: ghcr.io/realkoder/antik-moderne-frontend-app
     env_file:
-      - .env.docker.prod
+      - .env.docker.frontend.prod
     pull_policy: always
     restart: always
     ports:

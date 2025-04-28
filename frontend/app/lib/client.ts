@@ -11,7 +11,6 @@
 export type BaseURL = string
 
 export const Local: BaseURL = "http://localhost:4000"
-export const LocalKubernetes: BaseURL = "http://localhost:30002"
 
 /**
  * Environment returns a BaseURL for calling the cloud environment with the given name.
@@ -266,7 +265,7 @@ export namespace basket {
     basket: types.BasketDto
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/basket/add-item`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("POST", `/api/basket/add-item`, JSON.stringify(params))
             return await resp.json() as {
     basket: types.BasketDto
 }
@@ -348,7 +347,7 @@ export namespace basket {
     basket: types.BasketDto
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/basket`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("POST", `/api/basket`, JSON.stringify(params))
             return await resp.json() as {
     basket: types.BasketDto
 }
@@ -395,7 +394,7 @@ export namespace basket {
             })
 
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/basket`, undefined, {query})
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/basket`, undefined, {query})
             return await resp.json() as {
     basket: types.BasketDto
 }
@@ -526,7 +525,7 @@ export namespace basket {
             })
 
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("DELETE", `/basket/remove-item`, undefined, {query})
+            const resp = await this.baseClient.callTypedAPI("DELETE", `/api/basket/remove-item`, undefined, {query})
             return await resp.json() as {
     basket: types.BasketDto
 }
@@ -552,7 +551,7 @@ export namespace product {
     posters: types.PosterDto[]
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("POST", `/posters`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("POST", `/api/posters`, JSON.stringify(params))
             return await resp.json() as {
     posters: types.PosterDto[]
 }
@@ -565,7 +564,7 @@ export namespace product {
     posters: types.PosterDto[]
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("DELETE", `/posters/${encodeURIComponent(posterId)}`)
+            const resp = await this.baseClient.callTypedAPI("DELETE", `/api/posters/${encodeURIComponent(posterId)}`)
             return await resp.json() as {
     posters: types.PosterDto[]
 }
@@ -575,7 +574,7 @@ export namespace product {
     poster: types.PosterDto
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/posters/${encodeURIComponent(posterId)}`)
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/posters/${encodeURIComponent(posterId)}`)
             return await resp.json() as {
     poster: types.PosterDto
 }
@@ -585,7 +584,7 @@ export namespace product {
     posters: types.PosterDto[]
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/posters`)
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/posters`)
             return await resp.json() as {
     posters: types.PosterDto[]
 }
@@ -600,7 +599,7 @@ export namespace product {
     posters: types.PosterDto[]
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("PUT", `/posters/${encodeURIComponent(posterId)}`, JSON.stringify(params))
+            const resp = await this.baseClient.callTypedAPI("PUT", `/api/posters/${encodeURIComponent(posterId)}`, JSON.stringify(params))
             return await resp.json() as {
     posters: types.PosterDto[]
 }
@@ -619,7 +618,7 @@ export namespace user {
 
         public async count(): Promise<types.Response> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/count/users`)
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/count/users`)
             return await resp.json() as types.Response
         }
 
@@ -627,7 +626,7 @@ export namespace user {
     role: types.Role
 }> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/role`)
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/role`)
             return await resp.json() as {
     role: types.Role
 }
@@ -635,18 +634,18 @@ export namespace user {
 
         public async readByEmail(email: string): Promise<types.UserResponse> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/users/email/${encodeURIComponent(email)}`)
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/users/email/${encodeURIComponent(email)}`)
             return await resp.json() as types.UserResponse
         }
 
         public async readOne(id: string): Promise<types.UserResponse> {
             // Now make the actual call to the API
-            const resp = await this.baseClient.callTypedAPI("GET", `/users/${encodeURIComponent(id)}`)
+            const resp = await this.baseClient.callTypedAPI("GET", `/api/users/${encodeURIComponent(id)}`)
             return await resp.json() as types.UserResponse
         }
 
         public async webhookHandler(method: "POST", body?: BodyInit, options?: CallParameters): Promise<globalThis.Response> {
-            return this.baseClient.callAPI(method, `/users/webhook`, body, options)
+            return this.baseClient.callAPI(method, `/api/users/webhook`, body, options)
         }
     }
 }

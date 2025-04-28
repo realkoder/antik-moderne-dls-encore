@@ -1,0 +1,48 @@
+# ===========================================================
+#       🐳 🐳 🐳 🐳 🐳 DOCKER COMPOSE 🐳 🐳 🐳 🐳 🐳
+# ===========================================================
+# docker-compose up: docker-compose -f docker-compose.prod.yml up -d
+# docker-compose logs: docker-compose -f docker-compose.prod.yml logs -f
+# docker-compose down: docker-compose -f docker-compose.prod.yml down --rmi all --remove-orphans // Deletes all images - JUST MAKE SURE VOLUMES WONT BE DELETED
+
+services:
+  postgres:
+    container_name: postgres-db
+    image: ghcr.io/realkoder/antik-moderne-postgres:latest
+    pull_policy: always
+    restart: always
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./user/db/migrations:/docker-entrypoint-initdb.d/migrations_users  # User migrations
+      - ./product/db/migrations:/docker-entrypoint-initdb.d/migrations_products  # Product migrations
+      - ./basket/db/migrations:/docker-entrypoint-initdb.d/migrations_baskets  # Basket migrations
+      - ./organization/db/migrations:/docker-entrypoint-initdb.d/migrations_organizations  # Organization migrations
+      - ./init-migrations.sh:/docker-entrypoint-initdb.d/init-migrations.sh  # Mount the init script
+
+  encore:
+    container_name: encore-app
+    image: ghcr.io/realkoder/antik-moderne-encore-app:latest
+    env_file:
+      - .env.docker.dev  
+    volumes:
+      - ./application_default_credentials.json:/app/application_default_credentials.json
+    ports:
+      - "4000:8080"
+    depends_on:
+      - postgres
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /app/application_default_credentials.json
+
+  antik-moderne-app:
+    container_name: antik-moderne-app
+    image: ghcr.io/realkoder/antik-moderne-frontend-app
+    pull_policy: always
+    restart: always
+    ports:
+      - '3000:3000'
+
+volumes:
+  postgres_data: {}
+  gcloud-config: {}

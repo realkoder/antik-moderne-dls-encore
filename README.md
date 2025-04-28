@@ -294,7 +294,6 @@ kubectl exec -it <pod_name> -- psql -U postgres
 ##### Kubernetes Info
 The algorithm used by _services_ in _Kubernetes_ depends on the specific type of _service_ default is _round-robin algorithm_ used, where each pod get's a turn to receive a request where all the pods are cycled through in order.
 
-
 #### Prometheus with Grafana
 
 Installing _Prometheus_ and _Grafana_ with _Helm_.
@@ -402,8 +401,6 @@ Bonus commands:
      --namespace monitoring \
      -f k8s/prometheus/values.yml
 ```
-
-
 
 
 ### Self Hosting ReactRouter-v7 applications

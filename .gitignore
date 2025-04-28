@@ -68,6 +68,7 @@ sketch
 .env.local
 .env.develop
 .env.production
+.env.kubernetes
 
 configmap.yml
 

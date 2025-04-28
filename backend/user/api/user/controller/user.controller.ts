@@ -11,7 +11,7 @@ interface UserRoleParams {
 }
 
 export const getUserRoleForClient = api<{}, { role: Role }>(
-    {auth: true, expose: true, method: "GET", path: "/role"},
+    {auth: true, expose: true, method: "GET", path: "/api/role"},
     async (): Promise<{ role: Role }> => {
         const userId = getAuthData().userID;
         if (!userId) throw APIError.unauthenticated("Authdata is missing for the user!");
@@ -30,7 +30,7 @@ export const getUserRoleForAuth = api<UserRoleParams, { role: Role }>(
 );
 
 export const count = api(
-    { expose: true, method: "GET", path: "/count/users" },
+    { expose: true, method: "GET", path: "/api/count/users" },
     async (): Promise<Response> => {
         try {
             const result = await UserService.count();
@@ -44,7 +44,7 @@ export const count = api(
 );
 
 export const readByEmail = api(
-    { expose: true, method: "GET", path: "/users/email/:email" },
+    { expose: true, method: "GET", path: "/api/users/email/:email" },
     async ({ email }: { email: string }): Promise<UserResponse> => {
         try {
             const result = await UserService.findByEmail(email);
@@ -56,7 +56,7 @@ export const readByEmail = api(
 );
 
 export const readOne = api(
-    { expose: true, method: "GET", path: "/users/:id" },
+    { expose: true, method: "GET", path: "/api/users/:id" },
     async ({ id }: { id: string }): Promise<UserResponse> => {
         try {
             const result = await UserService.findOne(id);

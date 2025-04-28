@@ -19,7 +19,7 @@ import BasketService from "../service/basket.service";
  * ```
  */
 export const getBasket = api<{ guid?: string }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "GET", path: "/basket" },
+    { auth: false, expose: true, method: "GET", path: "/api/basket" },
     async ({ guid }): Promise<{ basket: BasketDto }> => {
         let userId: string | undefined;
 
@@ -79,7 +79,7 @@ export const getBasket = api<{ guid?: string }, { basket: BasketDto }>(
  * @throws {APIError.invalidArgument} If neither userId nor guid is provided.
  */
 export const createBasket = api<{ guid?: string }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "POST", path: "/basket" },
+    { auth: false, expose: true, method: "POST", path: "/api/basket" },
     async ({ guid }): Promise<{ basket: BasketDto }> => {
         let userId: string | undefined;
 
@@ -146,7 +146,7 @@ export const createBasket = api<{ guid?: string }, { basket: BasketDto }>(
  * @throws {APIError.invalidArgument} If neither userId nor guid is provided.
  */
 export const addItemToBasket = api<{ guid?: string, basketItemCreate: BasketItemCreate }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "POST", path: "/basket/add-item" },
+    { auth: false, expose: true, method: "POST", path: "/api/basket/add-item" },
     async ({ guid, basketItemCreate }): Promise<{ basket: BasketDto }> => {
 
         let userId: string | undefined;
@@ -203,7 +203,7 @@ export const addItemToBasket = api<{ guid?: string, basketItemCreate: BasketItem
  * @throws {APIError.invalidArgument} If neither userId nor guid is provided.
  */
 export const removeItemFromBasket = api<{ guid?: string, basketItemId: number }, { basket: BasketDto }>(
-    { auth: false, expose: true, method: "DELETE", path: "/basket/remove-item" },
+    { auth: false, expose: true, method: "DELETE", path: "/api/basket/remove-item" },
     async ({ guid, basketItemId }): Promise<{ basket: BasketDto }> => {
         let userId: string | undefined;
 

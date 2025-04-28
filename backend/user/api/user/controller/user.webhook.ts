@@ -8,7 +8,7 @@ import { UserAddedTopic } from "../messaging/userAddedTopic";
 const WebhookSigningSecretKey = secret("WebhookSigningSecretKey");
 
 export const webhookHandler = api.raw(
-    { expose: true, path: "/users/webhook" },
+    { expose: true, path: "/api/users/webhook" },
     async (req, resp) => {
         const signingSecret = WebhookSigningSecretKey();
 

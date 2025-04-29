@@ -24,6 +24,7 @@ const useCart = () => {
         if (cart && cart.userId === userId) return;
         (async () => {
             if (authRequestClient && userId) {
+                console.log("FETHCING")
                 const response = await authRequestClient.basket.createBasket({guid: undefined});
                 if (response) {
                     setCart(response.basket);

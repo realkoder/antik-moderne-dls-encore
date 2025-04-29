@@ -11,6 +11,7 @@ const useAuthFetch = () => {
         (async () => {
             const token = await getToken();
             if (!token) return;
+            console.log("TOKEN FROM AUTHFETCH", token);
             setAuthRequestClient(getRequestClient(token, false));
         })();
 

@@ -22,6 +22,7 @@ const getRequestClient = (token: string, isSSRFetch: boolean) => {
   }
 
   console.log("THIS IS THE TOKEN", token);
+  console.log("THIS IS THE ENV STRING", env);
   console.log("THIS IS THE isSSRFETCH", isSSRFetch);
   console.log("THIS IS THE VITE_ENV", VITE_ENV);
 

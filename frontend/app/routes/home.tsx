@@ -14,7 +14,7 @@ export function meta({}: Route.MetaArgs) {
 export function loader({}: Route.LoaderArgs) {
   return (async () => {
     try {
-      const posters = await getRequestClient("", true).product.getPosters();
+      const posters = await getRequestClient(undefined, true).product.getPosters();
 
       return posters;
     } catch (e) {

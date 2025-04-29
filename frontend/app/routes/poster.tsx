@@ -15,7 +15,7 @@ export function loader({ params }: Route.LoaderArgs) {
   }
 
   return (async () => {
-    const poster = await getRequestClient("", true).product.getPoster(posterId);
+    const poster = await getRequestClient(undefined, true).product.getPoster(posterId);
     return poster;
   })();
 }

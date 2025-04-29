@@ -24,14 +24,13 @@ const useCart = () => {
         if (cart && cart.userId === userId) return;
         (async () => {
             if (authRequestClient && userId) {
-                console.log("FETHCING")
                 const response = await authRequestClient.basket.createBasket({guid: undefined});
                 if (response) {
                     setCart(response.basket);
                 }
             } else {
                 if (localstorageGuid) {
-                    const response = await getRequestClient("", false).basket.createBasket({ guid: localstorageGuid });
+                    const response = await getRequestClient(undefined, false).basket.createBasket({ guid: localstorageGuid });
                     if (response) {
                         setCart(response.basket);
                     }
@@ -47,7 +46,7 @@ const useCart = () => {
             response = await authRequestClient.basket.addItemToBasket({ basketItemCreate });
         } else {
             if (guid) {
-                response = await getRequestClient("", false).basket.addItemToBasket({ guid, basketItemCreate });
+                response = await getRequestClient(undefined, false).basket.addItemToBasket({ guid, basketItemCreate });
             }
         }
 
@@ -64,7 +63,7 @@ const useCart = () => {
         } else {
             const guid = localStorage.getItem("cartguid");
             if (guid) {
-                response = await getRequestClient("", false).basket.removeItemFromBasket({ guid, basketItemId: cartItemId });
+                response = await getRequestClient(undefined, false).basket.removeItemFromBasket({ guid, basketItemId: cartItemId });
             }
         }
 

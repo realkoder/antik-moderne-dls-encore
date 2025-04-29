@@ -15,7 +15,7 @@ export function loader({ params }: Route.LoaderArgs) {
   }
 
   return (async () => {
-    const poster = await getRequestClient(undefined, true).product.getPoster(posterId);
+    const poster = await getRequestClient("", true).product.getPoster(posterId);
     return poster;
   })();
 }
@@ -30,7 +30,6 @@ export default function Poster({ loaderData }: Route.ComponentProps) {
   }, []);
 
   const handleUpdateQuantity = (formatToUpdate: types.Format, shouldIncrease: boolean) => {
-    console.log("JE");
     setQuantities((cur) => {
       const updatedMap = cur.map((formatQuant) => {
         if (formatQuant.format === formatToUpdate) {
